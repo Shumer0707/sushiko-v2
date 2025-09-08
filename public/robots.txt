@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию админки
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+
+# Запрещаем служебные файлы
+Disallow: /storage/
+Disallow: /.env
+
+# Ссылка на sitemap (добавим позже)
+# Sitemap: https://yourdomain.com/sitemap.xml
