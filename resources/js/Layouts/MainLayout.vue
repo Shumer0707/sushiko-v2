@@ -2,6 +2,7 @@
     import Header from './Partials/Header.vue'
     import Footer from './Partials/Footer.vue'
     import PageLoaderWrapper from '@/Components/common/PageLoaderWrapper.vue'
+    import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
 
     // Функция загрузки данных (будет заменяться под проект)
@@ -17,6 +18,7 @@
 <template>
     <div class="flex flex-col min-h-screen">
         <Header />
+        <StickyHeader />
         <main class="flex-grow container mx-auto py-6">
             <PageLoaderWrapper :loading="!isReady">
                 <slot />

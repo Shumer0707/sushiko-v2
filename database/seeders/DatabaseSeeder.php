@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-        CategorySeeder::class,
-        AdminUserSeeder::class,
-    ]);
+            SushiDataSeeder::class,
+            AdminUserSeeder::class,
+        ]);
 
         // User::factory(10)->create();
 

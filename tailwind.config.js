@@ -22,6 +22,17 @@ export default {
                     text: '#334155', // основной текст
                     muted: '#1E293B', // тёмный серый
                 },
+                first_color: '#34302f',
+                second_color: '#b5836b',
+                third_color: '#fe2b2b',
+                black: '#110d0e',
+                sushi: {
+                    // dark: '#2D2D2D',
+                    dark: '#110d0e',
+
+                    gold: '#D4AF37', // золотистый акцент
+                    white: '#FFFFFF',
+                },
             },
         },
     },
