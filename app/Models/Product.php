@@ -31,7 +31,7 @@ class Product extends Model
     public function getMainImageUrlAttribute(): ?string
     {
         $img = $this->images()->where('is_main', true)->first() ?? $this->images()->orderBy('sort_order')->first();
-        return $img ? asset('storage/' . $img->path) : asset('images/default-product.png');
+        return $img ? asset('storage/' . $img->path) : asset('images/default-product.webp');
     }
 
     /* Relations */

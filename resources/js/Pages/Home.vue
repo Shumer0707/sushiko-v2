@@ -1,10 +1,10 @@
 <script setup>
     import AppHead from '@/Components/Seo/Head.vue'
-    import BannerGallery from '@/Components/BannerGallery.vue'
-    import SeoBlock from '@/Components/SeoBlock.vue'
-    import CategoriesNav from '@/Components/CategoriesNav.vue'
-    import ProductsMenu from '@/Components/ProductsMenu.vue'
-    import ParallaxBackground from '@/Components/ParallaxBackground.vue'
+    import BannerGallery from '@/Components/home/BannerGallery.vue'
+    import SeoBlock from '@/Components/home/SeoBlock.vue'
+    import CategoriesNav from '@/Components/home/CategoriesNav.vue'
+    import ProductsMenu from '@/Components/home/ProductsMenu.vue'
+    import ParallaxBackground from '@/Components/home/ParallaxBackground.vue'
 
     defineProps({
         banners: {

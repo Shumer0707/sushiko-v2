@@ -1,10 +1,12 @@
 <template>
-    <section class="categories-nav py-12 bg-white">
+    <section class="categories-nav py-8 bg-sushi-dark container mx-auto">
         <div class="container mx-auto px-4">
-            <!-- Заголовок секции -->
-            <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold text-first_color mb-2">Наше меню</h2>
-                <p class="text-sushi-dark_op">Выберите категорию и откройте мир японской кухни</p>
+            <!-- Заголовок секции - компактнее -->
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-sushi-gold mb-2">Наше меню</h2>
+                <p class="text-sushi-silver text-sm md:text-base opacity-80">
+                    Выберите категорию и откройте мир японской кухни
+                </p>
             </div>
 
             <!-- Swiper с категориями -->
@@ -12,42 +14,44 @@
                 <Swiper
                     :modules="modules"
                     :slides-per-view="2"
-                    :space-between="20"
+                    :space-between="12"
                     :loop="false"
                     :navigation="true"
                     :grab-cursor="true"
                     :breakpoints="{
-                        640: { slidesPerView: 3, spaceBetween: 24 },
-                        768: { slidesPerView: 4, spaceBetween: 24 },
-                        1024: { slidesPerView: 5, spaceBetween: 30 },
-                        1280: { slidesPerView: 6, spaceBetween: 30 },
+                        640: { slidesPerView: 3, spaceBetween: 16 },
+                        768: { slidesPerView: 4, spaceBetween: 16 },
+                        1024: { slidesPerView: 5, spaceBetween: 20 },
+                        1280: { slidesPerView: 6, spaceBetween: 20 },
                     }"
                     class="category-swiper"
                 >
                     <SwiperSlide v-for="category in categories" :key="category.id">
                         <!-- Карточка категории -->
                         <div @click="goToCategory(category)" class="category-card cursor-pointer group">
-                            <!-- Картинка -->
-                            <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-3 shadow-md">
+                            <!-- Картинка - меньше -->
+                            <div
+                                class="relative w-full aspect-square rounded-xl overflow-hidden mb-2 border-2 border-sushi-gold border-opacity-20 group-hover:border-opacity-60 transition-all duration-300"
+                            >
                                 <img
                                     :src="category.image_url"
                                     :alt="category.name"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
 
-                                <!-- Overlay при наведении -->
+                                <!-- Overlay при наведении - золотой -->
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                    class="absolute inset-0 bg-gradient-to-t from-sushi-dark via-sushi-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                 >
-                                    <div class="absolute bottom-4 left-4 right-4">
-                                        <span class="text-white text-sm font-medium">Перейти →</span>
+                                    <div class="absolute bottom-2 left-2 right-2">
+                                        <span class="text-sushi-gold text-xs font-semibold">Перейти →</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Название категории -->
+                            <!-- Название категории - меньше -->
                             <h3
-                                class="text-center text-base md:text-lg font-semibold text-first_color group-hover:text-second_color transition-colors duration-300 px-2"
+                                class="text-center text-sm md:text-base font-semibold text-sushi-silver group-hover:text-sushi-gold transition-colors duration-300 px-1"
                             >
                                 {{ category.name }}
                             </h3>
@@ -99,30 +103,31 @@
 
 <style scoped>
     .categories-swiper-wrapper {
-        padding: 0 40px; /* отступы для стрелок */
+        padding: 0 36px; /* отступы для стрелок - меньше */
     }
 
-    /* Стили для Swiper */
+    /* Стили для Swiper - золотые стрелки */
     .category-swiper {
-        --swiper-navigation-color: #34302f;
-        --swiper-navigation-size: 20px;
+        --swiper-navigation-color: rgba(212, 175, 55, 1);
+        --swiper-navigation-size: 18px;
     }
 
-    /* Стрелки навигации */
+    /* Стрелки навигации - темные с золотым */
     .category-swiper :deep(.swiper-button-next),
     .category-swiper :deep(.swiper-button-prev) {
-        background: white;
-        width: 44px;
-        height: 44px;
+        background: rgba(17, 13, 14, 0.8);
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 2px solid rgba(212, 175, 55, 0.3);
         transition: all 0.3s ease;
     }
 
     .category-swiper :deep(.swiper-button-next):hover,
     .category-swiper :deep(.swiper-button-prev):hover {
-        background: #ecf4f4;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background: rgba(212, 175, 55, 0.9);
+        border-color: rgba(212, 175, 55, 1);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         transform: scale(1.05);
     }
 
@@ -164,8 +169,8 @@
         }
     }
 
-    /* Тень при наведении на карточку */
+    /* Золотая тень при наведении на карточку */
     .category-card:hover .relative {
-        box-shadow: 0 10px 25px -5px rgba(52, 48, 47, 0.3);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
     }
 </style>

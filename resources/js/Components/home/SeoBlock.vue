@@ -1,40 +1,40 @@
 <template>
-    <section class="seo-block bg-gradient-to-b from-sushi-silver to-white py-12 md:py-16">
+    <section class="seo-block bg-gradient-to-b from-sushi-first to-sushi-dark py-8 md:py-12 container mx-auto">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
-                <!-- H1 заголовок -->
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-first_color mb-6">
+                <!-- H1 заголовок - уменьшил -->
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-sushi-gold mb-4">
                     {{ title }}
                 </h1>
 
-                <!-- Описание -->
-                <p class="text-lg md:text-xl text-sushi-dark_op mb-8 leading-relaxed">
+                <!-- Описание - уменьшил -->
+                <p class="text-base md:text-lg text-sushi-silver opacity-90 mb-6 leading-relaxed">
                     {{ description }}
                 </p>
 
-                <!-- USP блоки (преимущества) -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                <!-- USP блоки (преимущества) - компактнее -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <div
                         v-for="feature in features"
                         :key="feature.id"
-                        class="feature-card bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300"
+                        class="feature-card bg-sushi-dark bg-opacity-60 backdrop-blur-sm rounded-lg p-4 border border-sushi-gold border-opacity-20 hover:border-opacity-50 transition-all duration-300"
                     >
-                        <!-- Иконка -->
-                        <div class="flex justify-center mb-4">
+                        <!-- Иконка - меньше -->
+                        <div class="flex justify-center mb-3">
                             <div
-                                class="w-16 h-16 rounded-full bg-gradient-to-br from-second_color to-sushi-gold flex items-center justify-center"
+                                class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center"
                             >
-                                <span class="text-3xl">{{ feature.icon }}</span>
+                                <span class="text-2xl">{{ feature.icon }}</span>
                             </div>
                         </div>
 
                         <!-- Заголовок преимущества -->
-                        <h3 class="text-lg font-semibold text-first_color mb-2">
+                        <h3 class="text-base font-semibold text-sushi-gold mb-2">
                             {{ feature.title }}
                         </h3>
 
                         <!-- Описание преимущества -->
-                        <p class="text-sm text-sushi-dark_op">
+                        <p class="text-sm text-sushi-silver opacity-80">
                             {{ feature.description }}
                         </p>
                     </div>
@@ -83,20 +83,20 @@
 </script>
 
 <style scoped>
-    /* Плавный градиент для фона */
+    /* Темный фон с градиентом */
     .seo-block {
         position: relative;
     }
 
-    /* Анимация при наведении на карточки */
+    /* Анимация при наведении на карточки - золотая подсветка */
     .feature-card {
-        border: 1px solid rgba(181, 131, 107, 0.1);
         transition: all 0.3s ease;
     }
 
     .feature-card:hover {
-        border-color: rgba(181, 131, 107, 0.3);
+        background-color: rgba(17, 13, 14, 0.8);
         transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
     }
 
     /* Плавная анимация появления */

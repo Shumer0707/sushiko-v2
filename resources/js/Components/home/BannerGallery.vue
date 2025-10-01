@@ -23,8 +23,8 @@
                 <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
                     <img :src="banner.image" :alt="banner.title" class="w-full h-full object-cover" />
 
-                    <!-- Overlay для лучшей читаемости текста -->
-                    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                    <!-- Overlay для лучшей читаемости текста - используем sushi-dark -->
+                    <div class="absolute inset-0 bg-sushi-dark bg-opacity-40"></div>
 
                     <!-- Контент баннера -->
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -36,11 +36,11 @@
                                 {{ banner.description }}
                             </p>
 
-                            <!-- Кнопка если нужна -->
+                            <!-- Кнопка - золотая с красным ховером -->
                             <button
                                 v-if="banner.buttonText"
                                 @click="handleBannerClick(banner)"
-                                class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300"
+                                class="bg-sushi-gold hover:bg-sushi-red text-sushi-dark hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                             >
                                 {{ banner.buttonText }}
                             </button>
@@ -64,9 +64,6 @@
     import 'swiper/css/pagination'
 
     // Подключаем нужные модули
-    // Navigation - стрелки влево/вправо
-    // Pagination - точки-индикаторы внизу
-    // Autoplay - автоматическая прокрутка
     const modules = [Navigation, Pagination, Autoplay]
 
     // Пропсы компонента
@@ -86,7 +83,7 @@
                       id: 1,
                       title: 'Добро пожаловать в Sushiko!',
                       description: 'Лучшие суши в Кишиневе. Свежие ингредиенты, традиционные рецепты',
-                      image: '/images/banners/sushi-banner-1.jpg',
+                      image: '/images/banners/sinsai-2.webp',
                       buttonText: 'Посмотреть меню',
                       link: '/catalog',
                   },
@@ -142,17 +139,15 @@
 </script>
 
 <style scoped>
-    /* Кастомные стили для Swiper */
     .banner-gallery {
-        /* Растягиваем на всю ширину экрана */
-        width: 100vw;
-        margin-left: calc(-50vw + 50%);
-        margin-right: calc(-50vw + 50%);
+        width: 100%;
+        margin: 0;
     }
 
     .banner-swiper {
-        --swiper-navigation-color: #fff;
-        --swiper-pagination-color: #dc2626;
+        /* Используем нашу суши-палитру */
+        --swiper-navigation-color: rgba(212, 175, 55); /* золото */
+        --swiper-pagination-color: rgba(212, 175, 55); /* золото */
         --swiper-navigation-size: 24px;
         cursor: grab;
     }
@@ -162,10 +157,10 @@
         cursor: grabbing;
     }
 
-    /* Стилизуем стрелки навигации */
+    /* Стилизуем стрелки навигации - тёмный фон */
     .banner-swiper :deep(.swiper-button-next),
     .banner-swiper :deep(.swiper-button-prev) {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(17, 13, 14, 0.6); /* sushi-dark с прозрачностью */
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -175,7 +170,7 @@
 
     .banner-swiper :deep(.swiper-button-next):hover,
     .banner-swiper :deep(.swiper-button-prev):hover {
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(212, 175, 55, 0.9); /* золото при ховере */
         transform: scale(1.1);
     }
 
@@ -188,18 +183,18 @@
     .banner-swiper :deep(.swiper-pagination-bullet) {
         width: 12px;
         height: 12px;
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.4);
         transition: all 0.3s ease;
         cursor: pointer;
     }
 
     .banner-swiper :deep(.swiper-pagination-bullet):hover {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(212, 175, 55, 0.7); /* золото при ховере */
         transform: scale(1.1);
     }
 
     .banner-swiper :deep(.swiper-pagination-bullet-active) {
-        background: #dc2626;
+        background: rgba(212, 175, 55, 1); /* золото для активной точки */
         transform: scale(1.2);
     }
 

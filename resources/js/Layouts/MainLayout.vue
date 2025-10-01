@@ -19,7 +19,7 @@
     <div class="flex flex-col min-h-screen ">
         <Header />
         <StickyHeader />
-        <main class="flex-grow container mx-auto py-6">
+        <main class="flex-grow">
             <PageLoaderWrapper :loading="!isReady">
                 <slot />
             </PageLoaderWrapper>
