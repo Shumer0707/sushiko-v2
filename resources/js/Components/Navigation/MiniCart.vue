@@ -2,9 +2,10 @@
     <div class="relative">
         <!-- Кнопка корзины -->
         <button
+            data-modal-trigger="mini-cart"
             ref="triggerButton"
             @click="overlay.toggle()"
-            class="flex items-center space-x-2 bg-gray-700 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 rounded cursor-pointer hover:bg-gray-600 transition-colors"
+            class="flex items-center space-x-2 bg-sushi-first px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 rounded cursor-pointer hover:bg-sushi-first/70 transition-colors"
         >
             <span class="text-sm md:text-xs">🛒</span>
             <div class="text-sm md:text-xs">
@@ -14,17 +15,23 @@
         </button>
 
         <!-- Выпадающая мини-корзина -->
+        <!-- Выпадающая мини-корзина -->
         <OverlayBackdrop :is-visible="overlay.isOpen.value" @close="overlay.close()">
             <div
                 v-if="overlay.isOpen.value"
-                class="bg-white rounded-lg shadow-xl border z-50 mini-cart sm:min-w-[380px] max-w-[calc(100vw-2rem)]"
+                data-modal-content="mini-cart"
+                :class="[
+                    'bg-sushi-dark rounded-b-lg shadow-xl border border-sushi-first z-50 mini-cart sm:min-w-[380px] max-w-[calc(100vw-2rem)]',
+                    // 🎯 Добавляем класс closing при анимации закрытия
+                    overlay.isClosing.value ? 'closing' : '',
+                ]"
                 :style="cartStyle"
                 @click.stop
             >
                 <!-- Заголовок корзины -->
-                <div class="flex justify-between items-center p-4 sm:p-4 md:p-3 border-b">
-                    <h3 class="font-bold text-gray-800 text-base sm:text-lg">Корзина</h3>
-                    <button @click="overlay.close()" class="text-gray-400 hover:text-gray-600 p-1">
+                <div class="flex justify-between items-center p-4 sm:p-4 md:p-3 border-b border-sushi-first">
+                    <h3 class="font-bold text-sushi-silver text-base sm:text-lg">Корзина</h3>
+                    <button @click="overlay.close()" class="text-sushi-silver/60 hover:text-sushi-gold p-1 transition-colors">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -35,11 +42,11 @@
                 <div class="max-h-60 sm:max-h-80 overflow-y-auto custom-scrollbar">
                     <!-- Пустая корзина -->
                     <div v-if="cartItems.length === 0" class="p-4 sm:p-6 text-center">
-                        <div class="text-gray-400 text-2xl sm:text-4xl mb-2 sm:mb-3">🛒</div>
-                        <p class="text-gray-500 mb-3 sm:mb-4 text-sm sm:text-base">Корзина пуста</p>
+                        <div class="text-sushi-gold text-2xl sm:text-4xl mb-2 sm:mb-3">🛒</div>
+                        <p class="text-sushi-silver/60 mb-3 sm:mb-4 text-sm sm:text-base">Корзина пуста</p>
                         <button
                             @click="overlay.close()"
-                            class="bg-sushi-gold hover:bg-yellow-600 text-black px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-colors text-sm sm:text-base"
+                            class="bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
                             Продолжить покупки
                         </button>
@@ -50,40 +57,45 @@
                         <div
                             v-for="item in cartItems"
                             :key="item.id"
-                            class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-sushi-first rounded-lg hover:bg-sushi-first/80 transition-colors"
                         >
                             <!-- Изображение товара -->
                             <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0"
+                                class="w-10 h-10 sm:w-12 sm:h-12 bg-sushi-dark border border-sushi-first rounded-lg flex items-center justify-center flex-shrink-0"
                             >
                                 <span class="text-lg sm:text-xl">{{ item.emoji || '🍣' }}</span>
                             </div>
 
                             <!-- Информация о товаре -->
                             <div class="flex-1 min-w-0">
-                                <h4 class="font-medium text-gray-800 truncate text-sm sm:text-base">{{ item.name }}</h4>
-                                <p class="text-xs sm:text-sm text-gray-500">{{ item.price }} MDL</p>
+                                <h4 class="font-medium text-sushi-silver truncate text-sm sm:text-base">{{ item.name }}</h4>
+                                <p class="text-xs sm:text-sm text-sushi-gold">{{ item.price }} MDL</p>
                             </div>
 
                             <!-- Количество и управление -->
                             <div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                                 <button
                                     @click="updateQuantity(item.id, item.quantity - 1)"
-                                    class="w-5 h-5 sm:w-6 sm:h-6 bg-gray-300 hover:bg-gray-400 rounded text-xs sm:text-sm flex items-center justify-center transition-colors"
+                                    class="w-5 h-5 sm:w-6 sm:h-6 bg-sushi-dark hover:bg-sushi-gold hover:text-sushi-dark border border-sushi-first rounded text-xs sm:text-sm flex items-center justify-center transition-colors text-sushi-silver"
                                 >
                                     -
                                 </button>
-                                <span class="w-6 sm:w-8 text-center text-xs sm:text-sm font-medium">{{ item.quantity }}</span>
+                                <span class="w-6 sm:w-8 text-center text-xs sm:text-sm font-medium text-sushi-silver">
+                                    {{ item.quantity }}
+                                </span>
                                 <button
                                     @click="updateQuantity(item.id, item.quantity + 1)"
-                                    class="w-5 h-5 sm:w-6 sm:h-6 bg-gray-300 hover:bg-gray-400 rounded text-xs sm:text-sm flex items-center justify-center transition-colors"
+                                    class="w-5 h-5 sm:w-6 sm:h-6 bg-sushi-dark hover:bg-sushi-gold hover:text-sushi-dark border border-sushi-first rounded text-xs sm:text-sm flex items-center justify-center transition-colors text-sushi-silver"
                                 >
                                     +
                                 </button>
                             </div>
 
                             <!-- Удалить товар -->
-                            <button @click="removeItem(item.id)" class="text-red-400 hover:text-red-600 p-1 flex-shrink-0">
+                            <button
+                                @click="removeItem(item.id)"
+                                class="text-red-400 hover:text-red-300 p-1 flex-shrink-0 transition-colors"
+                            >
                                 <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
                                         stroke-linecap="round"
@@ -98,21 +110,21 @@
                 </div>
 
                 <!-- Итого и кнопки -->
-                <div v-if="cartItems.length > 0" class="p-3 sm:p-4 border-t bg-gray-50">
+                <div v-if="cartItems.length > 0" class="p-3 sm:p-4 border-t border-sushi-first bg-sushi-first/50">
                     <div class="flex justify-between items-center mb-3">
-                        <span class="font-medium text-gray-700 text-sm sm:text-base">Итого:</span>
-                        <span class="font-bold text-base sm:text-lg text-gray-800">{{ totalAmount }} MDL</span>
+                        <span class="font-medium text-sushi-silver/80 text-sm sm:text-base">Итого:</span>
+                        <span class="font-bold text-base sm:text-lg text-sushi-gold">{{ totalAmount }} MDL</span>
                     </div>
 
                     <div class="space-y-2">
                         <button
-                            class="w-full bg-sushi-gold hover:bg-yellow-600 text-black py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
+                            class="w-full bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
                             Оформить заказ
                         </button>
                         <button
                             @click="overlay.close()"
-                            class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
+                            class="w-full bg-sushi-first hover:bg-sushi-first/80 text-sushi-silver border border-sushi-dark py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
                             Продолжить покупки
                         </button>
@@ -161,32 +173,33 @@
         return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
     })
 
-    // Позиционирование корзины
+    // MiniCart.vue - более простая логика
     const cartStyle = computed(() => {
         if (!overlay.isOpen.value) return {}
+
+        // Всегда определяем активный хедер
+        const header = document.querySelector('header')
+        const stickyHeader = document.querySelector('.fixed.translate-y-0') // sticky когда виден
+
+        const activeHeader = stickyHeader || header
+        const headerHeight = activeHeader ? activeHeader.offsetHeight : 80
 
         const isSmallScreen = window.innerWidth < 640
 
         if (isSmallScreen) {
-            // На мобильных - точно под хедером, определяем высоту динамически
-            const header = document.querySelector('header')
-            const headerHeight = header ? header.offsetHeight : 80
-
+            // Мобильные - на всю ширину
             return {
-                top: `${headerHeight}px`, // точно под хедером
+                top: `${headerHeight}px`,
                 left: '0',
                 right: '0',
                 position: 'fixed',
             }
         } else {
-            // На десктопе - под кнопкой
-            if (!triggerButton.value) return {}
-
-            const rect = triggerButton.value.getBoundingClientRect()
+            // Десктоп - справа, но под хедером
             return {
-                top: `${rect.bottom + 8}px`,
-                right: `${window.innerWidth - rect.right}px`,
-                position: 'absolute',
+                top: `${headerHeight}px`,
+                right: '16px', // отступ от края
+                position: 'fixed',
             }
         }
     })
@@ -213,37 +226,37 @@
 </script>
 
 <style scoped>
-    /* Анимация появления корзины */
     .mini-cart {
-        animation: cartSlideIn 0.3s ease-out forwards;
+        animation: cartSlideIn 0.5s ease-out forwards;
     }
 
     @keyframes cartSlideIn {
         0% {
-            opacity: 0;
-            transform: translateY(-20px); /* выезжает из-под хедера */
+            transform: translateY(-100%);
+        }
+        50% {
+            transform: translateY(1%);
         }
         100% {
-            opacity: 1;
             transform: translateY(0);
         }
     }
 
-    /* Анимация для мобильных - выезжает из-под хедера */
-    @media (max-width: 640px) {
-        .mini-cart {
-            animation: cartSlideInMobile 0.35s ease-out forwards;
-        }
+    .mini-cart.closing {
+        animation: cartSlideOut 0.4s ease-in forwards;
+    }
 
-        @keyframes cartSlideInMobile {
-            0% {
-                opacity: 0;
-                transform: translateY(-100%); /* полностью скрыта под хедером */
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0); /* выезжает точно под хедер */
-            }
+    @keyframes cartSlideOut {
+        0% {
+            /* opacity: 1; */
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(1%);
+        }
+        100% {
+            /* opacity: 0; */
+            transform: translateY(-100%);
         }
     }
 

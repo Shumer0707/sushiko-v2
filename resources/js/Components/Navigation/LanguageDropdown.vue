@@ -2,11 +2,12 @@
     <div class="relative">
         <!-- Кнопка языка -->
         <button
+            data-modal-trigger="language-dropdown"
             ref="triggerButton"
             @click="overlay.toggle()"
-            class="flex items-center space-x-2 px-3 py-2 rounded hover:bg-gray-700 transition-colors"
+            class="flex items-center space-x-2 px-3 py-2 rounded hover:bg-sushi-first transition-colors"
         >
-            <img :src="`/images/flag-${currentLocale}.png`" :alt="currentLocale.toUpperCase()" class="w-5 h-3" />
+            <!-- <img :src="`/images/flag-${currentLocale}.png`" :alt="currentLocale.toUpperCase()" class="w-5 h-3" /> -->
             <span class="text-sm font-medium">{{ currentLocale.toUpperCase() }}</span>
             <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': overlay.isOpen.value }">
                 <path fill="currentColor" d="M7 10l5 5 5-5z" />
@@ -17,8 +18,13 @@
         <OverlayBackdrop :is-visible="overlay.isOpen.value" @close="overlay.close()">
             <!-- Позиционируем относительно кнопки -->
             <div
+                data-modal-content="language-dropdown"
                 v-if="overlay.isOpen.value"
-                class="absolute bg-white rounded-lg shadow-xl border py-2 min-w-[140px] z-50 menu-dropdown"
+                :class="[
+                    'absolute bg-sushi-dark rounded-b-lg shadow-xl border border-t-0 py-2 min-w-[140px] z-50 menu-dropdown',
+                    // 🎯 Добавляем класс closing при анимации закрытия
+                    overlay.isClosing.value ? 'closing' : '',
+                ]"
                 :style="dropdownStyle"
                 @click.stop
             >
@@ -35,11 +41,11 @@
                     <button
                         type="submit"
                         :class="[
-                            'w-full flex items-center space-x-3 px-4 py-3 text-left text-gray-700 hover:bg-gray-100 transition-colors',
-                            currentLocale === locale ? 'bg-gray-50 font-medium' : '',
+                            'w-full flex items-center space-x-3 px-4 py-3 text-left text-sushi-silver hover:bg-sushi-first/70 transition-colors',
+                            currentLocale === locale ? 'bg-sushi-first font-medium' : '',
                         ]"
                     >
-                        <img :src="`/images/flag-${locale}.png`" :alt="locale.toUpperCase()" class="w-6 h-4" />
+                        <!-- <img :src="`/images/flag-${locale}.png`" :alt="locale.toUpperCase()" class="w-6 h-4" /> -->
                         <span class="text-sm">{{ getLanguageName(locale) }}</span>
                     </button>
                 </form>
@@ -102,43 +108,35 @@
 </script>
 
 <style scoped>
-    /* Анимация появления меню */
     .menu-dropdown {
         animation: menuSlideIn 0.4s ease-out forwards;
     }
 
     @keyframes menuSlideIn {
         0% {
-            opacity: 0;
-            transform: translateY(-15px) scale(0.85);
+            transform: translateY(-100%);
         }
         50% {
-            opacity: 0.8;
-            transform: translateY(3px) scale(1.02); /* небольшой перелет + увеличение */
+            transform: translateY(1%);
         }
         100% {
-            opacity: 1;
-            transform: translateY(0) scale(1); /* возвращаемся на место */
+            transform: translateY(0);
         }
     }
 
-    /* Анимация при закрытии */
     .menu-dropdown.closing {
         animation: menuSlideOut 0.25s ease-in forwards;
     }
 
     @keyframes menuSlideOut {
         0% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
-        60% {
-            opacity: 0.4;
-            transform: translateY(-5px) scale(0.95); /* сжимаемся и уходим вверх */
+        50% {
+            transform: translateY(1%);
         }
         100% {
-            opacity: 0;
-            transform: translateY(-20px) scale(0.8);
+            transform: translateY(-100%);
         }
     }
 </style>

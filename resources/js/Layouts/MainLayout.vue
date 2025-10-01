@@ -16,7 +16,7 @@
 </script>
 
 <template>
-    <div class="flex flex-col min-h-screen">
+    <div class="flex flex-col min-h-screen ">
         <Header />
         <StickyHeader />
         <main class="flex-grow container mx-auto py-6">

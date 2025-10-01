@@ -1,7 +1,17 @@
 <template>
     <OverlayBackdrop :is-visible="isVisible" @close="$emit('close')">
-        <!-- Мобильное меню - выезжает сверху -->
-        <div v-if="isVisible" class="absolute top-0 left-0 right-0 bg-sushi-dark text-white shadow-2xl mobile-menu" @click.stop>
+        <!-- Мобильное меню - выезжает точно из-под хедера -->
+        <div
+            v-if="isVisible"
+            :data-modal-content="modalId"
+            :class="[
+                'bg-sushi-dark text-white shadow-2xl mobile-menu',
+                // 🎯 Добавляем класс closing при анимации закрытия
+                isClosing ? 'closing' : '',
+            ]"
+            :style="menuStyle"
+            @click.stop
+        >
             <div class="container mx-auto px-4 py-6">
                 <!-- Заголовок меню -->
                 <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-600">
@@ -104,12 +114,17 @@
     import { Link, usePage } from '@inertiajs/vue3'
     import { useLocale } from '@/composables/useLocale'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
+    import { computed } from 'vue'
 
     // Props
     const props = defineProps({
         isVisible: {
             type: Boolean,
             required: true,
+        },
+        isClosing: {
+            type: Boolean,
+            default: false,
         },
         categories: {
             type: Array,
@@ -119,6 +134,10 @@
             type: String,
             required: true,
         },
+        modalId: {
+            type: String,
+            default: 'mobile-menu',
+        },
     })
 
     // Emits
@@ -126,6 +145,27 @@
 
     const { localizedRoute } = useLocale()
     const page = usePage()
+
+    // Вычисляем стиль для позиционирования под хедером
+    const menuStyle = computed(() => {
+        if (!props.isVisible) return {}
+
+        // Определяем активный хедер
+        const header = document.querySelector('header')
+        const stickyHeader = document.querySelector('.fixed.translate-y-0') // sticky когда виден
+
+        const activeHeader = stickyHeader || header
+        const headerHeight = activeHeader ? activeHeader.offsetHeight : 80
+
+        return {
+            position: 'fixed',
+            top: `${headerHeight}px`,
+            left: '0',
+            right: '0',
+            maxHeight: `calc(100vh - ${headerHeight}px)`,
+            overflowY: 'auto',
+        }
+    })
 
     // Названия языков
     const getLanguageName = (locale) => {
@@ -139,35 +179,57 @@
 </script>
 
 <style scoped>
-    /* Анимация выезжания сверху */
     .mobile-menu {
-        animation: slideDown 0.3s ease-out forwards;
+        animation: slideDownFromHeader 0.5s ease-out forwards;
     }
 
-    @keyframes slideDown {
+    @keyframes slideDownFromHeader {
         0% {
-            opacity: 0;
+            /* opacity: 0; */
             transform: translateY(-100%);
         }
+        50% {
+            transform: translateY(1%);
+        }
         100% {
-            opacity: 1;
+            /* opacity: 1; */
             transform: translateY(0);
         }
     }
 
-    /* При закрытии */
     .mobile-menu.closing {
-        animation: slideUp 0.25s ease-in forwards;
+        animation: slideUpToHeader 0.4s ease-in forwards;
     }
 
-    @keyframes slideUp {
+    @keyframes slideUpToHeader {
         0% {
-            opacity: 1;
+            /* opacity: 1; */
             transform: translateY(0);
         }
+        50% {
+            transform: translateY(1%);
+        }
         100% {
-            opacity: 0;
+            /* opacity: 0; */
             transform: translateY(-100%);
         }
+    }
+
+    /* Кастомный скроллбар */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(212, 175, 55, 0.5);
+        border-radius: 2px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 175, 55, 0.8);
     }
 </style>

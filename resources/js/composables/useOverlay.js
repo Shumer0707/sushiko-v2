@@ -7,9 +7,10 @@ const isAnyOverlayActive = ref(false)
 
 export function useOverlay(overlayId) {
     const isOpen = ref(false)
+    const isClosing = ref(false) // 🆕 Флаг для анимации закрытия
 
     const open = async () => {
-        if (isOpen.value) return
+        if (isOpen.value || isClosing.value) return
 
         // Добавляем в активные оверлеи
         activeOverlays.value.add(overlayId)
@@ -19,28 +20,60 @@ export function useOverlay(overlayId) {
         // Блокируем скролл с поддержкой modern CSS и fallback
         await nextTick()
         blockScroll()
+
+        // Добавляем глобальный слушатель кликов с фазой capture
+        document.addEventListener('click', handleGlobalClick, true)
     }
 
     const close = () => {
-        if (!isOpen.value) return
+        if (!isOpen.value || isClosing.value) return
 
-        // Убираем из активных оверлеев
-        activeOverlays.value.delete(overlayId)
-        isOpen.value = false
+        // 🚀 Запускаем анимацию закрытия
+        isClosing.value = true
 
-        // Если других оверлеев нет - разблокируем скролл
-        if (activeOverlays.value.size === 0) {
-            isAnyOverlayActive.value = false
-            unblockScroll()
-        }
+        // Убираем глобальный слушатель сразу (чтобы не мешал)
+        document.removeEventListener('click', handleGlobalClick, true)
+
+        // ⏰ Ждем завершения анимации (250ms = чуть больше чем в CSS)
+        setTimeout(() => {
+            // Теперь уже реально закрываем
+            activeOverlays.value.delete(overlayId)
+            isOpen.value = false
+            isClosing.value = false
+
+            // Если других оверлеев нет - разблокируем скролл
+            if (activeOverlays.value.size === 0) {
+                isAnyOverlayActive.value = false
+                unblockScroll()
+            }
+        }, 250) // Чуть больше чем 200ms из CSS для надежности
     }
 
     const toggle = () => {
+        if (isClosing.value) return // Не даем переключаться во время анимации
         isOpen.value ? close() : open()
+    }
+
+    // Обработчик глобальных кликов
+    const handleGlobalClick = (event) => {
+        if (isClosing.value) return // Игнорируем клики во время закрытия
+
+        // Проверяем, не клик ли по самой модалке или её содержимому
+        const modalContent = event.target.closest(`[data-modal-content="${overlayId}"]`)
+
+        // Проверяем, не клик ли по кнопке-триггеру этой модалки
+        const triggerButton = event.target.closest(`[data-modal-trigger="${overlayId}"]`)
+
+        // Если клик НЕ по модалке и НЕ по триггеру - закрываем
+        if (!modalContent && !triggerButton) {
+            event.preventDefault()
+            close()
+        }
     }
 
     return {
         isOpen,
+        isClosing, // 🆕 Возвращаем новый флаг
         open,
         close,
         toggle,

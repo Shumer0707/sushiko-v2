@@ -1,5 +1,5 @@
 <template>
-    <header class="bg-sushi-dark text-white">
+    <header class="bg-sushi-dark text-sushi-white z-30">
         <!-- Верхняя строка -->
         <div class="border-b border-gray-700">
             <div class="container mx-auto px-4 py-3">
@@ -7,10 +7,7 @@
                     <!-- Лого -->
                     <div class="flex items-center">
                         <Link :href="localizedRoute('/')" class="block">
-                            <div class="text-white">
-                                <div class="text-xl xl:text-2xl lg:text-xl font-bold tracking-wider">SUSHIKO</div>
-                                <div class="text-xs text-gray-300 -mt-1 tracking-widest">sushi & rolls</div>
-                            </div>
+                            <img src="images/logo.jpg" alt="" class="w-32 lg:w-48">
                         </Link>
                     </div>
 
@@ -31,7 +28,7 @@
                     <!-- Правая часть -->
                     <div class="flex items-center space-x-4">
                         <!-- Корзина (всегда видна) -->
-                        <MiniCart />
+                        <MiniCart :is-closing="mobileMenuOverlay.isClosing.value"/>
 
                         <!-- Навигация для десктопа (скрываем на мобильных) -->
                         <div class="hidden lg:flex items-center space-x-6">
@@ -45,6 +42,7 @@
 
                         <!-- Гамбургер (только на мобильных) -->
                         <button
+                            data-modal-trigger="mobile-menu"
                             @click="toggleMobileMenu"
                             class="lg:hidden text-white p-2 hover:bg-gray-700 rounded transition-colors"
                         >
@@ -87,6 +85,8 @@
         <!-- Мобильное меню -->
         <MobileMenu
             :is-visible="mobileMenuOverlay.isOpen.value"
+            :is-closing="mobileMenuOverlay.isClosing.value"
+            :modal-id="'mobile-menu'"
             :categories="categories"
             :current-locale="currentLocale"
             @close="closeMobileMenu"

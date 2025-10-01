@@ -9,10 +9,7 @@
             <div class="flex justify-between items-center">
                 <!-- Лого -->
                 <Link :href="localizedRoute('/')" class="flex items-center">
-                    <div class="text-white">
-                        <div class="text-lg xl:text-xl lg:text-base font-bold tracking-wider">SUSHIKO</div>
-                        <div class="text-xs xl:text-xs lg:text-[10px] text-gray-300 -mt-1 tracking-widest">sushi & rolls</div>
-                    </div>
+                    <img src="images/logo.jpg" alt="" class="w-32 lg:w-48" />
                 </Link>
 
                 <!-- Навигация по категориям (только lg+ экраны) -->
@@ -34,6 +31,7 @@
 
                     <!-- Гамбургер (только на мобильных < lg) -->
                     <button
+                        data-modal-trigger="sticky-mobile-menu"
                         @click="toggleMobileMenu"
                         class="lg:hidden text-white p-2 hover:bg-gray-700 rounded transition-colors"
                     >
@@ -52,6 +50,7 @@
             <!-- Мобильное меню для sticky header -->
             <MobileMenu
                 v-if="mobileMenuOverlay.isOpen.value"
+                :modal-id="'sticky-mobile-menu'"
                 :is-visible="mobileMenuOverlay.isOpen.value"
                 :categories="categories"
                 :current-locale="page.props.current_locale"

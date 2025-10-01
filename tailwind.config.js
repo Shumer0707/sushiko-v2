@@ -28,9 +28,12 @@ export default {
                 black: '#110d0e',
                 sushi: {
                     // dark: '#2D2D2D',
-                    dark: '#110d0e',
-
-                    gold: '#D4AF37', // золотистый акцент
+                    first: 'rgba(52, 48, 47)',
+                    dark: 'rgba(17, 13, 14)',
+                    dark_op: 'rgba(17, 13, 14, 0.7)',
+                    silver: '#ecf4f4ff',
+                    gold: 'rgba(212, 175, 55)',
+                    gold_op: 'rgba(212, 175, 55, 0.7)',
                     white: '#FFFFFF',
                 },
             },

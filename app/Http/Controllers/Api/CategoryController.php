@@ -28,6 +28,7 @@ class CategoryController extends Controller
                         'id' => $category->id,
                         'name' => $category->translatedName(),
                         'slug' => $category->translation->slug ?? '',
+                        'image_url' => $category->image_url,
                     ];
                 });
         });
