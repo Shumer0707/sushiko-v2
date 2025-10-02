@@ -9,12 +9,20 @@
         >
             <span class="text-sm md:text-xs">🛒</span>
             <div class="text-sm md:text-xs">
-                <span class="font-semibold">{{ totalAmount }} MDL</span>
-                <div class="text-xs md:text-[10px] text-gray-300 hidden sm:block">{{ totalItems }} товара</div>
+                <!-- 🔥 НОВОЕ: Данные из store -->
+                <span class="font-semibold">{{ cartStore.totalPrice }} {{ cartStore.currency }}</span>
+                <div class="text-xs md:text-[10px] text-gray-300 hidden sm:block">{{ cartStore.totalItems }} {{ itemsWord }}</div>
             </div>
+
+            <!-- 🔥 НОВОЕ: Бейдж с количеством (если есть товары) -->
+            <span
+                v-if="cartStore.totalItems > 0"
+                class="absolute -top-1 -right-1 bg-sushi-red text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-sushi-dark"
+            >
+                {{ cartStore.totalItems > 99 ? '99+' : cartStore.totalItems }}
+            </span>
         </button>
 
-        <!-- Выпадающая мини-корзина -->
         <!-- Выпадающая мини-корзина -->
         <OverlayBackdrop :is-visible="overlay.isOpen.value" @close="overlay.close()">
             <div
@@ -22,7 +30,6 @@
                 data-modal-content="mini-cart"
                 :class="[
                     'bg-sushi-dark rounded-b-lg shadow-xl border border-sushi-first z-50 mini-cart sm:min-w-[380px] max-w-[calc(100vw-2rem)]',
-                    // 🎯 Добавляем класс closing при анимации закрытия
                     overlay.isClosing.value ? 'closing' : '',
                 ]"
                 :style="cartStyle"
@@ -41,7 +48,7 @@
                 <!-- Товары в корзине -->
                 <div class="max-h-60 sm:max-h-80 overflow-y-auto custom-scrollbar">
                     <!-- Пустая корзина -->
-                    <div v-if="cartItems.length === 0" class="p-4 sm:p-6 text-center">
+                    <div v-if="cartStore.items.length === 0" class="p-4 sm:p-6 text-center">
                         <div class="text-sushi-gold text-2xl sm:text-4xl mb-2 sm:mb-3">🛒</div>
                         <p class="text-sushi-silver/60 mb-3 sm:mb-4 text-sm sm:text-base">Корзина пуста</p>
                         <button
@@ -55,27 +62,38 @@
                     <!-- Товары -->
                     <div v-else class="p-3 sm:p-4 space-y-2 sm:space-y-3">
                         <div
-                            v-for="item in cartItems"
-                            :key="item.id"
+                            v-for="item in cartStore.items"
+                            :key="item.product.id"
                             class="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-sushi-first rounded-lg hover:bg-sushi-first/80 transition-colors"
                         >
                             <!-- Изображение товара -->
                             <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-sushi-dark border border-sushi-first rounded-lg flex items-center justify-center flex-shrink-0"
+                                class="w-10 h-10 sm:w-12 sm:h-12 bg-sushi-dark border border-sushi-first rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
                             >
-                                <span class="text-lg sm:text-xl">{{ item.emoji || '🍣' }}</span>
+                                <!-- 🔥 НОВОЕ: Реальное фото товара или плейсхолдер -->
+                                <img
+                                    v-if="item.product.image_url"
+                                    :src="item.product.image_url"
+                                    :alt="item.product.name"
+                                    class="w-full h-full object-cover"
+                                />
+                                <span v-else class="text-lg sm:text-xl">🍣</span>
                             </div>
 
                             <!-- Информация о товаре -->
                             <div class="flex-1 min-w-0">
-                                <h4 class="font-medium text-sushi-silver truncate text-sm sm:text-base">{{ item.name }}</h4>
-                                <p class="text-xs sm:text-sm text-sushi-gold">{{ item.price }} MDL</p>
+                                <h4 class="font-medium text-sushi-silver truncate text-sm sm:text-base">
+                                    {{ item.product.name }}
+                                </h4>
+                                <p class="text-xs sm:text-sm text-sushi-gold">
+                                    {{ item.product.price }} {{ item.product.currency }}
+                                </p>
                             </div>
 
                             <!-- Количество и управление -->
                             <div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                                 <button
-                                    @click="updateQuantity(item.id, item.quantity - 1)"
+                                    @click="cartStore.decrementQuantity(item.product.id)"
                                     class="w-5 h-5 sm:w-6 sm:h-6 bg-sushi-dark hover:bg-sushi-gold hover:text-sushi-dark border border-sushi-first rounded text-xs sm:text-sm flex items-center justify-center transition-colors text-sushi-silver"
                                 >
                                     -
@@ -84,7 +102,7 @@
                                     {{ item.quantity }}
                                 </span>
                                 <button
-                                    @click="updateQuantity(item.id, item.quantity + 1)"
+                                    @click="cartStore.incrementQuantity(item.product.id)"
                                     class="w-5 h-5 sm:w-6 sm:h-6 bg-sushi-dark hover:bg-sushi-gold hover:text-sushi-dark border border-sushi-first rounded text-xs sm:text-sm flex items-center justify-center transition-colors text-sushi-silver"
                                 >
                                     +
@@ -93,7 +111,7 @@
 
                             <!-- Удалить товар -->
                             <button
-                                @click="removeItem(item.id)"
+                                @click="cartStore.removeFromCart(item.product.id)"
                                 class="text-red-400 hover:text-red-300 p-1 flex-shrink-0 transition-colors"
                             >
                                 <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,17 +128,20 @@
                 </div>
 
                 <!-- Итого и кнопки -->
-                <div v-if="cartItems.length > 0" class="p-3 sm:p-4 border-t border-sushi-first bg-sushi-first/50">
+                <div v-if="cartStore.items.length > 0" class="p-3 sm:p-4 border-t border-sushi-first bg-sushi-first/50">
                     <div class="flex justify-between items-center mb-3">
                         <span class="font-medium text-sushi-silver/80 text-sm sm:text-base">Итого:</span>
-                        <span class="font-bold text-base sm:text-lg text-sushi-gold">{{ totalAmount }} MDL</span>
+                        <span class="font-bold text-base sm:text-lg text-sushi-gold">
+                            {{ cartStore.totalPrice }} {{ cartStore.currency }}
+                        </span>
                     </div>
 
                     <div class="space-y-2">
                         <button
+                            @click="goToCart"
                             class="w-full bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
-                            Оформить заказ
+                            Перейти в корзину
                         </button>
                         <button
                             @click="overlay.close()"
@@ -139,47 +160,42 @@
     import { useOverlay } from '@/composables/useOverlay'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
     import { ref, computed } from 'vue'
+    import { useCartStore } from '@/Stores/cart' // 🔥 Импорт store
+    import { router, usePage } from '@inertiajs/vue3'
 
     // Refs
     const triggerButton = ref(null)
 
+    // 🔥 Подключаем store корзины
+    const cartStore = useCartStore()
+
     // Overlay система
     const overlay = useOverlay('mini-cart')
 
-    // Временные тестовые данные корзины (потом заменим на реальные)
-    const cartItems = ref([
-        {
-            id: 1,
-            name: 'Филадельфия с лососем',
-            price: 250,
-            quantity: 2,
-            emoji: '🍣',
-        },
-        {
-            id: 2,
-            name: 'Калифорния с крабом',
-            price: 180,
-            quantity: 1,
-            emoji: '🍤',
-        },
-    ])
+    // 🔥 Склонение слова "товар" (1 товар, 2 товара, 5 товаров)
+    const itemsWord = computed(() => {
+        const count = cartStore.totalItems
+        const lastDigit = count % 10
+        const lastTwoDigits = count % 100
 
-    // Вычисляемые свойства
-    const totalItems = computed(() => {
-        return cartItems.value.reduce((sum, item) => sum + item.quantity, 0)
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+            return 'товаров'
+        }
+        if (lastDigit === 1) {
+            return 'товар'
+        }
+        if (lastDigit >= 2 && lastDigit <= 4) {
+            return 'товара'
+        }
+        return 'товаров'
     })
 
-    const totalAmount = computed(() => {
-        return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    })
-
-    // MiniCart.vue - более простая логика
+    // Стили для позиционирования
     const cartStyle = computed(() => {
         if (!overlay.isOpen.value) return {}
 
-        // Всегда определяем активный хедер
         const header = document.querySelector('header')
-        const stickyHeader = document.querySelector('.fixed.translate-y-0') // sticky когда виден
+        const stickyHeader = document.querySelector('.fixed.translate-y-0')
 
         const activeHeader = stickyHeader || header
         const headerHeight = activeHeader ? activeHeader.offsetHeight : 80
@@ -187,7 +203,6 @@
         const isSmallScreen = window.innerWidth < 640
 
         if (isSmallScreen) {
-            // Мобильные - на всю ширину
             return {
                 top: `${headerHeight}px`,
                 left: '0',
@@ -195,33 +210,17 @@
                 position: 'fixed',
             }
         } else {
-            // Десктоп - справа, но под хедером
             return {
                 top: `${headerHeight}px`,
-                right: '16px', // отступ от края
+                right: '16px',
                 position: 'fixed',
             }
         }
     })
 
-    // Методы управления корзиной
-    const updateQuantity = (itemId, newQuantity) => {
-        if (newQuantity <= 0) {
-            removeItem(itemId)
-            return
-        }
-
-        const item = cartItems.value.find((item) => item.id === itemId)
-        if (item) {
-            item.quantity = newQuantity
-        }
-    }
-
-    const removeItem = (itemId) => {
-        const index = cartItems.value.findIndex((item) => item.id === itemId)
-        if (index > -1) {
-            cartItems.value.splice(index, 1)
-        }
+    const goToCart = () => {
+        overlay.close()
+        router.visit(route('cart.index', { locale: usePage().props.locale }))
     }
 </script>
 
@@ -248,14 +247,12 @@
 
     @keyframes cartSlideOut {
         0% {
-            /* opacity: 1; */
             transform: translateY(0);
         }
         50% {
             transform: translateY(1%);
         }
         100% {
-            /* opacity: 0; */
             transform: translateY(-100%);
         }
     }

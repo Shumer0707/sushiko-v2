@@ -13,7 +13,7 @@ import AuthenticatedLayout from './Layouts/AuthenticatedLayout.vue'
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 
 // страницы без авторизации
-const publicPages = ['Home', 'About', 'Contact']
+const publicPages = ['Home', 'About', 'Contact', 'Cart']
 // при желании сюда можно добавить ещё: 'Catalog', 'Product', и т.д.
 
 createInertiaApp({

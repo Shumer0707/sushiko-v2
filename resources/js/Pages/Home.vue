@@ -5,6 +5,8 @@
     import CategoriesNav from '@/Components/home/CategoriesNav.vue'
     import ProductsMenu from '@/Components/home/ProductsMenu.vue'
     import ParallaxBackground from '@/Components/home/ParallaxBackground.vue'
+    // Переиспользуемый UI компонент
+    import PageGradient from '@/Components/UI/PageGradient.vue'
 
     defineProps({
         banners: {
@@ -28,8 +30,14 @@
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />
 
-    <!-- Градиент поверх ВСЕЙ страницы -->
-    <div class="page-gradient"></div>
+    <!--
+        Градиент поверх ВСЕЙ страницы (теперь переиспользуемый компонент!)
+        Можно настроить через пропсы:
+        - color="52, 48, 47" - цвет в RGB
+        - :opacity="[1, 0, 0.3, 0.7, 1]" - прозрачность в 5 точках
+        - :z-index="1" - слой
+    -->
+    <PageGradient />
 
     <!-- Контент -->
     <div class="relative z-20 min-h-screen">
@@ -56,29 +64,7 @@
 </template>
 
 <style scoped>
-    /* Градиент на ВСЮ страницу */
-    .page-gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        z-index: 1;
-        pointer-events: none;
-
-        /* Градиент от прозрачного к коричневому */
-        background: linear-gradient(
-            to bottom,
-            rgba(52, 48, 47, 1) 0%,
-            rgba(52, 48, 47, 0) 30%,
-            rgba(52, 48, 47, 0.3) 50%,
-            rgba(52, 48, 47, 0.7) 70%,
-            rgba(52, 48, 47, 1) 100%
-        );
-    }
-
-    /* Фон всей страницы - коричневый */
     :deep(body) {
-        background-color: rgb(52, 48, 47);
+        background-color: rgb(52, 48, 47); /* sushi-first */
     }
 </style>

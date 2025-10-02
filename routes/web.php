@@ -16,13 +16,10 @@ use App\Http\Controllers\ProductController;
 
 Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en']], function () {
 
-    // Главная страница с товарами
     Route::get('/', [ProductController::class, 'index'])->name('home');
 
-    // Страница товара
     Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
-
-    // Статические страницы
+    Route::get('/cart', fn() => Inertia::render('Cart'))->name('cart.index');
     Route::get('/about', fn() => Inertia::render('About'))->name('about');
     Route::get('/contact', fn() => Inertia::render('Contact'))->name('contact');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');

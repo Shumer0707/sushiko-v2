@@ -1,3 +1,4 @@
+<!-- Components/UI/OverlayBackdrop.vue -->
 <template>
     <Teleport to="body">
         <Transition
@@ -8,7 +9,12 @@
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
         >
-            <div v-if="isVisible" class="fixed inset-0 bg-sushi-dark bg-opacity-50 z-20" @click="handleBackdropClick">
+            <div
+                v-if="isVisible"
+                class="fixed inset-0 bg-sushi-dark bg-opacity-50"
+                :style="{ zIndex: zIndex }"
+                @click="handleBackdropClick"
+            >
                 <!-- Слот для контента меню -->
                 <slot />
             </div>
@@ -26,6 +32,10 @@
         closeOnBackdropClick: {
             type: Boolean,
             default: true,
+        },
+        zIndex: {
+            type: Number,
+            default: 20, // ставим 50 по умолчанию (было 20, но это слишком низко)
         },
     })
 
