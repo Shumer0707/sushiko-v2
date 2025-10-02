@@ -60,7 +60,7 @@
     import { usePage } from '@inertiajs/vue3'
 
     // Компоненты
-    import ParallaxBackground from '@/Components/home/ParallaxBackground.vue'
+    import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
     import PageGradient from '@/Components/UI/PageGradient.vue'
     import CartEmpty from '@/Components/Cart/CartEmpty.vue'
     import CartItem from '@/Components/Cart/CartItem.vue'

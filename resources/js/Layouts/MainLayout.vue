@@ -2,7 +2,7 @@
     import { onMounted } from 'vue'
     import Header from './Partials/Header.vue'
     import Footer from './Partials/Footer.vue'
-    import PageLoaderWrapper from '@/Components/common/PageLoaderWrapper.vue'
+    import PageLoaderWrapper from '@/Components/Common/PageLoaderWrapper.vue'
     import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
