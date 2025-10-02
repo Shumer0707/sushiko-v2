@@ -1,10 +1,15 @@
-// resources/js/stores/cart.js
+// resources/js/Stores/cart.js
 import { defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
         items: [], // Массив товаров в корзине
-        // Структура item: { product, quantity, selectedAttributes }
+
+        // Настройки доставки
+        deliverySettings: {
+            freeDeliveryThreshold: 500, // Минимальная сумма для бесплатной доставки
+            deliveryCost: 50, // Стоимость доставки если не достигнут порог
+        },
     }),
 
     getters: {
@@ -15,14 +20,58 @@ export const useCartStore = defineStore('cart', {
 
         // Общая сумма корзины
         totalPrice: (state) => {
-            return state.items.reduce((sum, item) => {
-                return sum + item.product.price * item.quantity
-            }, 0)
+            return state.items
+                .reduce((sum, item) => {
+                    return sum + item.product.price * item.quantity
+                }, 0)
+                .toFixed(2)
         },
 
         // Валюта (берём у первого товара, обычно у всех одна)
         currency: (state) => {
             return state.items[0]?.product?.currency || 'MDL'
+        },
+
+        // Стоимость доставки (зависит от суммы заказа)
+        deliveryCost: (state) => {
+            const total = state.items.reduce((sum, item) => {
+                return sum + item.product.price * item.quantity
+            }, 0)
+
+            // Если сумма >= порога - доставка бесплатно
+            if (total >= state.deliverySettings.freeDeliveryThreshold) {
+                return 0
+            }
+
+            return state.deliverySettings.deliveryCost
+        },
+
+        // Бесплатная ли доставка
+        isFreeDelivery: (state) => {
+            const total = state.items.reduce((sum, item) => {
+                return sum + item.product.price * item.quantity
+            }, 0)
+
+            return total >= state.deliverySettings.freeDeliveryThreshold
+        },
+
+        // Сколько не хватает до бесплатной доставки
+        amountUntilFreeDelivery: (state) => {
+            const total = state.items.reduce((sum, item) => {
+                return sum + item.product.price * item.quantity
+            }, 0)
+
+            const remaining = state.deliverySettings.freeDeliveryThreshold - total
+
+            return remaining > 0 ? remaining.toFixed(2) : 0
+        },
+
+        // Итоговая сумма с доставкой
+        totalWithDelivery(state) {
+            const subtotal = parseFloat(this.totalPrice)
+            const delivery = this.deliveryCost
+
+            return (subtotal + delivery).toFixed(2)
         },
 
         // Проверка: есть ли товар в корзине
@@ -39,14 +88,11 @@ export const useCartStore = defineStore('cart', {
     actions: {
         // Добавить товар в корзину
         addToCart(product, quantity = 1, selectedAttributes = {}) {
-            // Проверяем, есть ли уже такой товар
             const existingItem = this.items.find((item) => item.product.id === product.id)
 
             if (existingItem) {
-                // Если есть - увеличиваем количество
                 existingItem.quantity += quantity
             } else {
-                // Если нет - добавляем новый
                 this.items.push({
                     product: {
                         id: product.id,
@@ -57,13 +103,11 @@ export const useCartStore = defineStore('cart', {
                         image_url: product.image_url,
                     },
                     quantity,
-                    selectedAttributes, // Например: { size: 'L', spicy: 'Hot' }
+                    selectedAttributes,
                 })
             }
 
-            // Сохраняем в localStorage
             this.saveToStorage()
-
             console.log('✅ Добавлено в корзину:', product.name, 'x', quantity)
         },
 
@@ -86,7 +130,6 @@ export const useCartStore = defineStore('cart', {
 
             if (item) {
                 if (quantity <= 0) {
-                    // Если количество 0 или меньше - удаляем товар
                     this.removeFromCart(productId)
                 } else {
                     item.quantity = quantity
@@ -114,7 +157,6 @@ export const useCartStore = defineStore('cart', {
                     item.quantity--
                     this.saveToStorage()
                 } else {
-                    // Если количество станет 0 - удаляем
                     this.removeFromCart(productId)
                 }
             }
@@ -125,6 +167,12 @@ export const useCartStore = defineStore('cart', {
             this.items = []
             this.saveToStorage()
             console.log('🧹 Корзина очищена')
+        },
+
+        // Обновить настройки доставки (если нужно менять из админки)
+        updateDeliverySettings(freeThreshold, cost) {
+            this.deliverySettings.freeDeliveryThreshold = freeThreshold
+            this.deliverySettings.deliveryCost = cost
         },
 
         // Сохранить в localStorage

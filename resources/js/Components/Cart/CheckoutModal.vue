@@ -1,18 +1,11 @@
 <!-- Components/Cart/CheckoutModal.vue -->
 <template>
-    <OverlayBackdrop :is-visible="isOpen" :z-index="100" @close="handleClose">
-        <!-- Центрирующий контейнер -->
-        <div
-            v-if="isOpen"
-            class="fixed inset-0 flex items-center justify-center p-2 sm:p-4"
-            style="z-index: 60"
-            @click="handleClose"
-        >
-            <!-- Модальное окно - останавливаем всплытие клика -->
+    <OverlayBackdrop :is-visible="isOpen" :z-index="9999" @close="handleClose">
+        <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center p-2 sm:p-4" @click="handleClose">
             <div
                 @click.stop
                 :class="[
-                    'bg-sushi-dark border border-sushi-gold rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-content',
+                    'bg-sushi-dark border border-sushi-gold rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto modal-content',
                     isClosing ? 'closing' : '',
                 ]"
             >
@@ -33,45 +26,50 @@
                         <div class="flex justify-between items-center flex-wrap gap-2">
                             <span class="text-sushi-silver/80 text-sm sm:text-base">Итого к оплате:</span>
                             <span class="text-xl sm:text-2xl font-bold text-sushi-gold">
-                                {{ cartStore.totalPrice }} {{ cartStore.currency }}
+                                {{ cartStore.totalWithDelivery }} {{ cartStore.currency }}
                             </span>
                         </div>
                         <p class="text-xs sm:text-sm text-sushi-silver/60 mt-2">{{ cartStore.totalItems }} {{ itemsWord }}</p>
                     </div>
 
                     <!-- Форма -->
-                    <form @submit.prevent="submitOrder" class="space-y-3 sm:space-y-4">
-                        <!-- Имя -->
-                        <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                Ваше имя
-                                <span class="text-red-400">*</span>
-                            </label>
-                            <input
-                                v-model="form.name"
-                                type="text"
-                                required
-                                class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
-                                placeholder="Введите ваше имя"
-                            />
+                    <form @submit.prevent="submitOrder" class="space-y-4">
+                        <!-- Имя и Телефон (2 колонки) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Имя -->
+                            <div>
+                                <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                    Ваше имя
+                                    <span class="text-red-400">*</span>
+                                </label>
+                                <input
+                                    v-model="form.name"
+                                    type="text"
+                                    required
+                                    class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                    placeholder="Иван Петров"
+                                />
+                            </div>
+
+                            <!-- Телефон с маской -->
+                            <div>
+                                <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                    Телефон
+                                    <span class="text-red-400">*</span>
+                                </label>
+                                <input
+                                    :value="phoneMask.formattedValue.value"
+                                    @input="phoneMask.handleInput"
+                                    type="text"
+                                    required
+                                    class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                    placeholder="+373 12 345 678"
+                                />
+                                <p v-if="phoneError" class="text-red-400 text-xs mt-1">{{ phoneError }}</p>
+                            </div>
                         </div>
 
-                        <!-- Телефон -->
-                        <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                Телефон
-                                <span class="text-red-400">*</span>
-                            </label>
-                            <input
-                                v-model="form.phone"
-                                type="tel"
-                                required
-                                class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
-                                placeholder="+373 XX XXX XXX"
-                            />
-                        </div>
-
-                        <!-- Email (опционально) -->
+                        <!-- Email (опционально, на всю ширину) -->
                         <div>
                             <label class="block text-sm font-medium text-sushi-silver mb-2">Email (опционально)</label>
                             <input
@@ -82,19 +80,219 @@
                             />
                         </div>
 
-                        <!-- Адрес доставки -->
+                        <!-- Способ получения -->
                         <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                Адрес доставки
+                            <label class="block text-sm font-medium text-sushi-silver mb-3">
+                                Способ получения
                                 <span class="text-red-400">*</span>
                             </label>
-                            <textarea
-                                v-model="form.address"
-                                required
-                                rows="3"
-                                class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors resize-none"
-                                placeholder="Улица, дом, квартира"
-                            ></textarea>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label
+                                    class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                    :class="
+                                        form.deliveryMethod === 'pickup'
+                                            ? 'border-sushi-gold bg-sushi-gold/10'
+                                            : 'border-sushi-dark hover:border-sushi-gold/50'
+                                    "
+                                >
+                                    <input
+                                        v-model="form.deliveryMethod"
+                                        type="radio"
+                                        value="pickup"
+                                        class="mr-3 flex-shrink-0"
+                                        required
+                                    />
+                                    <span class="text-sushi-silver text-sm sm:text-base">Самовывоз</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                    :class="
+                                        form.deliveryMethod === 'delivery'
+                                            ? 'border-sushi-gold bg-sushi-gold/10'
+                                            : 'border-sushi-dark hover:border-sushi-gold/50'
+                                    "
+                                >
+                                    <input
+                                        v-model="form.deliveryMethod"
+                                        type="radio"
+                                        value="delivery"
+                                        class="mr-3 flex-shrink-0"
+                                        required
+                                    />
+                                    <span class="text-sushi-silver text-sm sm:text-base">Доставка</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Адрес самовывоза (если выбран самовывоз) -->
+                        <div
+                            v-if="form.deliveryMethod === 'pickup'"
+                            class="bg-sushi-first/30 border border-sushi-gold/30 rounded-lg p-4"
+                        >
+                            <p class="text-sushi-silver font-medium mb-2">Адрес самовывоза:</p>
+                            <p class="text-sushi-silver/80 text-sm mb-1">ул. Пушкина, д. 10</p>
+                            <p class="text-sushi-silver/60 text-xs">Время работы: 10:00 - 22:00</p>
+                        </div>
+
+                        <!-- Блок доставки (если выбрана доставка) -->
+                        <div
+                            v-if="form.deliveryMethod === 'delivery'"
+                            class="space-y-4 bg-sushi-first/10 border border-sushi-first rounded-lg p-4"
+                        >
+                            <!-- Тип адреса -->
+                            <div>
+                                <label class="block text-sm font-medium text-sushi-silver mb-3">
+                                    Тип адреса
+                                    <span class="text-red-400">*</span>
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <label
+                                        class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                        :class="
+                                            form.addressType === 'house'
+                                                ? 'border-sushi-gold bg-sushi-gold/10'
+                                                : 'border-sushi-dark hover:border-sushi-gold/50'
+                                        "
+                                    >
+                                        <input v-model="form.addressType" type="radio" value="house" class="mr-3 flex-shrink-0" />
+                                        <span class="text-sushi-silver text-sm sm:text-base">Частный дом</span>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                        :class="
+                                            form.addressType === 'apartment'
+                                                ? 'border-sushi-gold bg-sushi-gold/10'
+                                                : 'border-sushi-dark hover:border-sushi-gold/50'
+                                        "
+                                    >
+                                        <input
+                                            v-model="form.addressType"
+                                            type="radio"
+                                            value="apartment"
+                                            class="mr-3 flex-shrink-0"
+                                        />
+                                        <span class="text-sushi-silver text-sm sm:text-base">Многоквартирный</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Адрес и номер дома -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <!-- Адрес (2/3 ширины) -->
+                                <div class="sm:col-span-2">
+                                    <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                        Улица
+                                        <span class="text-red-400">*</span>
+                                    </label>
+                                    <input
+                                        v-model="form.address"
+                                        type="text"
+                                        :required="form.deliveryMethod === 'delivery'"
+                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        placeholder="ул. Примерная"
+                                    />
+                                </div>
+
+                                <!-- Номер дома (1/3 ширины) -->
+                                <div>
+                                    <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                        Дом
+                                        <span class="text-red-400">*</span>
+                                    </label>
+                                    <input
+                                        v-model="form.houseNumber"
+                                        type="text"
+                                        :required="form.deliveryMethod === 'delivery'"
+                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        placeholder="10"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Номер квартиры, подъезд и этаж (только для многоквартирного) -->
+                            <div v-if="form.addressType === 'apartment'" class="space-y-4">
+                                <!-- Квартира -->
+                                <div>
+                                    <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                        Квартира
+                                        <span class="text-red-400">*</span>
+                                    </label>
+                                    <input
+                                        v-model="form.apartmentNumber"
+                                        type="text"
+                                        :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
+                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        placeholder="25"
+                                    />
+                                </div>
+
+                                <!-- Подъезд и Этаж (2 колонки) -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <!-- Подъезд -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                            Подъезд
+                                            <span class="text-red-400">*</span>
+                                        </label>
+                                        <input
+                                            v-model="form.entrance"
+                                            type="text"
+                                            :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
+                                            class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                            placeholder="1"
+                                        />
+                                        <p class="text-xs text-sushi-silver/50 mt-1">Если нет подъезда — укажите 1</p>
+                                    </div>
+
+                                    <!-- Этаж -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                            Этаж
+                                            <span class="text-red-400">*</span>
+                                        </label>
+                                        <input
+                                            v-model="form.floor"
+                                            type="text"
+                                            :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
+                                            class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                            placeholder="5"
+                                        />
+                                        <p class="text-xs text-sushi-silver/50 mt-1">Если нет этажа — укажите 1</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Способ оплаты -->
+                        <div>
+                            <label class="block text-sm font-medium text-sushi-silver mb-3">
+                                Способ оплаты
+                                <span class="text-red-400">*</span>
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label
+                                    class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                    :class="
+                                        form.payment === 'cash'
+                                            ? 'border-sushi-gold bg-sushi-gold/10'
+                                            : 'border-sushi-dark hover:border-sushi-gold/50'
+                                    "
+                                >
+                                    <input v-model="form.payment" type="radio" value="cash" class="mr-3 flex-shrink-0" required />
+                                    <span class="text-sushi-silver text-sm sm:text-base">Наличными</span>
+                                </label>
+                                <label
+                                    class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
+                                    :class="
+                                        form.payment === 'card'
+                                            ? 'border-sushi-gold bg-sushi-gold/10'
+                                            : 'border-sushi-dark hover:border-sushi-gold/50'
+                                    "
+                                >
+                                    <input v-model="form.payment" type="radio" value="card" class="mr-3 flex-shrink-0" required />
+                                    <span class="text-sushi-silver text-sm sm:text-base">Картой</span>
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Комментарий -->
@@ -108,28 +306,6 @@
                             ></textarea>
                         </div>
 
-                        <!-- Способ оплаты -->
-                        <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                Способ оплаты
-                                <span class="text-red-400">*</span>
-                            </label>
-                            <div class="space-y-2">
-                                <label
-                                    class="flex items-center p-3 bg-sushi-first border border-sushi-dark rounded-lg cursor-pointer hover:border-sushi-gold transition-colors"
-                                >
-                                    <input v-model="form.payment" type="radio" value="cash" class="mr-3 flex-shrink-0" required />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Наличными при получении</span>
-                                </label>
-                                <label
-                                    class="flex items-center p-3 bg-sushi-first border border-sushi-dark rounded-lg cursor-pointer hover:border-sushi-gold transition-colors"
-                                >
-                                    <input v-model="form.payment" type="radio" value="card" class="mr-3 flex-shrink-0" required />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Картой при получении</span>
-                                </label>
-                            </div>
-                        </div>
-
                         <!-- Кнопки -->
                         <div class="flex flex-col sm:flex-row gap-3 pt-4">
                             <button
@@ -137,7 +313,7 @@
                                 :disabled="isSubmitting"
                                 class="w-full sm:flex-1 bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             >
-                                {{ isSubmitting ? 'Отправка...' : 'Подтвердить заказ' }}
+                                {{ isSubmitting ? 'Отправка...' : 'Оформить заказ' }}
                             </button>
                             <button
                                 type="button"
@@ -157,6 +333,7 @@
 <script setup>
     import { ref, computed, watch } from 'vue'
     import { useCartStore } from '@/Stores/cart'
+    import { usePhoneMask } from '@/composables/usePhoneMask'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
 
     const props = defineProps({
@@ -170,11 +347,21 @@
 
     const cartStore = useCartStore()
 
+    // Инициализация маски телефона
+    const phoneMask = usePhoneMask()
+    const phoneError = ref('')
+
     const form = ref({
         name: '',
-        phone: '',
         email: '',
+
+        deliveryMethod: 'pickup',
+
+        addressType: 'apartment',
         address: '',
+        houseNumber: '',
+        apartmentNumber: '',
+
         comment: '',
         payment: 'cash',
     })
@@ -213,26 +400,63 @@
     }
 
     const submitOrder = async () => {
+        // Валидация телефона
+        if (!phoneMask.isValid()) {
+            phoneError.value = 'Введите корректный номер телефона (минимум 10 цифр)'
+            return
+        }
+        phoneError.value = ''
+
         isSubmitting.value = true
 
         try {
             const orderData = {
-                customer: form.value,
+                customer: {
+                    name: form.value.name,
+                    phone: phoneMask.getCleanValue(),
+                    email: form.value.email,
+                },
+                delivery: {
+                    method: form.value.deliveryMethod,
+                    ...(form.value.deliveryMethod === 'delivery' && {
+                        addressType: form.value.addressType,
+                        address: form.value.address,
+                        houseNumber: form.value.houseNumber,
+                        ...(form.value.addressType === 'apartment' && {
+                            apartmentNumber: form.value.apartmentNumber,
+                            entrance: form.value.entrance, // отправляем как есть
+                            floor: form.value.floor, // отправляем как есть
+                        }),
+                    }),
+                },
+                payment: form.value.payment,
+                comment: form.value.comment,
                 items: cartStore.items,
                 total: cartStore.totalPrice,
+                deliveryCost: cartStore.deliveryCost,
+                totalWithDelivery: cartStore.totalWithDelivery,
                 currency: cartStore.currency,
             }
 
             emit('submit', orderData)
 
+            // Очищаем форму
             form.value = {
                 name: '',
-                phone: '',
                 email: '',
+                deliveryMethod: 'pickup',
+                addressType: 'apartment',
                 address: '',
+                houseNumber: '',
+                apartmentNumber: '',
+                entrance: '',
+                floor: '',
                 comment: '',
                 payment: 'cash',
             }
+
+            phoneMask.formattedValue.value = ''
+            phoneError.value = ''
         } catch (error) {
             console.error('Ошибка при отправке заказа:', error)
         } finally {

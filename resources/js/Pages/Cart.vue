@@ -2,13 +2,9 @@
 <template>
     <Head title="Корзина" />
 
-    <!-- Фон с параллаксом (как на главной) -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />
-
-    <!-- Градиент поверх страницы (переиспользуемый компонент) -->
     <PageGradient />
 
-    <!-- Контент -->
     <div class="relative z-20 min-h-screen">
         <div class="container mx-auto px-4 py-8 max-w-6xl">
             <!-- Заголовок -->
@@ -37,10 +33,15 @@
 
                 <!-- Итоговый блок (правая часть) -->
                 <CartSummary
+                    :items="cartStore.items"
                     :total-items="cartStore.totalItems"
                     :total-price="cartStore.totalPrice"
                     :currency="cartStore.currency"
                     :locale="$page.props.locale"
+                    :delivery-cost="cartStore.deliveryCost"
+                    :is-free-delivery="cartStore.isFreeDelivery"
+                    :amount-until-free="cartStore.amountUntilFreeDelivery"
+                    :total-with-delivery="cartStore.totalWithDelivery"
                     @checkout="showCheckoutModal = true"
                     @clear="clearCart"
                 />
@@ -70,10 +71,8 @@
     const cartStore = useCartStore()
     const page = usePage()
 
-    // Состояние модалки
     const showCheckoutModal = ref(false)
 
-    // Склонение слова "товар"
     const itemsWord = computed(() => {
         const count = cartStore.totalItems
         const lastDigit = count % 10
@@ -91,37 +90,26 @@
         return 'товаров'
     })
 
-    // Удалить товар с подтверждением
     const removeItem = (productId) => {
         if (confirm('Удалить товар из корзины?')) {
             cartStore.removeFromCart(productId)
         }
     }
 
-    // Очистить корзину с подтверждением
     const clearCart = () => {
         if (confirm('Очистить всю корзину?')) {
             cartStore.clearCart()
         }
     }
 
-    // Обработка отправки заказа
     const handleOrderSubmit = (orderData) => {
         console.log('Заказ отправлен:', orderData)
 
-        // Здесь будет отправка на сервер
-        // axios.post('/api/orders', orderData)
-
-        // Пока просто показываем alert
         alert(`Спасибо за заказ, ${orderData.customer.name}! Мы свяжемся с вами по телефону ${orderData.customer.phone}`)
 
-        // Закрываем модалку
         showCheckoutModal.value = false
-
-        // Очищаем корзину
         cartStore.clearCart()
 
-        // Редирект на главную
         setTimeout(() => {
             router.visit(route('home', { locale: page.props.locale }))
         }, 1000)
