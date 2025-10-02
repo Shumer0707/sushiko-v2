@@ -1,0 +1,114 @@
+<template>
+    <section class="products-menu py-8 container mx-auto">
+        <div class="container mx-auto px-4">
+            <!-- Если товаров нет -->
+            <div v-if="!products || products.length === 0" class="text-center py-8">
+                <p class="text-base text-sushi-silver opacity-80">Товары не найдены</p>
+            </div>
+
+            <!-- Товары по категориям -->
+            <div v-else class="space-y-12">
+                <!-- Перебираем категории -->
+                <div
+                    v-for="category in categoriesWithProducts"
+                    :key="category.id"
+                    :id="`category-${category.id}`"
+                    class="category-section"
+                >
+                    <!-- Заголовок категории с прозрачным фоном -->
+                    <div
+                        class="flex items-center justify-between mb-6 bg-sushi-dark bg-opacity-70 backdrop-blur-sm rounded-xl p-4 border border-sushi-gold border-opacity-20"
+                    >
+                        <div class="flex items-center gap-3">
+                            <!-- Иконка категории (если есть) - меньше -->
+                            <div
+                                v-if="category.image_url"
+                                class="w-12 h-12 rounded-full overflow-hidden border-2 border-sushi-gold"
+                            >
+                                <img :src="category.image_url" :alt="category.name" class="w-full h-full object-cover" />
+                            </div>
+
+                            <!-- Название категории - меньше -->
+                            <h2 class="text-xl md:text-2xl font-bold text-sushi-gold">
+                                {{ category.name }}
+                            </h2>
+                        </div>
+
+                        <!-- Количество товаров -->
+                        <span
+                            class="text-xs md:text-sm text-sushi-silver bg-sushi-dark bg-opacity-60 px-3 py-1.5 rounded-full border border-sushi-gold border-opacity-30"
+                        >
+                            {{ category.products.length }} {{ declension(category.products.length) }}
+                        </span>
+                    </div>
+
+                    <!-- Сетка товаров - меньше отступы -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <ProductCard v-for="product in category.products" :key="product.id" :product="product" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<script setup>
+    import { computed, onMounted } from 'vue'
+    import { useProductsStore } from '@/Stores/products'
+    import ProductCard from '@/Components/home/ProductCard.vue'
+
+    // Пропсы от контроллера (SSR данные)
+    const props = defineProps({
+        products: {
+            type: Array,
+            default: () => [],
+        },
+        categories: {
+            type: Array,
+            default: () => [],
+        },
+    })
+
+    // Инициализируем store
+    const store = useProductsStore()
+
+    // При монтировании - загружаем данные в store
+    onMounted(() => {
+        store.initFromProps(props.products, props.categories)
+    })
+
+    // Используем данные из store
+    const categoriesWithProducts = computed(() => store.categoriesWithProducts)
+    const hasProducts = computed(() => store.products.length > 0)
+
+    // Склонение слова "товар"
+    const declension = (count) => {
+        const cases = [2, 0, 1, 1, 1, 2]
+        const titles = ['товар', 'товара', 'товаров']
+
+        return titles[count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)]]
+    }
+</script>
+
+<style scoped>
+    /* Убираем фон - будет просвечивать параллакс */
+    .products-menu {
+        background: transparent;
+    }
+
+    /* Плавное появление секций */
+    .category-section {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
