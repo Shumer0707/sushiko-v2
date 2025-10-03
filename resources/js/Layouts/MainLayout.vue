@@ -4,6 +4,7 @@
     import Footer from './Partials/Footer.vue'
     import PageLoaderWrapper from '@/Components/Common/PageLoaderWrapper.vue'
     import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
+    import ScrollToTop from '@/Components/UI/ScrollToTop.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
 
@@ -32,5 +33,7 @@
             </PageLoaderWrapper>
         </main>
         <Footer />
+
+        <ScrollToTop />
     </div>
 </template>
