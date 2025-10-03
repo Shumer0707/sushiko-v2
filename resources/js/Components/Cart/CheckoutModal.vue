@@ -32,6 +32,11 @@
                         <p class="text-xs sm:text-sm text-sushi-silver/60 mt-2">{{ cartStore.totalItems }} {{ itemsWord }}</p>
                     </div>
 
+                    <!-- Общая ошибка корзины/товаров -->
+                    <div v-if="getError('items')" class="bg-red-500/10 border border-red-400 rounded-lg p-4 mb-6">
+                        <p class="text-red-400 font-medium">{{ getError('items') }}</p>
+                    </div>
+
                     <!-- Форма -->
                     <form @submit.prevent="submitOrder" class="space-y-4">
                         <!-- Имя и Телефон (2 колонки) -->
@@ -46,9 +51,15 @@
                                     v-model="form.name"
                                     type="text"
                                     required
-                                    class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                    :class="[
+                                        'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                        getError('customer.name') ? 'border-red-400' : 'border-sushi-dark',
+                                    ]"
                                     placeholder="Иван Петров"
                                 />
+                                <p v-if="getError('customer.name')" class="text-red-400 text-xs mt-1">
+                                    {{ getError('customer.name') }}
+                                </p>
                             </div>
 
                             <!-- Телефон с маской -->
@@ -62,10 +73,15 @@
                                     @input="phoneMask.handleInput"
                                     type="text"
                                     required
-                                    class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                    :class="[
+                                        'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                        phoneError || getError('customer.phone') ? 'border-red-400' : 'border-sushi-dark',
+                                    ]"
                                     placeholder="+373 12 345 678"
                                 />
-                                <p v-if="phoneError" class="text-red-400 text-xs mt-1">{{ phoneError }}</p>
+                                <p v-if="phoneError || getError('customer.phone')" class="text-red-400 text-xs mt-1">
+                                    {{ phoneError || getError('customer.phone') }}
+                                </p>
                             </div>
                         </div>
 
@@ -75,9 +91,15 @@
                             <input
                                 v-model="form.email"
                                 type="email"
-                                class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                :class="[
+                                    'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                    getError('customer.email') ? 'border-red-400' : 'border-sushi-dark',
+                                ]"
                                 placeholder="your@email.com"
                             />
+                            <p v-if="getError('customer.email')" class="text-red-400 text-xs mt-1">
+                                {{ getError('customer.email') }}
+                            </p>
                         </div>
 
                         <!-- Способ получения -->
@@ -122,6 +144,9 @@
                                     <span class="text-sushi-silver text-sm sm:text-base">Доставка</span>
                                 </label>
                             </div>
+                            <p v-if="getError('delivery.method')" class="text-red-400 text-xs mt-1">
+                                {{ getError('delivery.method') }}
+                            </p>
                         </div>
 
                         <!-- Адрес самовывоза (если выбран самовывоз) -->
@@ -174,6 +199,9 @@
                                         <span class="text-sushi-silver text-sm sm:text-base">Многоквартирный</span>
                                     </label>
                                 </div>
+                                <p v-if="getError('delivery.addressType')" class="text-red-400 text-xs mt-1">
+                                    {{ getError('delivery.addressType') }}
+                                </p>
                             </div>
 
                             <!-- Адрес и номер дома -->
@@ -188,9 +216,15 @@
                                         v-model="form.address"
                                         type="text"
                                         :required="form.deliveryMethod === 'delivery'"
-                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        :class="[
+                                            'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                            getError('delivery.address') ? 'border-red-400' : 'border-sushi-dark',
+                                        ]"
                                         placeholder="ул. Примерная"
                                     />
+                                    <p v-if="getError('delivery.address')" class="text-red-400 text-xs mt-1">
+                                        {{ getError('delivery.address') }}
+                                    </p>
                                 </div>
 
                                 <!-- Номер дома (1/3 ширины) -->
@@ -203,9 +237,15 @@
                                         v-model="form.houseNumber"
                                         type="text"
                                         :required="form.deliveryMethod === 'delivery'"
-                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        :class="[
+                                            'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                            getError('delivery.houseNumber') ? 'border-red-400' : 'border-sushi-dark',
+                                        ]"
                                         placeholder="10"
                                     />
+                                    <p v-if="getError('delivery.houseNumber')" class="text-red-400 text-xs mt-1">
+                                        {{ getError('delivery.houseNumber') }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -221,9 +261,15 @@
                                         v-model="form.apartmentNumber"
                                         type="text"
                                         :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
-                                        class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        :class="[
+                                            'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                            getError('delivery.apartmentNumber') ? 'border-red-400' : 'border-sushi-dark',
+                                        ]"
                                         placeholder="25"
                                     />
+                                    <p v-if="getError('delivery.apartmentNumber')" class="text-red-400 text-xs mt-1">
+                                        {{ getError('delivery.apartmentNumber') }}
+                                    </p>
                                 </div>
 
                                 <!-- Подъезд и Этаж (2 колонки) -->
@@ -238,10 +284,16 @@
                                             v-model="form.entrance"
                                             type="text"
                                             :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
-                                            class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                            :class="[
+                                                'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                                getError('delivery.entrance') ? 'border-red-400' : 'border-sushi-dark',
+                                            ]"
                                             placeholder="1"
                                         />
-                                        <p class="text-xs text-sushi-silver/50 mt-1">Если нет подъезда — укажите 1</p>
+                                        <p v-if="getError('delivery.entrance')" class="text-red-400 text-xs mt-1">
+                                            {{ getError('delivery.entrance') }}
+                                        </p>
+                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">Если нет подъезда — укажите 1</p>
                                     </div>
 
                                     <!-- Этаж -->
@@ -254,10 +306,16 @@
                                             v-model="form.floor"
                                             type="text"
                                             :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
-                                            class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                            :class="[
+                                                'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                                getError('delivery.floor') ? 'border-red-400' : 'border-sushi-dark',
+                                            ]"
                                             placeholder="5"
                                         />
-                                        <p class="text-xs text-sushi-silver/50 mt-1">Если нет этажа — укажите 1</p>
+                                        <p v-if="getError('delivery.floor')" class="text-red-400 text-xs mt-1">
+                                            {{ getError('delivery.floor') }}
+                                        </p>
+                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">Если нет этажа — укажите 1</p>
                                     </div>
                                 </div>
                             </div>
@@ -293,6 +351,9 @@
                                     <span class="text-sushi-silver text-sm sm:text-base">Картой</span>
                                 </label>
                             </div>
+                            <p v-if="getError('payment')" class="text-red-400 text-xs mt-1">
+                                {{ getError('payment') }}
+                            </p>
                         </div>
 
                         <!-- Комментарий -->
@@ -301,9 +362,15 @@
                             <textarea
                                 v-model="form.comment"
                                 rows="3"
-                                class="w-full bg-sushi-first border border-sushi-dark rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors resize-none"
+                                :class="[
+                                    'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors resize-none',
+                                    getError('comment') ? 'border-red-400' : 'border-sushi-dark',
+                                ]"
                                 placeholder="Особые пожелания, время доставки..."
                             ></textarea>
+                            <p v-if="getError('comment')" class="text-red-400 text-xs mt-1">
+                                {{ getError('comment') }}
+                            </p>
                         </div>
 
                         <!-- Кнопки -->
@@ -332,6 +399,7 @@
 
 <script setup>
     import { ref, computed, watch } from 'vue'
+    import { router } from '@inertiajs/vue3'
     import { useCartStore } from '@/Stores/cart'
     import { usePhoneMask } from '@/composables/usePhoneMask'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
@@ -343,7 +411,7 @@
         },
     })
 
-    const emit = defineEmits(['close', 'submit'])
+    const emit = defineEmits(['close'])
 
     const cartStore = useCartStore()
 
@@ -351,17 +419,19 @@
     const phoneMask = usePhoneMask()
     const phoneError = ref('')
 
+    // Ошибки валидации от Laravel
+    const validationErrors = ref({})
+
     const form = ref({
         name: '',
         email: '',
-
         deliveryMethod: 'pickup',
-
         addressType: 'apartment',
         address: '',
         houseNumber: '',
         apartmentNumber: '',
-
+        entrance: '',
+        floor: '',
         comment: '',
         payment: 'cash',
     })
@@ -399,8 +469,16 @@
         }, 250)
     }
 
+    // Функция для получения ошибки по ключу
+    const getError = (field) => {
+        return validationErrors.value[field] ? validationErrors.value[field][0] : null
+    }
+
     const submitOrder = async () => {
-        // Валидация телефона
+        // Сброс ошибок валидации
+        validationErrors.value = {}
+
+        // Валидация телефона на фронте
         if (!phoneMask.isValid()) {
             phoneError.value = 'Введите корректный номер телефона (минимум 10 цифр)'
             return
@@ -409,59 +487,82 @@
 
         isSubmitting.value = true
 
-        try {
-            const orderData = {
-                customer: {
-                    name: form.value.name,
-                    phone: phoneMask.getCleanValue(),
-                    email: form.value.email,
-                },
-                delivery: {
-                    method: form.value.deliveryMethod,
-                    ...(form.value.deliveryMethod === 'delivery' && {
-                        addressType: form.value.addressType,
-                        address: form.value.address,
-                        houseNumber: form.value.houseNumber,
-                        ...(form.value.addressType === 'apartment' && {
-                            apartmentNumber: form.value.apartmentNumber,
-                            entrance: form.value.entrance, // отправляем как есть
-                            floor: form.value.floor, // отправляем как есть
-                        }),
+        // Преобразуем items: разворачиваем product в корневой уровень
+        const formattedItems = cartStore.items.map((item) => ({
+            id: item.product.id,
+            name: item.product.name,
+            price: parseFloat(item.product.price), // преобразуем строку в число
+            quantity: item.quantity,
+            // Можно добавить selectedAttributes если нужно
+            // selectedAttributes: item.selectedAttributes
+        }))
+
+        const orderData = {
+            customer: {
+                name: form.value.name,
+                phone: phoneMask.getCleanValue(),
+                email: form.value.email,
+            },
+            delivery: {
+                method: form.value.deliveryMethod,
+                ...(form.value.deliveryMethod === 'delivery' && {
+                    addressType: form.value.addressType,
+                    address: form.value.address,
+                    houseNumber: form.value.houseNumber,
+                    ...(form.value.addressType === 'apartment' && {
+                        apartmentNumber: form.value.apartmentNumber,
+                        entrance: form.value.entrance,
+                        floor: form.value.floor,
                     }),
-                },
-                payment: form.value.payment,
-                comment: form.value.comment,
-                items: cartStore.items,
-                total: cartStore.totalPrice,
-                deliveryCost: cartStore.deliveryCost,
-                totalWithDelivery: cartStore.totalWithDelivery,
-                currency: cartStore.currency,
-            }
-
-            emit('submit', orderData)
-
-            // Очищаем форму
-            form.value = {
-                name: '',
-                email: '',
-                deliveryMethod: 'pickup',
-                addressType: 'apartment',
-                address: '',
-                houseNumber: '',
-                apartmentNumber: '',
-                entrance: '',
-                floor: '',
-                comment: '',
-                payment: 'cash',
-            }
-
-            phoneMask.formattedValue.value = ''
-            phoneError.value = ''
-        } catch (error) {
-            console.error('Ошибка при отправке заказа:', error)
-        } finally {
-            isSubmitting.value = false
+                }),
+            },
+            payment: form.value.payment,
+            comment: form.value.comment,
+            items: formattedItems, // используем преобразованные items
+            total: parseFloat(cartStore.totalPrice),
+            deliveryCost: parseFloat(cartStore.deliveryCost),
+            totalWithDelivery: parseFloat(cartStore.totalWithDelivery),
+            currency: cartStore.currency,
         }
+
+        // Отправляем через Inertia на бэкенд
+        router.post(route('order.checkout'), orderData, {
+            preserveScroll: true,
+            onSuccess: () => {
+                // Успех - очищаем всё
+                validationErrors.value = {}
+                cartStore.clearCart()
+
+                form.value = {
+                    name: '',
+                    email: '',
+                    deliveryMethod: 'pickup',
+                    addressType: 'apartment',
+                    address: '',
+                    houseNumber: '',
+                    apartmentNumber: '',
+                    entrance: '',
+                    floor: '',
+                    comment: '',
+                    payment: 'cash',
+                }
+
+                phoneMask.formattedValue.value = ''
+                phoneError.value = ''
+
+                handleClose()
+
+                alert('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.')
+            },
+            onError: (errors) => {
+                // Сохраняем ошибки для отображения под полями
+                validationErrors.value = errors
+                console.error('Ошибки валидации:', errors)
+            },
+            onFinish: () => {
+                isSubmitting.value = false
+            },
+        })
     }
 </script>
 

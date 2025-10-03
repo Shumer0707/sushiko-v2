@@ -100,4 +100,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'manager_email' => env('MANAGER_EMAIL', 'manager@sushiko.md'),
+
 ];

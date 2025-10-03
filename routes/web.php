@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en']], func
     Route::get('/about', fn() => Inertia::render('About'))->name('about');
     Route::get('/contact', fn() => Inertia::render('Contact'))->name('contact');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
+
+    Route::post('/order/checkout', [OrderController::class, 'store'])->name('order.checkout');
 
     // API для категорий (если нужно)
     Route::get('/api/category/{slug}/products', [ProductController::class, 'byCategory'])->name('category.products');
