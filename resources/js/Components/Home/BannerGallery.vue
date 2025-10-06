@@ -160,7 +160,7 @@
     /* Стилизуем стрелки навигации - тёмный фон */
     .banner-swiper :deep(.swiper-button-next),
     .banner-swiper :deep(.swiper-button-prev) {
-        background: rgba(17, 13, 14, 0.6); /* sushi-dark с прозрачностью */
+        /* background: rgba(17, 13, 14, 0.6); */
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -170,7 +170,7 @@
 
     .banner-swiper :deep(.swiper-button-next):hover,
     .banner-swiper :deep(.swiper-button-prev):hover {
-        background: rgba(212, 175, 55, 0.9); /* золото при ховере */
+        /* background: rgba(212, 175, 55, 0.9); */
         transform: scale(1.1);
     }
 

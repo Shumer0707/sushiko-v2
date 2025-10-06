@@ -7,7 +7,7 @@
                     <!-- Лого -->
                     <div class="flex items-center">
                         <Link :href="localizedRoute('/')" class="block">
-                            <img src="images/logo.jpg" alt="" class="w-32 lg:w-48">
+                            <img src="images/logo.jpg" alt="" class="w-32 lg:w-48" />
                         </Link>
                     </div>
 
@@ -28,7 +28,7 @@
                     <!-- Правая часть -->
                     <div class="flex items-center space-x-4">
                         <!-- Корзина (всегда видна) -->
-                        <MiniCart :is-closing="mobileMenuOverlay.isClosing.value"/>
+                        <MiniCart :is-closing="mobileMenuOverlay.isClosing.value" />
 
                         <!-- Навигация для десктопа (скрываем на мобильных) -->
                         <div class="hidden lg:flex items-center space-x-6">
@@ -64,16 +64,17 @@
         <div class="hidden lg:block">
             <div class="container mx-auto px-4 py-3 lg:py-2">
                 <div class="flex justify-between items-center">
-                    <!-- Категории -->
+                    <!-- 🎯 Категории - теперь с прокруткой вместо переходов -->
                     <nav class="flex space-x-8 xl:space-x-8 lg:space-x-4">
-                        <Link
+                        <a
                             v-for="category in categories"
                             :key="category.id"
-                            :href="localizedRoute(`/category/${category.slug}`)"
-                            class="text-white hover:text-sushi-gold transition-colors font-medium text-base xl:text-base lg:text-sm"
+                            :href="`#category-${category.id}`"
+                            @click.prevent="scrollToCategory(category.id)"
+                            class="text-white hover:text-sushi-gold transition-colors font-medium text-base xl:text-base lg:text-sm cursor-pointer"
                         >
                             {{ category.name }}
-                        </Link>
+                        </a>
                     </nav>
 
                     <!-- Новый компонент языков -->
@@ -90,12 +91,13 @@
             :categories="categories"
             :current-locale="currentLocale"
             @close="closeMobileMenu"
+            @scroll-to-category="scrollToCategory"
         />
     </header>
 </template>
 
 <script setup>
-    import { Link, usePage } from '@inertiajs/vue3'
+    import { Link, usePage, router } from '@inertiajs/vue3'
     import { useLocale } from '@/composables/useLocale'
     import { useOverlay } from '@/composables/useOverlay'
     import LanguageDropdown from '@/Components/Navigation/LanguageDropdown.vue'
@@ -119,5 +121,41 @@
 
     const closeMobileMenu = () => {
         mobileMenuOverlay.close()
+    }
+
+    const scrollToCategory = (categoryId) => {
+        // Получаем текущий путь страницы
+        const currentPath = window.location.pathname
+
+        // Варианты главной страницы (с учётом локализации)
+        const homePathVariants = ['/', `/${currentLocale}`, `/${currentLocale}/`]
+
+        // Проверяем, находимся ли мы на главной странице
+        const isHomePage = homePathVariants.some((path) => currentPath === path)
+
+        if (isHomePage) {
+            const element = document.getElementById(`category-${categoryId}`)
+
+            if (element) {
+                // Закрываем мобильное меню (если оно открыто)
+                closeMobileMenu()
+
+                // Плавная прокрутка с учётом высоты хедера
+                const headerOffset = 100 // отступ сверху для хедера (в пикселях)
+                const elementPosition = element.getBoundingClientRect().top // позиция элемента относительно viewport
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset // финальная позиция с учётом скролла
+
+                // Прокручиваем плавно
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth',
+                })
+            }
+        } else {
+            closeMobileMenu()
+
+            // Переходим на главную + добавляем хеш (например: /ru#category-5)
+            router.visit(localizedRoute('/') + `#category-${categoryId}`)
+        }
     }
 </script>

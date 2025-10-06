@@ -1,5 +1,5 @@
 <template>
-    <section class="seo-block bg-gradient-to-b from-sushi-first to-sushi-dark py-8 md:py-12 container mx-auto">
+    <section class="seo-block bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 py-8 md:py-12 container mx-auto rounded-xl ">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <!-- H1 заголовок - уменьшил -->

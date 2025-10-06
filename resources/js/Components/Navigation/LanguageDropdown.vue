@@ -21,7 +21,7 @@
                 data-modal-content="language-dropdown"
                 v-if="overlay.isOpen.value"
                 :class="[
-                    'absolute bg-sushi-dark rounded-b-lg shadow-xl border border-t-0 py-2 min-w-[140px] z-50 menu-dropdown',
+                    'absolute bg-sushi-dark rounded-b-lg shadow-xl border border-sushi-first min-w-[140px] z-50 menu-dropdown',
                     // 🎯 Добавляем класс closing при анимации закрытия
                     overlay.isClosing.value ? 'closing' : '',
                 ]"
@@ -41,8 +41,8 @@
                     <button
                         type="submit"
                         :class="[
-                            'w-full flex items-center space-x-3 px-4 py-3 text-left text-sushi-silver hover:bg-sushi-first/70 transition-colors',
-                            currentLocale === locale ? 'bg-sushi-first font-medium' : '',
+                            'w-full flex items-center space-x-3 px-4 py-3 text-left text-sushi-silver hover:bg-sushi-gold/40 transition-colors',
+                            currentLocale === locale ? 'bg-sushi-gold/70 font-medium' : '',
                         ]"
                     >
                         <!-- <img :src="`/images/flag-${locale}.png`" :alt="locale.toUpperCase()" class="w-6 h-4" /> -->

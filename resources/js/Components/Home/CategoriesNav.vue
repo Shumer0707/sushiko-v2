@@ -1,12 +1,10 @@
 <template>
-    <section class="categories-nav py-8 bg-sushi-dark container mx-auto">
+    <section class="categories-nav py-8 bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 container mx-auto rounded-xl ">
         <div class="container mx-auto px-4">
             <!-- Заголовок секции - компактнее -->
             <div class="text-center mb-6">
                 <h2 class="text-2xl md:text-3xl font-bold text-sushi-gold mb-2">Наше меню</h2>
-                <p class="text-sushi-silver text-sm md:text-base opacity-80">
-                    Выберите категорию и откройте мир японской кухни
-                </p>
+                <p class="text-sushi-silver text-sm md:text-base opacity-80">Выберите категорию и откройте мир японской кухни</p>
             </div>
 
             <!-- Swiper с категориями -->
@@ -116,8 +114,8 @@
     .category-swiper :deep(.swiper-button-next),
     .category-swiper :deep(.swiper-button-prev) {
         background: rgba(17, 13, 14, 0.8);
-        width: 36px;
-        height: 36px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         border: 2px solid rgba(212, 175, 55, 0.3);
         transition: all 0.3s ease;
@@ -125,7 +123,7 @@
 
     .category-swiper :deep(.swiper-button-next):hover,
     .category-swiper :deep(.swiper-button-prev):hover {
-        background: rgba(212, 175, 55, 0.9);
+        /* background: rgba(212, 175, 55, 0.9); */
         border-color: rgba(212, 175, 55, 1);
         box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         transform: scale(1.05);

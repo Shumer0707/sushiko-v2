@@ -71,7 +71,7 @@
                                                 : 'text-white hover:text-sushi-gold hover:bg-gray-700',
                                         ]"
                                     >
-                                        <img :src="`/images/flag-${locale}.png`" :alt="locale.toUpperCase()" class="w-6 h-4" />
+                                        <!-- <img :src="`/images/flag-${locale}.png`" :alt="locale.toUpperCase()" class="w-6 h-4" /> -->
                                         <span>{{ getLanguageName(locale) }}</span>
                                     </button>
                                 </form>
@@ -79,16 +79,17 @@
                         </div>
                     </div>
 
-                    <!-- Правая колонка - Категории -->
+                    <!-- Правая колонка - Категории (теперь с прокруткой) -->
                     <div>
                         <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Категории суши</h3>
                         <div class="space-y-1 max-h-96 overflow-y-auto custom-scrollbar">
-                            <Link
+                            <!-- 🎯 Заменили Link на a с событием -->
+                            <a
                                 v-for="category in categories"
                                 :key="category.id"
-                                :href="localizedRoute(`/category/${category.slug}`)"
-                                class="block py-3 px-3 text-white hover:text-sushi-gold hover:bg-gray-700 rounded-lg transition-colors border-l-2 border-transparent hover:border-sushi-gold"
-                                @click="$emit('close')"
+                                :href="`#category-${category.id}`"
+                                @click.prevent="handleCategoryClick(category.id)"
+                                class="block py-3 px-3 text-white hover:text-sushi-gold hover:bg-gray-700 rounded-lg transition-colors border-l-2 border-transparent hover:border-sushi-gold cursor-pointer"
                             >
                                 <div class="flex items-center justify-between">
                                     <span class="font-medium">{{ category.name }}</span>
@@ -101,7 +102,7 @@
                                         ></path>
                                     </svg>
                                 </div>
-                            </Link>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -140,8 +141,8 @@
         },
     })
 
-    // Emits
-    const emit = defineEmits(['close'])
+    // 🎯 Добавляем emit для прокрутки к категории
+    const emit = defineEmits(['close', 'scroll-to-category'])
 
     const { localizedRoute } = useLocale()
     const page = usePage()
@@ -176,6 +177,11 @@
         }
         return names[locale] || locale
     }
+
+    // 🎯 Обработчик клика по категории - передаём событие родителю (Header)
+    const handleCategoryClick = (categoryId) => {
+        emit('scroll-to-category', categoryId)
+    }
 </script>
 
 <style scoped>
@@ -185,14 +191,12 @@
 
     @keyframes slideDownFromHeader {
         0% {
-            /* opacity: 0; */
             transform: translateY(-100%);
         }
         50% {
             transform: translateY(1%);
         }
         100% {
-            /* opacity: 1; */
             transform: translateY(0);
         }
     }
@@ -203,14 +207,12 @@
 
     @keyframes slideUpToHeader {
         0% {
-            /* opacity: 1; */
             transform: translateY(0);
         }
         50% {
             transform: translateY(1%);
         }
         100% {
-            /* opacity: 0; */
             transform: translateY(-100%);
         }
     }

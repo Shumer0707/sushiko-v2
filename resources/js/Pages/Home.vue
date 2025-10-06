@@ -1,11 +1,11 @@
 <script setup>
+    import { onMounted } from 'vue'
     import AppHead from '@/Components/Seo/Head.vue'
     import BannerGallery from '@/Components/Home/BannerGallery.vue'
     import SeoBlock from '@/Components/Home/SeoBlock.vue'
     import CategoriesNav from '@/Components/Home/CategoriesNav.vue'
     import ProductsMenu from '@/Components/Home/ProductsMenu.vue'
     import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
-    // Переиспользуемый UI компонент
     import PageGradient from '@/Components/UI/PageGradient.vue'
 
     defineProps({
@@ -22,6 +22,31 @@
             default: () => [],
         },
     })
+
+    // 🎯 ОБРАБОТКА ПРОКРУТКИ после загрузки страницы
+    onMounted(() => {
+        // Проверяем, есть ли хеш в URL (например: /ru#category-5)
+        const hash = window.location.hash
+
+        if (hash) {
+            // Даём странице время отрендериться (300ms обычно достаточно)
+            setTimeout(() => {
+                const element = document.querySelector(hash) // ищем элемент по ID
+
+                if (element) {
+                    // Плавная прокрутка с учётом высоты хедера
+                    const headerOffset = 100 // отступ сверху для хедера
+                    const elementPosition = element.getBoundingClientRect().top
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth',
+                    })
+                }
+            }, 300)
+        }
+    })
 </script>
 
 <template>
@@ -30,13 +55,6 @@
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />
 
-    <!--
-        Градиент поверх ВСЕЙ страницы (теперь переиспользуемый компонент!)
-        Можно настроить через пропсы:
-        - color="52, 48, 47" - цвет в RGB
-        - :opacity="[1, 0, 0.3, 0.7, 1]" - прозрачность в 5 точках
-        - :z-index="1" - слой
-    -->
     <PageGradient />
 
     <!-- Контент -->

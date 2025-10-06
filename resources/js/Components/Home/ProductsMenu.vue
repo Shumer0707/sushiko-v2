@@ -55,7 +55,7 @@
 <script setup>
     import { computed, onMounted } from 'vue'
     import { useProductsStore } from '@/Stores/products'
-    import ProductCard from '@/Components/home/ProductCard.vue'
+    import ProductCard from '@/Components/Home/ProductCard.vue'
 
     // Пропсы от контроллера (SSR данные)
     const props = defineProps({
