@@ -1,14 +1,13 @@
 User-agent: *
-Allow: /
-
-# Запрещаем индексацию админки
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /profile/
-
-# Запрещаем служебные файлы
-Disallow: /storage/
+Disallow: /storage/app/
 Disallow: /.env
 
-# Ссылка на sitemap (добавим позже)
-# Sitemap: https://yourdomain.com/sitemap.xml
+# Временно закрываем весь сайт от индексации (удали эту строку когда будешь готов к индексации)
+Disallow: /
+
+# Когда будешь готов открыть сайт:
+# Allow: /
+# Sitemap: https://sushiko.md/sitemap.xml
