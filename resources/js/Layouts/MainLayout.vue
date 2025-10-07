@@ -5,16 +5,14 @@
     import PageLoaderWrapper from '@/Components/Common/PageLoaderWrapper.vue'
     import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
     import ScrollToTop from '@/Components/UI/ScrollToTop.vue'
-    import HashCleanup from '@/Components/UI/HashCleanup.vue' // 🔥 Новый компонент
+    import HashCleanup from '@/Components/UI/HashCleanup.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
 
-    // Функция загрузки данных
     async function fetchData() {
         await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
-    // Инициализация загрузки
     const { isReady, load } = useInitialLoad(fetchData)
     load()
 
@@ -28,11 +26,15 @@
     <div class="flex flex-col min-h-screen">
         <Header />
         <StickyHeader />
-        <main class="flex-grow">
+
+        <!-- 🔥 КЛЮЧ: min-h-[calc(100vh-300px)] -->
+        <!-- Резервируем место под контент = высота экрана - хедер/футер -->
+        <main class="flex-grow ">
             <PageLoaderWrapper :loading="!isReady">
                 <slot />
             </PageLoaderWrapper>
         </main>
+
         <Footer />
 
         <ScrollToTop />
