@@ -7,7 +7,7 @@
                     <!-- Лого -->
                     <div class="flex items-center">
                         <Link :href="localizedRoute('/')" class="block">
-                            <img src="images/logo.jpg" alt="" class="w-32 lg:w-48" />
+                            <img src="images/logo.jpg" alt="logo" class="w-32 lg:w-48" />
                         </Link>
                     </div>
 

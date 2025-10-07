@@ -118,11 +118,10 @@
 </template>
 
 <script setup>
-    import { router } from '@inertiajs/vue3'
+    import { router, usePage } from '@inertiajs/vue3'
     import { computed } from 'vue'
     import { useCartStore } from '@/Stores/cart'
 
-    // Пропсы
     const props = defineProps({
         product: {
             type: Object,
@@ -130,35 +129,29 @@
         },
     })
 
-    // 🔥 Подключаем store корзины
+    const page = usePage()
+    const locale = computed(() => page.props.current_locale || 'ru')
+
     const cartStore = useCartStore()
 
-    // 🔥 Проверяем, есть ли товар в корзине (реактивно!)
     const itemInCart = computed(() => {
         return cartStore.getCartItem(props.product.id)
     })
 
-    // Переход на страницу товара
     const goToProduct = () => {
-        router.visit(`/product/${props.product.slug}`)
+        router.visit(
+            route('product.show', {
+                locale: locale.value,
+                slug: props.product.slug,
+            })
+        )
     }
 
-    // 🔥 Добавить в корзину
-    const addToCart = () => {
-        cartStore.addToCart(props.product, 1)
-        console.log('✅ Добавлено:', props.product.name)
-
-        // Можно добавить toast-уведомление (опционально)
-        // toast.success(`${props.product.name} добавлен в корзину`)
-    }
-
-    // 🔥 Увеличить количество на 1
     const incrementQuantity = () => {
         cartStore.incrementQuantity(props.product.id)
         console.log('➕ Увеличено:', props.product.name)
     }
 
-    // 🔥 Уменьшить количество на 1 (если станет 0 - удалится)
     const decrementQuantity = () => {
         cartStore.decrementQuantity(props.product.id)
         console.log('➖ Уменьшено:', props.product.name)
@@ -166,7 +159,6 @@
 </script>
 
 <style scoped>
-    /* 🔥 Анимация "подпрыгивания" для бейджа */
     @keyframes bounce-once {
         0%,
         100% {

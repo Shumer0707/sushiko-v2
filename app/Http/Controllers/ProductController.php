@@ -92,10 +92,12 @@ class ProductController extends Controller
      * Детальная страница товара
      * Показываем всю информацию о товаре
      */
-    public function show($slug)
+    /**
+     * Детальная страница товара
+     * Показываем всю информацию о товаре
+     */
+    public function show($locale, $slug)
     {
-        $locale = app()->getLocale();
-
         // Ищем товар по slug в переводах
         $product = Product::with([
             'translations',          // Все переводы (для переключения языков)
@@ -126,7 +128,8 @@ class ProductController extends Controller
             'name' => $product->translation?->name ?? '',
             'slug' => $product->translation?->slug ?? '',
             'short_description' => $product->translation?->short_description ?? '',
-            'full_description' => $product->translation?->full_description ?? '',
+            'description' => $product->translation?->full_description ?? '', // 🔥 Переименовали для фронта
+            'ingredients' => null, // 🔥 Добавили поле (если будет в БД - заполнишь)
 
             // Категория
             'category' => [
@@ -144,7 +147,10 @@ class ProductController extends Controller
                 'logo_url' => $product->brand?->logo_url ?? '',
             ],
 
-            // Все изображения
+            // 🔥 ИСПРАВЛЕНО: Главное изображение для совместимости с карточкой
+            'image_url' => $product->main_image_url,
+
+            // Все изображения (галерея)
             'images' => $product->images->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -195,10 +201,11 @@ class ProductController extends Controller
                 ];
             });
 
-        return Inertia::render('Product/Show', [
+        // 🔥 ИСПРАВЛЕНО: Рендерим Product вместо Product/Show
+        return Inertia::render('Product', [
             'product' => $productData,
             'relatedProducts' => $relatedProducts,
-            'locale' => $locale,
+            'locale' => app()->getLocale(),
         ]);
     }
 
