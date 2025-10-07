@@ -2,7 +2,7 @@
     <section class="products-menu py-8 container mx-auto">
         <div class="container mx-auto px-4">
             <!-- Если товаров нет -->
-            <div v-if="!products || products.length === 0" class="text-center py-8">
+            <div v-if="!products || products.length === 0" class="font-display text-center py-8">
                 <p class="text-base text-sushi-silver opacity-80">Товары не найдены</p>
             </div>
 
@@ -29,7 +29,7 @@
                             </div>
 
                             <!-- Название категории - меньше -->
-                            <h2 class="text-xl md:text-2xl font-bold text-sushi-gold">
+                            <h2 class="font-display text-xl md:text-2xl font-bold text-sushi-gold">
                                 {{ category.name }}
                             </h2>
                         </div>
@@ -42,8 +42,8 @@
                         </span>
                     </div>
 
-                    <!-- Сетка товаров - меньше отступы -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Сетка товаров - БОЛЬШЕ карточек в ряд -->
+                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         <ProductCard v-for="product in category.products" :key="product.id" :product="product" />
                     </div>
                 </div>

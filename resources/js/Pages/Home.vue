@@ -75,7 +75,7 @@
         </section>
 
         <!-- 4. Меню товаров -->
-        <section class="py-16">
+        <section class="py-12">
             <ProductsMenu :products="products" :categories="categories" />
         </section>
     </div>

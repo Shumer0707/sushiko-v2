@@ -13,7 +13,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans], // основной текст
+                display: ['Noto Sans JP', 'sans-serif'], // заголовки в японском стиле
+                elegant: ['Playfair Display', 'serif'], // если нужна элегантность
             },
             colors: {
                 admin: {

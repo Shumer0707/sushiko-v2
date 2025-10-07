@@ -6,6 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { createApp, h } from 'vue'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy'
 import { createPinia } from 'pinia'
+import { router } from '@inertiajs/vue3'
 
 import MainLayout from './Layouts/MainLayout.vue'
 import AuthenticatedLayout from './Layouts/AuthenticatedLayout.vue'
@@ -42,4 +43,12 @@ createInertiaApp({
             .mount(el)
     },
     progress: { color: '#4B5563' },
+})
+
+// Блокируем автоскролл браузера при переходах с хэшем
+router.on('before', (event) => {
+    const url = event.detail.visit.url
+    if (url.hash) {
+        event.detail.visit.preserveScroll = true
+    }
 })

@@ -29,7 +29,7 @@
                     <!-- Контент баннера -->
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div class="text-center text-white px-4 max-w-4xl">
-                            <h2 class="text-3xl md:text-5xl font-bold mb-4">
+                            <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">
                                 {{ banner.title }}
                             </h2>
                             <p class="text-lg md:text-xl mb-6 opacity-90">

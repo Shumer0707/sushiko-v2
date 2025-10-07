@@ -5,10 +5,11 @@
     import PageLoaderWrapper from '@/Components/Common/PageLoaderWrapper.vue'
     import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
     import ScrollToTop from '@/Components/UI/ScrollToTop.vue'
+    import HashCleanup from '@/Components/UI/HashCleanup.vue' // 🔥 Новый компонент
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
 
-    // Функция загрузки данных (будет заменяться под проект)
+    // Функция загрузки данных
     async function fetchData() {
         await new Promise((resolve) => setTimeout(resolve, 1000))
     }
@@ -35,5 +36,6 @@
         <Footer />
 
         <ScrollToTop />
+        <HashCleanup />
     </div>
 </template>

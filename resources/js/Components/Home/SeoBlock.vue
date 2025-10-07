@@ -3,7 +3,7 @@
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <!-- H1 заголовок - уменьшил -->
-                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-sushi-gold mb-4">
+                <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-sushi-gold mb-4">
                     {{ title }}
                 </h1>
 

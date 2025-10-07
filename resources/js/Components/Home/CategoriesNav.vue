@@ -1,35 +1,39 @@
 <template>
-    <section class="categories-nav py-8 bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 container mx-auto rounded-xl ">
+    <section class="categories-nav py-8 bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 container mx-auto rounded-xl">
         <div class="container mx-auto px-4">
             <!-- Заголовок секции - компактнее -->
             <div class="text-center mb-6">
-                <h2 class="text-2xl md:text-3xl font-bold text-sushi-gold mb-2">Наше меню</h2>
-                <p class="text-sushi-silver text-sm md:text-base opacity-80">Выберите категорию и откройте мир японской кухни</p>
+                <h2 class="font-display text-2xl md:text-3xl font-bold text-sushi-gold mb-2">Наше меню</h2>
+                <p class="font-display text-sushi-silver text-sm md:text-base opacity-80">
+                    Выберите категорию и откройте мир японской кухни
+                </p>
             </div>
 
             <!-- Swiper с категориями -->
             <div class="categories-swiper-wrapper relative">
                 <Swiper
                     :modules="modules"
-                    :slides-per-view="2"
-                    :space-between="12"
+                    :slides-per-view="3"
+                    :space-between="10"
                     :loop="false"
                     :navigation="true"
                     :grab-cursor="true"
                     :breakpoints="{
-                        640: { slidesPerView: 3, spaceBetween: 16 },
-                        768: { slidesPerView: 4, spaceBetween: 16 },
-                        1024: { slidesPerView: 5, spaceBetween: 20 },
-                        1280: { slidesPerView: 6, spaceBetween: 20 },
+                        480: { slidesPerView: 4, spaceBetween: 12 },
+                        640: { slidesPerView: 5, spaceBetween: 12 },
+                        768: { slidesPerView: 6, spaceBetween: 14 },
+                        1024: { slidesPerView: 7, spaceBetween: 16 },
+                        1280: { slidesPerView: 8, spaceBetween: 16 },
+                        1536: { slidesPerView: 10, spaceBetween: 18 },
                     }"
                     class="category-swiper"
                 >
                     <SwiperSlide v-for="category in categories" :key="category.id">
                         <!-- Карточка категории -->
                         <div @click="goToCategory(category)" class="category-card cursor-pointer group">
-                            <!-- Картинка - меньше -->
+                            <!-- Картинка - ещё меньше -->
                             <div
-                                class="relative w-full aspect-square rounded-xl overflow-hidden mb-2 border-2 border-sushi-gold border-opacity-20 group-hover:border-opacity-60 transition-all duration-300"
+                                class="relative w-full aspect-square rounded-lg overflow-hidden mb-2 border-2 border-sushi-gold border-opacity-20 group-hover:border-opacity-60 transition-all duration-300"
                             >
                                 <img
                                     :src="category.image_url"
@@ -41,15 +45,15 @@
                                 <div
                                     class="absolute inset-0 bg-gradient-to-t from-sushi-dark via-sushi-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                 >
-                                    <div class="absolute bottom-2 left-2 right-2">
-                                        <span class="text-sushi-gold text-xs font-semibold">Перейти →</span>
+                                    <div class="absolute bottom-1 left-1 right-1">
+                                        <span class="text-sushi-gold text-[10px] font-semibold">Перейти →</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Название категории - меньше -->
                             <h3
-                                class="text-center text-sm md:text-base font-semibold text-sushi-silver group-hover:text-sushi-gold transition-colors duration-300 px-1"
+                                class="text-center text-xs md:text-sm font-semibold text-sushi-silver group-hover:text-sushi-gold transition-colors duration-300 px-1 line-clamp-2"
                             >
                                 {{ category.name }}
                             </h3>
@@ -101,32 +105,44 @@
 
 <style scoped>
     .categories-swiper-wrapper {
-        padding: 0 36px; /* отступы для стрелок - меньше */
+        padding: 0 32px; /* отступы для стрелок */
     }
 
     /* Стили для Swiper - золотые стрелки */
     .category-swiper {
         --swiper-navigation-color: rgba(212, 175, 55, 1);
-        --swiper-navigation-size: 18px;
+        --swiper-navigation-size: 16px;
     }
 
-    /* Стрелки навигации - темные с золотым */
+    /* Стрелки навигации - КРУГЛЫЕ кнопки с золотым */
     .category-swiper :deep(.swiper-button-next),
     .category-swiper :deep(.swiper-button-prev) {
-        background: rgba(17, 13, 14, 0.8);
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 2px solid rgba(212, 175, 55, 0.3);
+        background: rgba(17, 13, 14, 0.9); /* более плотный фон */
+        width: 44px;
+        height: 44px;
+        border-radius: 50%; /* круглые */
+        border: 2px solid rgba(212, 175, 55, 0.4);
         transition: all 0.3s ease;
+
+        /* Центрируем стрелку внутри */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Убираем стандартный ::after со стрелкой */
+    .category-swiper :deep(.swiper-button-next::after),
+    .category-swiper :deep(.swiper-button-prev::after) {
+        font-size: 16px; /* размер стрелки */
+        font-weight: 900; /* жирнее */
     }
 
     .category-swiper :deep(.swiper-button-next):hover,
     .category-swiper :deep(.swiper-button-prev):hover {
-        /* background: rgba(212, 175, 55, 0.9); */
+        background: rgba(212, 175, 55, 0.2); /* золотистый фон при наведении */
         border-color: rgba(212, 175, 55, 1);
-        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
-        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        transform: scale(1.1);
     }
 
     .category-swiper :deep(.swiper-button-next) {
@@ -137,15 +153,21 @@
         left: 0;
     }
 
-    /* На мобилке прячем стрелки */
+    /* Адаптив для мобилок - делаем стрелки меньше */
     @media (max-width: 768px) {
         .categories-swiper-wrapper {
-            padding: 0;
+            padding: 0 28px; /* меньше отступы */
         }
 
         .category-swiper :deep(.swiper-button-next),
         .category-swiper :deep(.swiper-button-prev) {
-            display: none;
+            width: 36px; /* меньше на мобилке */
+            height: 36px;
+        }
+
+        .category-swiper :deep(.swiper-button-next::after),
+        .category-swiper :deep(.swiper-button-prev::after) {
+            font-size: 14px; /* стрелка меньше */
         }
     }
 
