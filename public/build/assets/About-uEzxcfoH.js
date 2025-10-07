@@ -1,0 +1,1 @@
+import{_ as o,c as n,o as s,a as e,F as r}from"./app-BlPMUxf4.js";const a={};function l(c,t){return s(),n(r,null,[t[0]||(t[0]=e("h1",{class:"text-2xl font-bold mb-4"},"О нас",-1)),t[1]||(t[1]=e("p",null,"Добро пожаловать на наш сайт!",-1))],64)}const m=o(a,[["render",l]]);export{m as default};
