@@ -1,7 +1,5 @@
-<!-- Components/Cart/CartItem.vue -->
 <template>
     <div class="bg-sushi-dark/50 border border-sushi-first rounded-lg p-4 hover:border-sushi-gold/50 transition-colors">
-        <!-- Контейнер: на мобилке колонка, на десктопе строка -->
         <div class="flex flex-col lg:flex-row lg:items-center gap-4">
             <!-- Верхняя часть (картинка + инфо) -->
             <div class="flex items-center gap-4 flex-grow">
@@ -60,7 +58,7 @@
                 <button
                     @click="$emit('remove')"
                     class="text-red-400 hover:text-red-300 p-2 transition-colors flex-shrink-0"
-                    title="Удалить"
+                    :title="t.cart_item_remove"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
@@ -77,8 +75,11 @@
 </template>
 
 <script setup>
-    import { Link } from '@inertiajs/vue3'
+    import { Link, usePage } from '@inertiajs/vue3'
     import { computed } from 'vue'
+
+    const page = usePage()
+    const t = page.props.translations.common
 
     const props = defineProps({
         item: {

@@ -1,11 +1,14 @@
 <script setup>
-    // Никаких пропсов пока, данные захардкодим внутри
+    import { usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
 </script>
 
 <template>
     <div class="bg-sushi-dark bg-opacity-60 backdrop-blur-sm rounded-2xl border-2 border-sushi-gold p-8 shadow-2xl">
         <!-- Заголовок -->
-        <h3 class="text-2xl font-bold text-sushi-gold mb-6 text-center">Наши контакты</h3>
+        <h3 class="text-2xl font-bold text-sushi-gold mb-6 text-center">{{ t.contacts_info_title }}</h3>
 
         <!-- Список контактов -->
         <div class="space-y-6">
@@ -17,12 +20,8 @@
                     <i class="fas fa-map-marker-alt text-sushi-gold text-xl group-hover:text-sushi-dark transition-colors"></i>
                 </div>
                 <div>
-                    <h4 class="text-sushi-gold font-semibold mb-1">Адрес</h4>
-                    <p class="text-white text-sm leading-relaxed">
-                        ул. Штефан чел Маре 10,
-                        <br />
-                        Кишинёв, Молдова
-                    </p>
+                    <h4 class="text-sushi-gold font-semibold mb-1">{{ t.contacts_address_label }}</h4>
+                    <p class="text-white text-sm leading-relaxed">{{ t.contacts_address_text }}</p>
                 </div>
             </div>
 
@@ -34,9 +33,12 @@
                     <i class="fas fa-phone-alt text-sushi-gold text-xl group-hover:text-sushi-dark transition-colors"></i>
                 </div>
                 <div>
-                    <h4 class="text-sushi-gold font-semibold mb-1">Телефон</h4>
-                    <a href="tel:+37322123456" class="text-white text-sm hover:text-sushi-gold transition-colors">
-                        +373 (22) 123-456
+                    <h4 class="text-sushi-gold font-semibold mb-1">{{ t.contacts_phone_label }}</h4>
+                    <a
+                        :href="`tel:${t.contacts_phone_number}`"
+                        class="text-white text-sm hover:text-sushi-gold transition-colors"
+                    >
+                        {{ t.contacts_phone_number }}
                     </a>
                 </div>
             </div>
@@ -49,9 +51,12 @@
                     <i class="fas fa-envelope text-sushi-gold text-xl group-hover:text-sushi-dark transition-colors"></i>
                 </div>
                 <div>
-                    <h4 class="text-sushi-gold font-semibold mb-1">Email</h4>
-                    <a href="mailto:info@sushiko.md" class="text-white text-sm hover:text-sushi-gold transition-colors">
-                        info@sushiko.md
+                    <h4 class="text-sushi-gold font-semibold mb-1">{{ t.contacts_email_label }}</h4>
+                    <a
+                        :href="`mailto:${t.contacts_email_address}`"
+                        class="text-white text-sm hover:text-sushi-gold transition-colors"
+                    >
+                        {{ t.contacts_email_address }}
                     </a>
                 </div>
             </div>
@@ -64,13 +69,13 @@
                     <i class="fas fa-clock text-sushi-gold text-xl group-hover:text-sushi-dark transition-colors"></i>
                 </div>
                 <div>
-                    <h4 class="text-sushi-gold font-semibold mb-1">Часы работы</h4>
+                    <h4 class="text-sushi-gold font-semibold mb-1">{{ t.contacts_hours_label }}</h4>
                     <p class="text-white text-sm">
-                        Пн-Пт:
-                        <span class="text-sushi-gold">10:00 - 23:00</span>
+                        {{ t.contacts_hours_weekdays }}
+                        <span class="text-sushi-gold">{{ t.contacts_hours_weekdays_time }}</span>
                         <br />
-                        Сб-Вс:
-                        <span class="text-sushi-gold">11:00 - 00:00</span>
+                        {{ t.contacts_hours_weekend }}
+                        <span class="text-sushi-gold">{{ t.contacts_hours_weekend_time }}</span>
                     </p>
                 </div>
             </div>
@@ -81,7 +86,7 @@
 
         <!-- Соцсети -->
         <div>
-            <h4 class="text-sushi-gold font-semibold mb-4 text-center">Мы в соцсетях</h4>
+            <h4 class="text-sushi-gold font-semibold mb-4 text-center">{{ t.contacts_social_title }}</h4>
             <div class="flex justify-center gap-4">
                 <!-- Instagram -->
                 <a

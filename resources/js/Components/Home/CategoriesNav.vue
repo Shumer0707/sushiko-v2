@@ -3,9 +3,9 @@
         <div class="container mx-auto px-4">
             <!-- Заголовок секции - компактнее -->
             <div class="text-center mb-6">
-                <h2 class="font-display text-2xl md:text-3xl font-bold text-sushi-gold mb-2">Наше меню</h2>
+                <h2 class="font-display text-2xl md:text-3xl font-bold text-sushi-gold mb-2">{{ t.home_cat_title }}</h2>
                 <p class="font-display text-sushi-silver text-sm md:text-base opacity-80">
-                    Выберите категорию и откройте мир японской кухни
+                    {{ t.home_cat_des }}
                 </p>
             </div>
 
@@ -46,7 +46,7 @@
                                     class="absolute inset-0 bg-gradient-to-t from-sushi-dark via-sushi-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                 >
                                     <div class="absolute bottom-1 left-1 right-1">
-                                        <span class="text-sushi-gold text-[10px] font-semibold">Перейти →</span>
+                                        <span class="text-sushi-gold text-[10px] font-semibold">{{ t.home_cat_go }} →</span>
                                     </div>
                                 </div>
                             </div>
@@ -80,6 +80,7 @@
 
     // Достаем категории из shared data
     const page = usePage()
+    const t = page.props.translations.common
     const categories = computed(() => page.props.navigation_categories || [])
 
     // Переход к категории

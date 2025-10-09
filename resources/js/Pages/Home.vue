@@ -7,6 +7,10 @@
     import ProductsMenu from '@/Components/Home/ProductsMenu.vue'
     import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
     import PageGradient from '@/Components/UI/PageGradient.vue'
+    import { usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
 
     defineProps({
         banners: {
@@ -50,7 +54,7 @@
 </script>
 
 <template>
-    <AppHead title="Главная" description="Добро пожаловать в SUSHIKO - лучшие суши и роллы в Кишиневе" />
+    <AppHead :title="t.home_page_title" :description="t.home_page_description" />
 
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />

@@ -1,47 +1,50 @@
 <script setup>
-    import { computed } from 'vue'
-    import AppHead from '@/Components/Seo/Head.vue'
-    import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
-    import PageGradient from '@/Components/UI/PageGradient.vue'
-    import { useCartStore } from '@/Stores/cart'
-    import { router, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+import AppHead from '@/Components/Seo/Head.vue'
+import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
+import PageGradient from '@/Components/UI/PageGradient.vue'
+import { useCartStore } from '@/Stores/cart'
+import { router, usePage } from '@inertiajs/vue3'
 
-    const props = defineProps({
-        product: {
-            type: Object,
-            required: true,
-        },
-    })
+const page = usePage()
+const t = page.props.translations.common
 
-    const cartStore = useCartStore()
+const props = defineProps({
+    product: {
+        type: Object,
+        required: true,
+    },
+})
 
-    // Проверяем, есть ли товар в корзине
-    const itemInCart = computed(() => {
-        return cartStore.getCartItem(props.product.id)
-    })
+const cartStore = useCartStore()
 
-    // Добавить в корзину
-    const addToCart = () => {
-        cartStore.addToCart(props.product, 1)
-    }
+// Проверяем, есть ли товар в корзине
+const itemInCart = computed(() => {
+    return cartStore.getCartItem(props.product.id)
+})
 
-    // Увеличить количество
-    const incrementQuantity = () => {
-        cartStore.incrementQuantity(props.product.id)
-    }
+// Добавить в корзину
+const addToCart = () => {
+    cartStore.addToCart(props.product, 1)
+}
 
-    // Уменьшить количество
-    const decrementQuantity = () => {
-        cartStore.decrementQuantity(props.product.id)
-    }
+// Увеличить количество
+const incrementQuantity = () => {
+    cartStore.incrementQuantity(props.product.id)
+}
 
-    const removeFromCart = () => {
-        cartStore.removeFromCart(props.product.id)
-    }
+// Уменьшить количество
+const decrementQuantity = () => {
+    cartStore.decrementQuantity(props.product.id)
+}
 
-    const goToCart = () => {
-        router.visit(route('cart.index', { locale: usePage().props.locale }))
-    }
+const removeFromCart = () => {
+    cartStore.removeFromCart(props.product.id)
+}
+
+const goToCart = () => {
+    router.visit(route('cart.index', { locale: page.props.locale }))
+}
 </script>
 
 <template>
@@ -63,7 +66,7 @@
                     class="inline-flex items-center gap-2 text-sushi-gold hover:text-sushi-silver transition-colors text-sm"
                 >
                     <i class="fas fa-arrow-left"></i>
-                    <span>Вернуться к меню</span>
+                    <span>{{ t.product_back_to_menu }}</span>
                 </a>
             </div>
 
@@ -89,7 +92,7 @@
                         >
                             <div class="text-center">
                                 <div class="text-8xl mb-3 opacity-30">🍱</div>
-                                <span class="text-sushi-gold text-base opacity-50 font-medium">Фото скоро появится</span>
+                                <span class="text-sushi-gold text-base opacity-50 font-medium">{{ t.product_photo_soon }}</span>
                             </div>
                         </div>
 
@@ -123,7 +126,7 @@
 
                     <!-- Полное описание -->
                     <div v-if="product.description" class="mb-4">
-                        <h3 class="text-lg font-semibold text-sushi-gold mb-2">Описание</h3>
+                        <h3 class="text-lg font-semibold text-sushi-gold mb-2">{{ t.product_description_title }}</h3>
                         <p class="text-white text-sm leading-relaxed">
                             {{ product.description }}
                         </p>
@@ -131,7 +134,7 @@
 
                     <!-- Состав (если есть) -->
                     <div v-if="product.ingredients" class="mb-4">
-                        <h3 class="text-lg font-semibold text-sushi-gold mb-2">Состав</h3>
+                        <h3 class="text-lg font-semibold text-sushi-gold mb-2">{{ t.product_ingredients_title }}</h3>
                         <p class="text-white text-sm leading-relaxed">
                             {{ product.ingredients }}
                         </p>
@@ -164,7 +167,7 @@
                             class="flex-1 bg-sushi-red hover:bg-sushi-red/90 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg"
                         >
                             <i class="fas fa-shopping-cart mr-2"></i>
-                            Добавить в корзину
+                            {{ t.product_add_to_cart }}
                         </button>
 
                         <!-- Если товар УЖЕ В корзине -->
@@ -199,7 +202,7 @@
                             <button
                                 @click="removeFromCart"
                                 class="px-5 py-3 bg-sushi-dark border-2 border-red-500 hover:bg-red-500/20 text-red-500 font-bold rounded-lg transition-all duration-300 hover:scale-105 shadow-lg group"
-                                title="Удалить из корзины"
+                                :title="t.product_remove_from_cart"
                             >
                                 <i class="fas fa-times group-hover:rotate-90 transition-transform duration-300"></i>
                             </button>

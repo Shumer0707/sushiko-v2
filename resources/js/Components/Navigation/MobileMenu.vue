@@ -29,28 +29,28 @@
                     <div class="space-y-6">
                         <!-- Основная навигация -->
                         <div>
-                            <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Навигация</h3>
+                            <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">{{ t.navigation }}</h3>
                             <nav class="space-y-2">
                                 <Link
                                     :href="localizedRoute('/')"
                                     class="block py-2 px-3 text-white hover:text-sushi-gold hover:bg-gray-700 rounded-lg transition-colors font-medium"
                                     @click="$emit('close')"
                                 >
-                                    🏠 Главная
+                                    🏠 {{ t.home }}
                                 </Link>
                                 <Link
                                     :href="localizedRoute('/contact')"
                                     class="block py-2 px-3 text-white hover:text-sushi-gold hover:bg-gray-700 rounded-lg transition-colors font-medium"
                                     @click="$emit('close')"
                                 >
-                                    📞 Контакты
+                                    📞 {{ t.contact }}
                                 </Link>
                             </nav>
                         </div>
 
                         <!-- Языки -->
                         <div>
-                            <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Язык</h3>
+                            <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">{{ t.language }}</h3>
                             <div class="space-y-2">
                                 <form
                                     v-for="locale in ['ro', 'ru', 'en']"
@@ -81,7 +81,7 @@
 
                     <!-- Правая колонка - Категории (теперь с прокруткой) -->
                     <div>
-                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Меню</h3>
+                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">{{ t.language }}</h3>
                         <div class="space-y-1 max-h-96 overflow-y-auto custom-scrollbar">
                             <!-- 🎯 Заменили Link на a с событием -->
                             <a
@@ -146,6 +146,7 @@
 
     const { localizedRoute } = useLocale()
     const page = usePage()
+    const t = page.props.translations.common
 
     // Вычисляем стиль для позиционирования под хедером
     const menuStyle = computed(() => {

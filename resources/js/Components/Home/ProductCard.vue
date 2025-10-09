@@ -38,7 +38,7 @@
             <div
                 class="hidden md:flex absolute inset-0 bg-gradient-to-t from-sushi-dark via-sushi-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-end justify-center pb-4"
             >
-                <span class="text-sushi-gold font-semibold text-sm">Подробнее →</span>
+                <span class="text-sushi-gold font-semibold text-sm">{{ t.home_menu_more }} →</span>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
                         @click.stop="addToCart"
                         class="h-full px-2 md:px-3 bg-sushi-red hover:bg-sushi-red/80 text-white rounded-lg text-[12px] md:text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg whitespace-nowrap"
                     >
-                        В корзину
+                        {{ t.home_menu_in_cart }}
                     </button>
 
                     <!-- Если товар В корзине -->
@@ -122,6 +122,9 @@
     })
 
     const page = usePage()
+
+    const t = page.props.translations.common
+
     const locale = computed(() => page.props.current_locale || 'ru')
 
     const cartStore = useCartStore()

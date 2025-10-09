@@ -1,15 +1,15 @@
 <template>
-    <section class="seo-block bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 py-8 md:py-12 container mx-auto rounded-xl ">
+    <section class="seo-block bg-gradient-to-b from-sushi-first/90 to-sushi-dark/90 py-8 md:py-12 container mx-auto rounded-xl">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <!-- H1 заголовок - уменьшил -->
                 <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-sushi-gold mb-4">
-                    {{ title }}
+                    {{ t.home_seo_title }}
                 </h1>
 
                 <!-- Описание - уменьшил -->
                 <p class="text-base md:text-lg text-sushi-silver opacity-90 mb-6 leading-relaxed">
-                    {{ description }}
+                    {{ t.home_seo_des }}
                 </p>
 
                 <!-- USP блоки (преимущества) - компактнее -->
@@ -45,41 +45,31 @@
 </template>
 
 <script setup>
-    // Пропсы компонента
-    const props = defineProps({
-        title: {
-            type: String,
-            default: 'Суши и роллы с доставкой в Кишиневе',
+    import { usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
+
+    const features = [
+        {
+            id: 1,
+            icon: '🍱',
+            title: t.home_seo_1_title,
+            description: t.home_seo_1_des,
         },
-        description: {
-            type: String,
-            default:
-                'Sushiko - это традиционная японская кухня с использованием только свежих продуктов премиум качества. Готовим роллы по аутентичным рецептам и доставляем быстро по всему Кишиневу.',
+        {
+            id: 2,
+            icon: '🚀',
+            title: t.home_seo_2_title,
+            description: t.home_seo_2_des,
         },
-        features: {
-            type: Array,
-            default: () => [
-                {
-                    id: 1,
-                    icon: '🍱',
-                    title: 'Свежие продукты',
-                    description: 'Только премиум ингредиенты. Доставка рыбы каждый день.',
-                },
-                {
-                    id: 2,
-                    icon: '🚀',
-                    title: 'Быстрая доставка',
-                    description: 'Доставка за 60 минут. Бесплатно от 500 лей.',
-                },
-                {
-                    id: 3,
-                    icon: '👨‍🍳',
-                    title: 'Японские мастера',
-                    description: 'Наши повара обучались в Японии. Аутентичные рецепты.',
-                },
-            ],
+        {
+            id: 3,
+            icon: '👨‍🍳',
+            title: t.home_seo_3_title,
+            description: t.home_seo_3_des,
         },
-    })
+    ]
 </script>
 
 <style scoped>

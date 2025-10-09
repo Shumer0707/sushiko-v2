@@ -1,9 +1,7 @@
-<!-- Components/Cart/CartSummary.vue -->
 <template>
     <div class="lg:col-span-1">
-        <!-- На мобилке НЕ sticky, на десктопе sticky -->
         <div class="bg-sushi-dark/50 border border-sushi-first rounded-lg p-4 sm:p-6 lg:sticky lg:top-24">
-            <h3 class="text-xl font-bold text-sushi-silver mb-4">Ваш заказ</h3>
+            <h3 class="text-xl font-bold text-sushi-silver mb-4">{{ t.cart_summary_title }}</h3>
 
             <!-- Список товаров (кратко) -->
             <div class="space-y-2 mb-4 max-h-[200px] overflow-y-auto custom-scrollbar">
@@ -31,14 +29,14 @@
             <div class="space-y-3 mb-6">
                 <!-- Товары -->
                 <div class="flex justify-between text-sushi-silver/80 text-sm sm:text-base">
-                    <span>Товары ({{ totalItems }})</span>
+                    <span>{{ t.cart_summary_products }} ({{ totalItems }})</span>
                     <span>{{ totalPrice }} {{ currency }}</span>
                 </div>
 
                 <!-- Доставка -->
                 <div class="flex justify-between text-sushi-silver/80 text-sm sm:text-base">
-                    <span>Доставка</span>
-                    <span v-if="isFreeDelivery" class="text-sushi-gold font-medium">Бесплатно</span>
+                    <span>{{ t.cart_summary_delivery }}</span>
+                    <span v-if="isFreeDelivery" class="text-sushi-gold font-medium">{{ t.cart_summary_free_delivery }}</span>
                     <span v-else class="text-sushi-silver">{{ deliveryCost }} {{ currency }}</span>
                 </div>
 
@@ -47,13 +45,13 @@
                     v-if="!isFreeDelivery && amountUntilFree > 0"
                     class="text-xs text-sushi-gold/80 bg-sushi-first/20 rounded p-2"
                 >
-                    💡 Добавьте ещё {{ amountUntilFree }} {{ currency }} для бесплатной доставки
+                    💡 {{ t.cart_summary_until_free }} {{ amountUntilFree }} {{ currency }} {{ t.cart_summary_until_free_text }}
                 </div>
 
                 <!-- Итого -->
                 <div class="border-t border-sushi-first pt-3">
                     <div class="flex justify-between items-center">
-                        <span class="text-base sm:text-lg font-semibold text-sushi-silver">К оплате:</span>
+                        <span class="text-base sm:text-lg font-semibold text-sushi-silver">{{ t.cart_summary_total }}</span>
                         <span class="text-xl sm:text-2xl font-bold text-sushi-gold">{{ totalWithDelivery }} {{ currency }}</span>
                     </div>
                 </div>
@@ -64,14 +62,14 @@
                 @click="$emit('checkout')"
                 class="block w-full bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-3 rounded-lg font-medium text-center transition-colors mb-3"
             >
-                Оформить заказ
+                {{ t.cart_summary_checkout }}
             </button>
 
             <Link
                 :href="route('home', { locale: locale })"
                 class="block w-full bg-sushi-first hover:bg-sushi-first/80 text-sushi-silver border border-sushi-dark py-3 rounded-lg font-medium text-center transition-colors"
             >
-                Продолжить покупки
+                {{ t.cart_summary_continue }}
             </Link>
 
             <!-- Очистить корзину -->
@@ -79,15 +77,17 @@
                 @click="$emit('clear')"
                 class="w-full mt-4 text-red-400 hover:text-red-300 text-sm underline transition-colors"
             >
-                Очистить корзину
+                {{ t.cart_summary_clear }}
             </button>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { Link } from '@inertiajs/vue3'
-    import { computed } from 'vue'
+    import { Link, usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
 
     const props = defineProps({
         items: {
@@ -110,7 +110,6 @@
             type: String,
             required: true,
         },
-        // Новые пропсы для доставки
         deliveryCost: {
             type: Number,
             required: true,
@@ -133,7 +132,6 @@
 </script>
 
 <style scoped>
-    /* Кастомный скроллбар для списка товаров */
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }

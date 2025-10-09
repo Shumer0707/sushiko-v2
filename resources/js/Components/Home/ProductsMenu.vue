@@ -3,7 +3,7 @@
         <div class="container mx-auto px-4">
             <!-- Если товаров нет -->
             <div v-if="!products || products.length === 0" class="font-display text-center py-8">
-                <p class="text-base text-sushi-silver opacity-80">Товары не найдены</p>
+                <p class="text-base text-sushi-silver opacity-80">{{ t.home_menu_not_item }}</p>
             </div>
 
             <!-- Товары по категориям -->
@@ -56,6 +56,10 @@
     import { computed, onMounted } from 'vue'
     import { useProductsStore } from '@/Stores/products'
     import ProductCard from '@/Components/Home/ProductCard.vue'
+    import { usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
 
     // Пропсы от контроллера (SSR данные)
     const props = defineProps({
@@ -84,7 +88,7 @@
     // Склонение слова "товар"
     const declension = (count) => {
         const cases = [2, 0, 1, 1, 1, 2]
-        const titles = ['товар', 'товара', 'товаров']
+        const titles = [t.home_menu_col_1, t.home_menu_col_2, t.home_menu_col_3]
 
         return titles[count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)]]
     }

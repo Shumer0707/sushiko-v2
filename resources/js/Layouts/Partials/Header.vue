@@ -21,7 +21,7 @@
                                     <span class="text-lg font-semibold">070000000</span>
                                 </div>
                             </div>
-                            <div class="text-sm text-gray-300 mt-1">с 10:00 до 22:00 Доставка занимает в среднем 40 минут.</div>
+                            <div class="text-sm text-gray-300 mt-1">{{ t.phone_time }}</div>
                         </div>
                     </div>
 
@@ -30,10 +30,10 @@
                         <!-- Навигация для десктопа (скрываем на мобильных) -->
                         <div class="hidden lg:flex items-center space-x-6">
                             <Link :href="localizedRoute('/')" class="text-white hover:text-sushi-gold transition-colors">
-                                Главная
+                                {{ t.home }}
                             </Link>
                             <Link :href="localizedRoute('/contact')" class="text-white hover:text-sushi-gold transition-colors">
-                                Контакты
+                                {{ t.contact }}
                             </Link>
                         </div>
 
@@ -84,13 +84,13 @@
 </template>
 
 <script setup>
-    import { Link, usePage, router } from '@inertiajs/vue3'
     import { useLocale } from '@/composables/useLocale'
     import { useOverlay } from '@/composables/useOverlay'
     import LanguageDropdown from '@/Components/Navigation/LanguageDropdown.vue'
     import MobileMenu from '@/Components/Navigation/MobileMenu.vue'
     import MiniCart from '@/Components/Navigation/MiniCart.vue'
     import BurgerButton from '@/Components/Navigation/BurgerButton.vue'
+    import { Link, usePage, router } from '@inertiajs/vue3'
 
     const page = usePage()
     const t = page.props.translations.common

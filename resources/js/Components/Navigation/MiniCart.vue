@@ -37,7 +37,7 @@
             >
                 <!-- Заголовок корзины -->
                 <div class="flex justify-between items-center p-4 sm:p-4 md:p-3 border-b border-sushi-first">
-                    <h3 class="font-bold text-sushi-silver text-base sm:text-lg">Корзина</h3>
+                    <h3 class="font-bold text-sushi-silver text-base sm:text-lg">{{ t.cart }}</h3>
                     <button @click="overlay.close()" class="text-sushi-silver/60 hover:text-sushi-gold p-1 transition-colors">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -55,7 +55,7 @@
                             @click="overlay.close()"
                             class="bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
-                            Продолжить покупки
+                            {{ t.go_back }}
                         </button>
                     </div>
 
@@ -141,13 +141,13 @@
                             @click="goToCart"
                             class="w-full bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
-                            Перейти в корзину
+                            {{ t.go_cart }}
                         </button>
                         <button
                             @click="overlay.close()"
                             class="w-full bg-sushi-first hover:bg-sushi-first/80 text-sushi-silver border border-sushi-dark py-2 px-4 rounded-lg font-medium transition-colors text-sm sm:text-base"
                         >
-                            Продолжить покупки
+                            {{ t.go_back }}
                         </button>
                     </div>
                 </div>
@@ -160,9 +160,11 @@
     import { useOverlay } from '@/composables/useOverlay'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
     import { ref, computed } from 'vue'
-    import { useCartStore } from '@/Stores/cart' // 🔥 Импорт store
+    import { useCartStore } from '@/Stores/cart'
     import { router, usePage } from '@inertiajs/vue3'
 
+    const page = usePage()
+    const t = page.props.translations.common
     // Refs
     const triggerButton = ref(null)
 
@@ -179,15 +181,15 @@
         const lastTwoDigits = count % 100
 
         if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
-            return 'товаров'
+            return t.item_5 // товаров
         }
         if (lastDigit === 1) {
-            return 'товар'
+            return t.item_1 // товар
         }
         if (lastDigit >= 2 && lastDigit <= 4) {
-            return 'товара'
+            return t.item_2 // товара
         }
-        return 'товаров'
+        return t.item_5 // товаров
     })
 
     // Стили для позиционирования

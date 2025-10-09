@@ -56,12 +56,15 @@
     // Импорты для Swiper 12
     import { Swiper, SwiperSlide } from 'swiper/vue'
     import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-    import { router } from '@inertiajs/vue3'
+    import { router, usePage } from '@inertiajs/vue3'
 
     // Импортируем стили Swiper 12
     import 'swiper/css'
     import 'swiper/css/navigation'
     import 'swiper/css/pagination'
+
+    const page = usePage()
+    const t = page.props.translations.common
 
     // Подключаем нужные модули
     const modules = [Navigation, Pagination, Autoplay]
@@ -73,53 +76,53 @@
             default: () => [],
         },
     })
-
-    // Если пропсы пустые, используем дефолтные тестовые баннеры
-    const displayBanners =
-        props.banners.length > 0
-            ? props.banners
-            : [
+    const bannersDefolt = [
                   {
                       id: 1,
-                      title: 'Добро пожаловать в Sushiko!',
-                      description: 'Лучшие суши в Кишиневе. Свежие ингредиенты, традиционные рецепты',
+                      title: t.home_ban_title_1,
+                      description: t.home_ban_description_1,
                       image: '/images/banners/header-1.webp',
-                      buttonText: 'Посмотреть меню',
+                      buttonText: t.home_ban_button_1,
                       link: '/catalog',
                   },
                   {
                       id: 2,
-                      title: 'Бесплатная доставка',
-                      description: 'При заказе от 500 лей доставляем бесплатно по всему Кишиневу',
+                      title: t.home_ban_title_2,
+                      description: t.home_ban_description_2,
                       image: '/images/banners/header-4.webp',
-                      buttonText: 'Заказать сейчас',
+                      buttonText: t.home_ban_button_2,
                       link: '/catalog',
                   },
                   {
                       id: 3,
-                      title: 'Свежие роллы каждый день',
-                      description: 'Готовим роллы только из свежих продуктов. Никаких заморозок!',
+                      title: t.home_ban_title_3,
+                      description: t.home_ban_description_3,
                       image: '/images/banners/header-5.webp',
-                      buttonText: 'Узнать больше',
+                      buttonText: t.home_ban_button_3,
                       link: '/about',
                   },
                   {
                       id: 4,
-                      title: 'Специальные предложения',
-                      description: 'Каждую неделю новые акции и специальные комбо-наборы',
+                      title: t.home_ban_title_4,
+                      description: t.home_ban_description_4,
                       image: '/images/banners/header-8.webp',
-                      buttonText: 'Смотреть акции',
+                      buttonText: t.home_ban_button_4,
                       link: '/catalog',
                   },
                   {
                       id: 5,
-                      title: 'Японская кухня',
-                      description: 'Аутентичные рецепты от наших японских шеф-поваров',
+                      title: t.home_ban_title_5,
+                      description: t.home_ban_description_5,
                       image: '/images/banners/header-7.webp',
-                      buttonText: 'Узнать больше',
+                      buttonText: t.home_ban_button_5,
                       link: '/about',
                   },
               ]
+    // Если пропсы пустые, используем дефолтные тестовые баннеры
+    const displayBanners =
+        props.banners.length > 0
+            ? props.banners
+            : bannersDefolt
 
     // Функция клика по баннеру
     const handleBannerClick = (banner) => {
@@ -132,9 +135,6 @@
                 router.visit(banner.link)
             }
         }
-
-        // Можно добавить аналитику
-        console.log('Banner clicked:', banner.title)
     }
 </script>
 

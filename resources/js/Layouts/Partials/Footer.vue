@@ -15,7 +15,7 @@
                     </div>
 
                     <p class="text-sm text-sushi-silver opacity-80 leading-relaxed max-w-xs mx-auto md:mx-0">
-                        Лучшие суши и роллы в Кишиневе. Свежие ингредиенты, традиционные рецепты, быстрая доставка.
+                        {{ t.footer_des_1 }}
                     </p>
                 </div>
 
@@ -24,26 +24,26 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
                         <!-- Навигация -->
                         <div class="text-center sm:text-left">
-                            <h3 class="text-sushi-gold font-semibold text-base mb-3">Навигация</h3>
+                            <h3 class="text-sushi-gold font-semibold text-base mb-3">{{ t.footer_navigation }}</h3>
                             <nav class="flex flex-col gap-2">
                                 <Link
                                     href="/"
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 text-sm"
                                 >
-                                    Главная
+                                    {{ t.footer_home }}
                                 </Link>
                                 <Link
                                     href="/contact"
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 text-sm"
                                 >
-                                    Контакты
+                                    {{ t.footer_about }}
                                 </Link>
                             </nav>
                         </div>
 
                         <!-- Контакты -->
                         <div class="text-center sm:text-left">
-                            <h3 class="text-sushi-gold font-semibold text-base mb-3">Контакты</h3>
+                            <h3 class="text-sushi-gold font-semibold text-base mb-3">{{ t.footer_contacts }}</h3>
                             <div class="flex flex-col gap-2 text-sm">
                                 <a
                                     href="tel:+37360123456"
@@ -66,7 +66,7 @@
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 flex items-center justify-center sm:justify-start gap-2"
                                 >
                                     <i class="fa-solid fa-location-dot"></i>
-                                    <span>Кишинёв, ул. Примерная 123</span>
+                                    <span> {{ t.footer_adress }}</span>
                                 </a>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                     </div>
 
                     <p class="text-xs text-sushi-silver opacity-70 leading-relaxed max-w-xs mx-auto md:mx-0 md:ml-auto">
-                        Наш талисман следит за качеством каждого ролла! 🍣
+                        {{ t.footer_des_2 }} 🍣
                     </p>
                 </div>
             </div>
@@ -137,7 +137,7 @@
             <!-- Копирайт -->
             <div class="mt-8 pt-6 border-t border-sushi-gold border-opacity-20 text-center">
                 <p class="text-xs text-sushi-silver opacity-60">
-                    &copy; {{ new Date().getFullYear() }} Sushiko.md. Все права защищены.
+                    &copy; {{ new Date().getFullYear() }} Sushiko.md. {{ t.footer_des_prava }}
                 </p>
             </div>
         </div>
@@ -146,6 +146,10 @@
 
 <script setup>
     import { Link } from '@inertiajs/vue3'
+    import { usePage } from '@inertiajs/vue3'
+
+    const page = usePage()
+    const t = page.props.translations.common
 </script>
 
 <style scoped>
