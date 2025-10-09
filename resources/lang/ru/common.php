@@ -194,6 +194,22 @@ return [
     'checkout_success' => 'Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.',
     'checkout_required' => '*', // звездочка для обязательных полей
 
+    // Email - шаблоны писем
+    'email_contact_subject' => 'Сообщение с сайта',
+    'email_contact_title' => 'Новое сообщение с сайта SUSHIKO',
+    'email_name_label' => 'Имя:',
+    'email_email_label' => 'Email:',
+    'email_phone_label' => 'Телефон:',
+    'email_message_label' => 'Сообщение:',
+
+    // Email для пользователя (автоответ)
+    'email_user_subject' => 'Спасибо за обращение!',
+    'email_user_title' => 'Мы получили ваше сообщение',
+    'email_user_greeting' => 'Здравствуйте',
+    'email_user_text' => 'Спасибо за ваше обращение! Мы получили ваше сообщение и свяжемся с вами в ближайшее время.',
+    'email_user_your_message' => 'Ваше сообщение:',
+    'email_user_footer' => 'С уважением, команда SUSHIKO',
+
     // footer
     'footer_home' => 'Главная',
     'footer_about' => 'О нас',

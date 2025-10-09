@@ -193,6 +193,22 @@ return [
     'checkout_success' => 'Order placed successfully! We will contact you shortly.',
     'checkout_required' => '*',
 
+    // Email - email templates
+    'email_contact_subject' => 'Message from website',
+    'email_contact_title' => 'New message from SUSHIKO website',
+    'email_name_label' => 'Name:',
+    'email_email_label' => 'Email:',
+    'email_phone_label' => 'Phone:',
+    'email_message_label' => 'Message:',
+
+    // Email for user (auto-reply)
+    'email_user_subject' => 'Thank you for contacting us!',
+    'email_user_title' => 'We received your message',
+    'email_user_greeting' => 'Hello',
+    'email_user_text' => 'Thank you for your message! We have received it and will contact you shortly.',
+    'email_user_your_message' => 'Your message:',
+    'email_user_footer' => 'Best regards, SUSHIKO team',
+
     // footer
     'footer_home' => 'Home',
     'footer_about' => 'About Us',

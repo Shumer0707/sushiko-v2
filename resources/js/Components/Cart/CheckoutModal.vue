@@ -11,7 +11,7 @@
             >
                 <!-- Заголовок -->
                 <div class="flex items-center justify-between p-4 sm:p-6 border-b border-sushi-first">
-                    <h2 class="text-lg sm:text-2xl font-bold text-sushi-silver">Оформление заказа</h2>
+                    <h2 class="text-lg sm:text-2xl font-bold text-sushi-silver">{{ t.checkout_title }}</h2>
                     <button @click="handleClose" class="text-sushi-silver/60 hover:text-sushi-gold transition-colors p-1">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -24,7 +24,7 @@
                     <!-- Итоговая сумма заказа -->
                     <div class="bg-sushi-first/30 border border-sushi-gold/30 rounded-lg p-3 sm:p-4 mb-6">
                         <div class="flex justify-between items-center flex-wrap gap-2">
-                            <span class="text-sushi-silver/80 text-sm sm:text-base">Итого к оплате:</span>
+                            <span class="text-sushi-silver/80 text-sm sm:text-base">{{ t.checkout_total_label }}</span>
                             <span class="text-xl sm:text-2xl font-bold text-sushi-gold">
                                 {{ cartStore.totalWithDelivery }} {{ cartStore.currency }}
                             </span>
@@ -44,8 +44,8 @@
                             <!-- Имя -->
                             <div>
                                 <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                    Ваше имя
-                                    <span class="text-red-400">*</span>
+                                    {{ t.checkout_name_label }}
+                                    <span class="text-red-400">{{ t.checkout_required }}</span>
                                 </label>
                                 <input
                                     v-model="form.name"
@@ -55,7 +55,7 @@
                                         'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                         getError('customer.name') ? 'border-red-400' : 'border-sushi-dark',
                                     ]"
-                                    placeholder="Иван Петров"
+                                    :placeholder="t.checkout_name_placeholder"
                                 />
                                 <p v-if="getError('customer.name')" class="text-red-400 text-xs mt-1">
                                     {{ getError('customer.name') }}
@@ -65,8 +65,8 @@
                             <!-- Телефон с маской -->
                             <div>
                                 <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                    Телефон
-                                    <span class="text-red-400">*</span>
+                                    {{ t.checkout_phone_label }}
+                                    <span class="text-red-400">{{ t.checkout_required }}</span>
                                 </label>
                                 <input
                                     :value="phoneMask.formattedValue.value"
@@ -77,7 +77,7 @@
                                         'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                         phoneError || getError('customer.phone') ? 'border-red-400' : 'border-sushi-dark',
                                     ]"
-                                    placeholder="+373 12 345 678"
+                                    :placeholder="t.checkout_phone_placeholder"
                                 />
                                 <p v-if="phoneError || getError('customer.phone')" class="text-red-400 text-xs mt-1">
                                     {{ phoneError || getError('customer.phone') }}
@@ -87,7 +87,7 @@
 
                         <!-- Email (опционально, на всю ширину) -->
                         <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">Email (опционально)</label>
+                            <label class="block text-sm font-medium text-sushi-silver mb-2">{{ t.checkout_email_label }}</label>
                             <input
                                 v-model="form.email"
                                 type="email"
@@ -95,7 +95,7 @@
                                     'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                     getError('customer.email') ? 'border-red-400' : 'border-sushi-dark',
                                 ]"
-                                placeholder="your@email.com"
+                                :placeholder="t.checkout_email_placeholder"
                             />
                             <p v-if="getError('customer.email')" class="text-red-400 text-xs mt-1">
                                 {{ getError('customer.email') }}
@@ -105,8 +105,8 @@
                         <!-- Способ получения -->
                         <div>
                             <label class="block text-sm font-medium text-sushi-silver mb-3">
-                                Способ получения
-                                <span class="text-red-400">*</span>
+                                {{ t.checkout_delivery_method_label }}
+                                <span class="text-red-400">{{ t.checkout_required }}</span>
                             </label>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <label
@@ -124,7 +124,7 @@
                                         class="mr-3 flex-shrink-0"
                                         required
                                     />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Самовывоз</span>
+                                    <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_pickup }}</span>
                                 </label>
                                 <label
                                     class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
@@ -141,7 +141,7 @@
                                         class="mr-3 flex-shrink-0"
                                         required
                                     />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Доставка</span>
+                                    <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_delivery }}</span>
                                 </label>
                             </div>
                             <p v-if="getError('delivery.method')" class="text-red-400 text-xs mt-1">
@@ -154,9 +154,9 @@
                             v-if="form.deliveryMethod === 'pickup'"
                             class="bg-sushi-first/30 border border-sushi-gold/30 rounded-lg p-4"
                         >
-                            <p class="text-sushi-silver font-medium mb-2">Адрес самовывоза:</p>
-                            <p class="text-sushi-silver/80 text-sm mb-1">ул. Пушкина, д. 10</p>
-                            <p class="text-sushi-silver/60 text-xs">Время работы: 10:00 - 22:00</p>
+                            <p class="text-sushi-silver font-medium mb-2">{{ t.checkout_pickup_address_label }}</p>
+                            <p class="text-sushi-silver/80 text-sm mb-1">{{ t.checkout_pickup_address }}</p>
+                            <p class="text-sushi-silver/60 text-xs">{{ t.checkout_pickup_hours }}</p>
                         </div>
 
                         <!-- Блок доставки (если выбрана доставка) -->
@@ -167,8 +167,8 @@
                             <!-- Тип адреса -->
                             <div>
                                 <label class="block text-sm font-medium text-sushi-silver mb-3">
-                                    Тип адреса
-                                    <span class="text-red-400">*</span>
+                                    {{ t.checkout_address_type_label }}
+                                    <span class="text-red-400">{{ t.checkout_required }}</span>
                                 </label>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <label
@@ -180,7 +180,7 @@
                                         "
                                     >
                                         <input v-model="form.addressType" type="radio" value="house" class="mr-3 flex-shrink-0" />
-                                        <span class="text-sushi-silver text-sm sm:text-base">Частный дом</span>
+                                        <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_house }}</span>
                                     </label>
                                     <label
                                         class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
@@ -196,7 +196,7 @@
                                             value="apartment"
                                             class="mr-3 flex-shrink-0"
                                         />
-                                        <span class="text-sushi-silver text-sm sm:text-base">Многоквартирный</span>
+                                        <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_apartment }}</span>
                                     </label>
                                 </div>
                                 <p v-if="getError('delivery.addressType')" class="text-red-400 text-xs mt-1">
@@ -209,8 +209,8 @@
                                 <!-- Адрес (2/3 ширины) -->
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                        Улица
-                                        <span class="text-red-400">*</span>
+                                        {{ t.checkout_street_label }}
+                                        <span class="text-red-400">{{ t.checkout_required }}</span>
                                     </label>
                                     <input
                                         v-model="form.address"
@@ -220,7 +220,7 @@
                                             'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                             getError('delivery.address') ? 'border-red-400' : 'border-sushi-dark',
                                         ]"
-                                        placeholder="ул. Примерная"
+                                        :placeholder="t.checkout_street_placeholder"
                                     />
                                     <p v-if="getError('delivery.address')" class="text-red-400 text-xs mt-1">
                                         {{ getError('delivery.address') }}
@@ -230,8 +230,8 @@
                                 <!-- Номер дома (1/3 ширины) -->
                                 <div>
                                     <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                        Дом
-                                        <span class="text-red-400">*</span>
+                                        {{ t.checkout_house_number_label }}
+                                        <span class="text-red-400">{{ t.checkout_required }}</span>
                                     </label>
                                     <input
                                         v-model="form.houseNumber"
@@ -241,7 +241,7 @@
                                             'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                             getError('delivery.houseNumber') ? 'border-red-400' : 'border-sushi-dark',
                                         ]"
-                                        placeholder="10"
+                                        :placeholder="t.checkout_house_number_placeholder"
                                     />
                                     <p v-if="getError('delivery.houseNumber')" class="text-red-400 text-xs mt-1">
                                         {{ getError('delivery.houseNumber') }}
@@ -254,8 +254,8 @@
                                 <!-- Квартира -->
                                 <div>
                                     <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                        Квартира
-                                        <span class="text-red-400">*</span>
+                                        {{ t.checkout_apartment_number_label }}
+                                        <span class="text-red-400">{{ t.checkout_required }}</span>
                                     </label>
                                     <input
                                         v-model="form.apartmentNumber"
@@ -265,7 +265,7 @@
                                             'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                             getError('delivery.apartmentNumber') ? 'border-red-400' : 'border-sushi-dark',
                                         ]"
-                                        placeholder="25"
+                                        :placeholder="t.checkout_apartment_number_placeholder"
                                     />
                                     <p v-if="getError('delivery.apartmentNumber')" class="text-red-400 text-xs mt-1">
                                         {{ getError('delivery.apartmentNumber') }}
@@ -277,8 +277,8 @@
                                     <!-- Подъезд -->
                                     <div>
                                         <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                            Подъезд
-                                            <span class="text-red-400">*</span>
+                                            {{ t.checkout_entrance_label }}
+                                            <span class="text-red-400">{{ t.checkout_required }}</span>
                                         </label>
                                         <input
                                             v-model="form.entrance"
@@ -288,19 +288,19 @@
                                                 'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                                 getError('delivery.entrance') ? 'border-red-400' : 'border-sushi-dark',
                                             ]"
-                                            placeholder="1"
+                                            :placeholder="t.checkout_entrance_placeholder"
                                         />
                                         <p v-if="getError('delivery.entrance')" class="text-red-400 text-xs mt-1">
                                             {{ getError('delivery.entrance') }}
                                         </p>
-                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">Если нет подъезда — укажите 1</p>
+                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">{{ t.checkout_entrance_hint }}</p>
                                     </div>
 
                                     <!-- Этаж -->
                                     <div>
                                         <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                            Этаж
-                                            <span class="text-red-400">*</span>
+                                            {{ t.checkout_floor_label }}
+                                            <span class="text-red-400">{{ t.checkout_required }}</span>
                                         </label>
                                         <input
                                             v-model="form.floor"
@@ -310,12 +310,12 @@
                                                 'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                                 getError('delivery.floor') ? 'border-red-400' : 'border-sushi-dark',
                                             ]"
-                                            placeholder="5"
+                                            :placeholder="t.checkout_floor_placeholder"
                                         />
                                         <p v-if="getError('delivery.floor')" class="text-red-400 text-xs mt-1">
                                             {{ getError('delivery.floor') }}
                                         </p>
-                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">Если нет этажа — укажите 1</p>
+                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">{{ t.checkout_floor_hint }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -324,8 +324,8 @@
                         <!-- Способ оплаты -->
                         <div>
                             <label class="block text-sm font-medium text-sushi-silver mb-3">
-                                Способ оплаты
-                                <span class="text-red-400">*</span>
+                                {{ t.checkout_payment_label }}
+                                <span class="text-red-400">{{ t.checkout_required }}</span>
                             </label>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <label
@@ -337,7 +337,7 @@
                                     "
                                 >
                                     <input v-model="form.payment" type="radio" value="cash" class="mr-3 flex-shrink-0" required />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Наличными</span>
+                                    <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_cash }}</span>
                                 </label>
                                 <label
                                     class="flex items-center p-3 bg-sushi-first border rounded-lg cursor-pointer transition-colors"
@@ -348,7 +348,7 @@
                                     "
                                 >
                                     <input v-model="form.payment" type="radio" value="card" class="mr-3 flex-shrink-0" required />
-                                    <span class="text-sushi-silver text-sm sm:text-base">Картой</span>
+                                    <span class="text-sushi-silver text-sm sm:text-base">{{ t.checkout_card }}</span>
                                 </label>
                             </div>
                             <p v-if="getError('payment')" class="text-red-400 text-xs mt-1">
@@ -358,7 +358,7 @@
 
                         <!-- Комментарий -->
                         <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">Комментарий к заказу</label>
+                            <label class="block text-sm font-medium text-sushi-silver mb-2">{{ t.checkout_comment_label }}</label>
                             <textarea
                                 v-model="form.comment"
                                 rows="3"
@@ -366,7 +366,7 @@
                                     'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors resize-none',
                                     getError('comment') ? 'border-red-400' : 'border-sushi-dark',
                                 ]"
-                                placeholder="Особые пожелания, время доставки..."
+                                :placeholder="t.checkout_comment_placeholder"
                             ></textarea>
                             <p v-if="getError('comment')" class="text-red-400 text-xs mt-1">
                                 {{ getError('comment') }}
@@ -380,14 +380,14 @@
                                 :disabled="isSubmitting"
                                 class="w-full sm:flex-1 bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             >
-                                {{ isSubmitting ? 'Отправка...' : 'Оформить заказ' }}
+                                {{ isSubmitting ? t.checkout_submitting : t.checkout_submit }}
                             </button>
                             <button
                                 type="button"
                                 @click="handleClose"
                                 class="w-full sm:flex-1 bg-sushi-first hover:bg-sushi-first/80 text-sushi-silver border border-sushi-dark py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
                             >
-                                Отмена
+                                {{ t.checkout_cancel }}
                             </button>
                         </div>
                     </form>
@@ -399,7 +399,7 @@
 
 <script setup>
     import { ref, computed, watch } from 'vue'
-    import { router } from '@inertiajs/vue3'
+    import { router, usePage } from '@inertiajs/vue3'
     import { useCartStore } from '@/Stores/cart'
     import { usePhoneMask } from '@/composables/usePhoneMask'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
@@ -413,6 +413,8 @@
 
     const emit = defineEmits(['close'])
 
+    const page = usePage()
+    const t = page.props.translations.common
     const cartStore = useCartStore()
 
     // Инициализация маски телефона
@@ -451,15 +453,22 @@
         }
     )
 
+    // Склонение слова "товар"
     const itemsWord = computed(() => {
         const count = cartStore.totalItems
         const lastDigit = count % 10
         const lastTwoDigits = count % 100
 
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return 'товаров'
-        if (lastDigit === 1) return 'товар'
-        if (lastDigit >= 2 && lastDigit <= 4) return 'товара'
-        return 'товаров'
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+            return t.item_5 // товаров
+        }
+        if (lastDigit === 1) {
+            return t.item_1 // товар
+        }
+        if (lastDigit >= 2 && lastDigit <= 4) {
+            return t.item_2 // товара
+        }
+        return t.item_5 // товаров
     })
 
     const handleClose = () => {
@@ -480,7 +489,7 @@
 
         // Валидация телефона на фронте
         if (!phoneMask.isValid()) {
-            phoneError.value = 'Введите корректный номер телефона (минимум 10 цифр)'
+            phoneError.value = t.checkout_phone_error
             return
         }
         phoneError.value = ''
@@ -493,8 +502,6 @@
             name: item.product.name,
             price: parseFloat(item.product.price), // преобразуем строку в число
             quantity: item.quantity,
-            // Можно добавить selectedAttributes если нужно
-            // selectedAttributes: item.selectedAttributes
         }))
 
         const orderData = {
@@ -518,7 +525,7 @@
             },
             payment: form.value.payment,
             comment: form.value.comment,
-            items: formattedItems, // используем преобразованные items
+            items: formattedItems,
             total: parseFloat(cartStore.totalPrice),
             deliveryCost: parseFloat(cartStore.deliveryCost),
             totalWithDelivery: parseFloat(cartStore.totalWithDelivery),
@@ -552,7 +559,7 @@
 
                 handleClose()
 
-                alert('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.')
+                alert(t.checkout_success)
             },
             onError: (errors) => {
                 // Сохраняем ошибки для отображения под полями

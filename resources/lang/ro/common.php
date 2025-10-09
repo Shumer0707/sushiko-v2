@@ -224,6 +224,22 @@ return [
     'checkout_success' => 'Comanda a fost plasată cu succes! Vă vom contacta în curând.',
     'checkout_required' => '*',
 
+    // Email - șabloane de email
+    'email_contact_subject' => 'Mesaj de pe site',
+    'email_contact_title' => 'Mesaj nou de pe site-ul SUSHIKO',
+    'email_name_label' => 'Nume:',
+    'email_email_label' => 'Email:',
+    'email_phone_label' => 'Telefon:',
+    'email_message_label' => 'Mesaj:',
+
+    // Email pentru utilizator (răspuns automat)
+    'email_user_subject' => 'Mulțumim pentru mesaj!',
+    'email_user_title' => 'Am primit mesajul dumneavoastră',
+    'email_user_greeting' => 'Bună ziua',
+    'email_user_text' => 'Mulțumim pentru mesajul dumneavoastră! Am primit mesajul și vă vom contacta în curând.',
+    'email_user_your_message' => 'Mesajul dumneavoastră:',
+    'email_user_footer' => 'Cu stimă, echipa SUSHIKO',
+
     // footer
     'footer_home' => 'Acasă',
     'footer_about' => 'Despre noi',
