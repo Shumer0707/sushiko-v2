@@ -9,7 +9,7 @@
             <div class="flex justify-between items-center">
                 <!-- Лого -->
                 <Link :href="localizedRoute('/')" class="flex items-center">
-                    <img src="images/logo.jpg" alt="" class="w-32 lg:w-48" />
+                    <img src="/images/logo-v1.webp" alt="" class="w-32 lg:w-48" />
                 </Link>
 
                 <!-- 🎯 Навигация по категориям - теперь с прокруткой (только lg+ экраны) -->
@@ -31,20 +31,7 @@
                     <MiniCart />
 
                     <!-- Гамбургер (только на мобильных < lg) -->
-                    <button
-                        data-modal-trigger="sticky-mobile-menu"
-                        @click="toggleMobileMenu"
-                        class="lg:hidden text-white p-2 hover:bg-gray-700 rounded transition-colors"
-                    >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                :d="mobileMenuOverlay.isOpen.value ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'"
-                            ></path>
-                        </svg>
-                    </button>
+                    <BurgerButton :is-open="mobileMenuOverlay.isOpen.value" @toggle="toggleMobileMenu" />
                 </div>
             </div>
 
@@ -70,6 +57,7 @@
     import MiniCart from '@/Components/Navigation/MiniCart.vue'
     import MobileMenu from '@/Components/Navigation/MobileMenu.vue'
     import { ref, onMounted, onUnmounted } from 'vue'
+    import BurgerButton from '@/Components/Navigation/BurgerButton.vue'
 
     const page = usePage()
     const categories = page.props.navigation_categories

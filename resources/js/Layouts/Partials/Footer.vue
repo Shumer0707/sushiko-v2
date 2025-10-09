@@ -5,13 +5,8 @@
                 <!-- ЛЕВАЯ КОЛОНКА - Лого -->
                 <div class="text-center md:text-left">
                     <div class="mb-4">
-                        <!--
-                            ВАЖНО! Добавляем width и height
-                            aspect-[3/1] - соотношение сторон (лого обычно широкое)
-                            Это резервирует место ДО загрузки картинки
-                        -->
                         <img
-                            src="/images/footer/logo.webp"
+                            src="/images/logo-v1.webp"
                             alt="Sushiko"
                             width="240"
                             height="80"

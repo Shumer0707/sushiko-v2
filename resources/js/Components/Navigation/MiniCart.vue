@@ -10,7 +10,7 @@
             <span class="text-sm md:text-xs">🛒</span>
             <div class="text-sm md:text-xs">
                 <!-- 🔥 НОВОЕ: Данные из store -->
-                <span class="font-semibold">{{ cartStore.totalPrice }} {{ cartStore.currency }}</span>
+                <span class="text-sushi-silver font-semibold">{{ cartStore.totalPrice }} {{ cartStore.currency }}</span>
                 <div class="text-xs md:text-[10px] text-gray-300 hidden sm:block">{{ cartStore.totalItems }} {{ itemsWord }}</div>
             </div>
 

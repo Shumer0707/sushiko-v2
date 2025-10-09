@@ -14,14 +14,14 @@
         >
             <div class="container mx-auto px-4 py-6">
                 <!-- Заголовок меню -->
-                <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-600">
+                <!-- <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-600">
                     <h2 class="text-xl font-bold">Меню</h2>
                     <button @click="$emit('close')" class="text-white hover:text-sushi-gold p-2">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Основной контент в две колонки -->
                 <div class="grid grid-cols-2 gap-8">
@@ -81,7 +81,7 @@
 
                     <!-- Правая колонка - Категории (теперь с прокруткой) -->
                     <div>
-                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Категории суши</h3>
+                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">Меню</h3>
                         <div class="space-y-1 max-h-96 overflow-y-auto custom-scrollbar">
                             <!-- 🎯 Заменили Link на a с событием -->
                             <a

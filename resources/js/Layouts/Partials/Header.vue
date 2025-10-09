@@ -7,7 +7,7 @@
                     <!-- Лого -->
                     <div class="flex items-center">
                         <Link :href="localizedRoute('/')" class="block">
-                            <img src="images/logo.jpg" alt="logo" class="w-32 lg:w-48" />
+                            <img src="/images/logo-v1.webp" alt="logo" class="w-32 lg:w-48" />
                         </Link>
                     </div>
 
@@ -27,9 +27,6 @@
 
                     <!-- Правая часть -->
                     <div class="flex items-center space-x-4">
-                        <!-- Корзина (всегда видна) -->
-                        <MiniCart :is-closing="mobileMenuOverlay.isClosing.value" />
-
                         <!-- Навигация для десктопа (скрываем на мобильных) -->
                         <div class="hidden lg:flex items-center space-x-6">
                             <Link :href="localizedRoute('/')" class="text-white hover:text-sushi-gold transition-colors">
@@ -41,20 +38,10 @@
                         </div>
 
                         <!-- Гамбургер (только на мобильных) -->
-                        <button
-                            data-modal-trigger="mobile-menu"
-                            @click="toggleMobileMenu"
-                            class="lg:hidden text-white p-2 hover:bg-gray-700 rounded transition-colors"
-                        >
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    :d="mobileMenuOverlay.isOpen.value ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'"
-                                ></path>
-                            </svg>
-                        </button>
+                        <BurgerButton :is-open="mobileMenuOverlay.isOpen.value" @toggle="toggleMobileMenu" />
+
+                        <!-- Корзина (всегда видна) -->
+                        <MiniCart :is-closing="mobileMenuOverlay.isClosing.value" />
                     </div>
                 </div>
             </div>
@@ -103,6 +90,7 @@
     import LanguageDropdown from '@/Components/Navigation/LanguageDropdown.vue'
     import MobileMenu from '@/Components/Navigation/MobileMenu.vue'
     import MiniCart from '@/Components/Navigation/MiniCart.vue'
+    import BurgerButton from '@/Components/Navigation/BurgerButton.vue'
 
     const page = usePage()
     const t = page.props.translations.common
