@@ -218,4 +218,13 @@ return [
     'footer_des_1' => 'The best sushi and rolls in Chisinau. Fresh ingredients, traditional recipes, fast delivery.',
     'footer_des_2' => 'Our mascot ensures the quality of every roll!',
     'footer_des_prava' => 'All rights reserved.',
+
+    // 404 Error Page
+    'error_404_title' => 'Page Not Found - 404',
+    'error_404_description' => 'Sorry, the page you are looking for could not be found. Return to the homepage and order delicious sushi!',
+    'error_404_heading' => 'Page Not Found',
+    'error_404_text' => 'Unfortunately, this page no longer exists or has been moved. But don\'t worry - our sushi is still here!',
+    'error_404_button_home' => 'Home',
+    'error_404_button_back' => 'Go Back',
+    'error_404_hint' => 'You may have followed an old link or the page has been deleted.',
 ];

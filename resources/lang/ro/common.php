@@ -249,4 +249,13 @@ return [
     'footer_des_1' => 'Cel mai bun sushi și roluri în Chișinău. Ingrediente proaspete, rețete tradiționale, livrare rapidă.',
     'footer_des_2' => 'Mascota noastră supraveghează calitatea fiecărui sul!',
     'footer_des_prava' => 'Toate drepturile rezervate.',
+
+    // 404 Error Page
+    'error_404_title' => 'Pagina nu a fost găsită - 404',
+    'error_404_description' => 'Din păcate, pagina solicitată nu a fost găsită. Reveniți la pagina principală și comandați sushi delicioși!',
+    'error_404_heading' => 'Pagina nu a fost găsită',
+    'error_404_text' => 'Din păcate, această pagină nu mai există sau a fost mutată. Dar nu vă faceți griji - sushi-ul nostru este încă aici!',
+    'error_404_button_home' => 'Pagina principală',
+    'error_404_button_back' => 'Înapoi',
+    'error_404_hint' => 'Poate ați accesat un link vechi sau pagina a fost ștearsă.',
 ];
