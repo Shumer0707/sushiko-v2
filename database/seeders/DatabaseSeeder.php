@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +15,11 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            SushiDataSeeder::class,
-            AdminUserSeeder::class,
+            CategorySeeder::class,      // 1. Сначала категории
+            BrandSeeder::class,          // 2. Потом бренды
+            AttributeSeeder::class,      // 3. Атрибуты (размер, острота)
+            ProductSeeder::class,        // 4. И наконец продукты
+            AdminUserSeeder::class,      // 5. Админ
         ]);
 
         // User::factory(10)->create();
