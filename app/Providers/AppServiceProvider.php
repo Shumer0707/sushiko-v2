@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
             'csrf_token' => fn() => csrf_token(),
             'translations' => fn() => [
                 'common' => trans('common'),
+                'seo' => trans('seo'),
             ],
         ]);
     }

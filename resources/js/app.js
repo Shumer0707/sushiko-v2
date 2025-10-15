@@ -18,7 +18,8 @@ const publicPages = ['Home', 'About', 'Contact', 'Cart', "Product"]
 // при желании сюда можно добавить ещё: 'Catalog', 'Product', и т.д.
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    // title: (title) => `${title} - ${appName}`,
+    title: (title) => title,
     resolve: (name) =>
         resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')).then((page) => {
             // Если в самом компоненте уже прописан layout — не трогаем

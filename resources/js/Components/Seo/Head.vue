@@ -1,12 +1,10 @@
 <template>
     <Head>
         <!-- Заголовок страницы -->
-        <title>{{ title }} - {{ siteName }}</title>
+        <title>{{ fullTitle }}</title>
 
         <!-- Основные мета-теги -->
         <meta name="description" :content="description" />
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Canonical URL -->
         <link rel="canonical" :href="currentUrl" />
@@ -18,12 +16,18 @@
         <link rel="alternate" hreflang="x-default" :href="getLocalizedUrl('ru')" />
 
         <!-- Open Graph для соцсетей -->
-        <meta property="og:title" :content="title" />
+        <meta property="og:title" :content="fullTitle" />
         <meta property="og:description" :content="description" />
         <meta property="og:image" :content="fullImageUrl" />
         <meta property="og:url" :content="currentUrl" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" :content="siteName" />
+        <meta property="og:type" :content="ogType" />
+        <meta property="og:site_name" content="Sushiko" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" :content="fullTitle" />
+        <meta name="twitter:description" :content="description" />
+        <meta name="twitter:image" :content="fullImageUrl" />
     </Head>
 </template>
 
@@ -34,23 +38,35 @@
     const props = defineProps({
         title: {
             type: String,
-            default: 'Главная страница',
+            required: true,
         },
         description: {
             type: String,
-            default: 'Описание сайта по умолчанию',
+            required: true,
         },
         image: {
             type: String,
-            default: '/images/default-og-image.jpg',
+            default: '/images/og-default.jpg',
+        },
+        ogType: {
+            type: String,
+            default: 'website',
         },
     })
 
-    const siteName = 'Мой Сайт'
     const page = usePage()
+
+    const fullTitle = computed(() => {
+        const result = props.title.trim()
+        console.log('🔥 AppHead fullTitle:', result) // 🔥 ДОБАВЬ ЭТО
+        return result
+    })
 
     // Полный URL для картинки
     const fullImageUrl = computed(() => {
+        if (props.image.startsWith('http')) {
+            return props.image
+        }
         return window.location.origin + props.image
     })
 
@@ -62,8 +78,8 @@
     // Функция для создания URL с другой локалью
     const getLocalizedUrl = (locale) => {
         const currentPath = page.url
-        // Заменяем текущую локаль на нужную
-        const newPath = currentPath.replace(/^\/[a-z]{2}/, `/${locale}`)
+        const pathWithoutLocale = currentPath.replace(/^\/[a-z]{2}(\/|$)/, '/')
+        const newPath = `/${locale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
         return window.location.origin + newPath
     }
 </script>

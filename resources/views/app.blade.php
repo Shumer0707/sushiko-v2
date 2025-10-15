@@ -5,7 +5,40 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title inertia>{{ config('app.name', 'Laravel') }}</title>
+    {{-- 🔥 ВАЖНО: добавляем атрибут "inertia" чтобы теги заменялись --}}
+    <title inertia>{{ $page['props']['meta']['title'] ?? 'Sushiko - Доставка суши в Кишинёве' }}</title>
+
+    <meta name="description" inertia
+        content="{{ $page['props']['meta']['description'] ?? 'Закажите свежие суши и роллы с доставкой в Кишинёве' }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:title" inertia content="{{ $page['props']['meta']['title'] ?? 'Sushiko' }}">
+    <meta property="og:description" inertia content="{{ $page['props']['meta']['description'] ?? 'Доставка суши' }}">
+    <meta property="og:image" inertia content="{{ $page['props']['meta']['image'] ?? asset('images/og-default.jpg') }}">
+    <meta property="og:url" inertia content="{{ url()->current() }}">
+    <meta property="og:type" inertia content="{{ $page['props']['meta']['og_type'] ?? 'website' }}">
+    <meta property="og:site_name" content="Sushiko">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" inertia content="{{ $page['props']['meta']['title'] ?? 'Sushiko' }}">
+    <meta name="twitter:description" inertia content="{{ $page['props']['meta']['description'] ?? 'Доставка суши' }}">
+    <meta name="twitter:image" inertia
+        content="{{ $page['props']['meta']['image'] ?? asset('images/og-default.jpg') }}">
+
+    {{-- Canonical --}}
+    <link rel="canonical" inertia href="{{ url()->current() }}">
+
+    {{-- Hreflang --}}
+    @php
+        $currentPath = request()->path();
+        $pathWithoutLocale = preg_replace('/^(ru|ro|en)/', '', $currentPath);
+        $pathWithoutLocale = $pathWithoutLocale ?: '/';
+    @endphp
+    <link rel="alternate" hreflang="ru" inertia href="{{ url('/ru' . $pathWithoutLocale) }}">
+    <link rel="alternate" hreflang="ro" inertia href="{{ url('/ro' . $pathWithoutLocale) }}">
+    <link rel="alternate" hreflang="en" inertia href="{{ url('/en' . $pathWithoutLocale) }}">
+    <link rel="alternate" hreflang="x-default" inertia href="{{ url('/ru' . $pathWithoutLocale) }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

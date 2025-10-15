@@ -1,54 +1,61 @@
 <script setup>
-import { computed } from 'vue'
-import AppHead from '@/Components/Seo/Head.vue'
-import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
-import PageGradient from '@/Components/UI/PageGradient.vue'
-import { useCartStore } from '@/Stores/cart'
-import { router, usePage } from '@inertiajs/vue3'
+    import { computed } from 'vue'
+    import AppHead from '@/Components/Seo/Head.vue'
+    import ParallaxBackground from '@/Components/UI/ParallaxBackground.vue'
+    import PageGradient from '@/Components/UI/PageGradient.vue'
+    import { useCartStore } from '@/Stores/cart'
+    import { router, usePage } from '@inertiajs/vue3'
 
-const page = usePage()
-const t = page.props.translations.common
+    const page = usePage()
+    const t = page.props.translations.common
 
-const props = defineProps({
-    product: {
-        type: Object,
-        required: true,
-    },
-})
+    const props = defineProps({
+        product: {
+            type: Object,
+            required: true,
+        },
+    })
 
-const cartStore = useCartStore()
+    const cartStore = useCartStore()
 
-// Проверяем, есть ли товар в корзине
-const itemInCart = computed(() => {
-    return cartStore.getCartItem(props.product.id)
-})
+    // Проверяем, есть ли товар в корзине
+    const itemInCart = computed(() => {
+        return cartStore.getCartItem(props.product.id)
+    })
 
-// Добавить в корзину
-const addToCart = () => {
-    cartStore.addToCart(props.product, 1)
-}
+    // 🔥 ИСПОЛЬЗУЕМ ГОТОВЫЕ meta из контроллера
+    const meta = computed(() => page.props.meta || {})
 
-// Увеличить количество
-const incrementQuantity = () => {
-    cartStore.incrementQuantity(props.product.id)
-}
+    // Остальной твой код...
+    const addToCart = () => {
+        cartStore.addToCart(props.product, 1)
+    }
 
-// Уменьшить количество
-const decrementQuantity = () => {
-    cartStore.decrementQuantity(props.product.id)
-}
+    const incrementQuantity = () => {
+        cartStore.incrementQuantity(props.product.id)
+    }
 
-const removeFromCart = () => {
-    cartStore.removeFromCart(props.product.id)
-}
+    const decrementQuantity = () => {
+        cartStore.decrementQuantity(props.product.id)
+    }
 
-const goToCart = () => {
-    router.visit(route('cart.index', { locale: page.props.locale }))
-}
+    const removeFromCart = () => {
+        cartStore.removeFromCart(props.product.id)
+    }
+
+    const goToCart = () => {
+        router.visit(route('cart.index', { locale: page.props.locale }))
+    }
 </script>
 
 <template>
-    <AppHead :title="product.name" :description="product.short_description || product.description" />
+    <!-- 🔥 ИСПОЛЬЗУЕМ meta из контроллера -->
+    <AppHead
+        :title="meta.title || product.name"
+        :description="meta.description || product.short_description"
+        :image="meta.image || product.image_url"
+        og-type="product"
+    />
 
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />

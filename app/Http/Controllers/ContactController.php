@@ -6,9 +6,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
 use App\Mail\ContactFormUserMail;
+use Inertia\Inertia;
 
 class ContactController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('Contact', [
+            'meta' => [
+                'title' => __('seo.contact_title'),
+                'description' => __('seo.contact_description'),
+                'image' => asset('images/og-default.jpg'),
+            ],
+        ]);
+    }
+
     public function send(Request $request)
     {
         $validated = $request->validate([

@@ -11,6 +11,7 @@
 
     const page = usePage()
     const t = page.props.translations.common
+    const s = page.props.translations.seo
 
     defineProps({
         banners: {
@@ -54,7 +55,7 @@
 </script>
 
 <template>
-    <AppHead :title="t.home_page_title" :description="t.home_page_description" />
+    <AppHead :title="s.home_title" :description="s.home_description" />
 
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />

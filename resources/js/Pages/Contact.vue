@@ -9,10 +9,11 @@
 
     const page = usePage()
     const t = page.props.translations.common
+    const s = page.props.translations.seo
 </script>
 
 <template>
-    <AppHead :title="t.contacts_page_title" :description="t.contacts_page_description" />
+    <AppHead :title="s.contact_title" :description="s.contact_description" />
 
     <!-- Фон с параллаксом -->
     <ParallaxBackground image="/images/sushi-pattern.jpg" :opacity="0.4" :speed="0.2" max-height="100vh" />

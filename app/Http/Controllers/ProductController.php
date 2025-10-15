@@ -82,6 +82,11 @@ class ProductController extends Controller
 
         // Отправляем на главную страницу
         return Inertia::render('Home', [
+            'meta' => [
+                'title' => __('seo.home_title'),
+                'description' => __('seo.home_description'),
+                'image' => asset('images/og-home.jpg'), // Создашь позже
+            ],
             'products' => $products,
             'categories' => $categories,
             'locale' => $locale,
@@ -100,16 +105,16 @@ class ProductController extends Controller
     {
         // Ищем товар по slug в переводах
         $product = Product::with([
-            'translations',          // Все переводы (для переключения языков)
-            'translation',           // Текущий перевод
+            'translations',
+            'translation',
             'category.translation',
             'brand.translation',
             'images' => function ($query) {
                 $query->orderBy('is_main', 'desc')
                     ->orderBy('sort_order', 'asc');
             },
-            'attributeValues.attribute.translation',  // Атрибуты товара
-            'attributeValues.translation',            // Значения атрибутов
+            'attributeValues.attribute.translation',
+            'attributeValues.translation',
         ])
             ->whereHas('translation', function ($query) use ($slug) {
                 $query->where('slug', $slug);
@@ -123,34 +128,24 @@ class ProductController extends Controller
             'sku' => $product->sku,
             'price' => $product->price,
             'currency' => $product->currency,
-
-            // Переводы
             'name' => $product->translation?->name ?? '',
             'slug' => $product->translation?->slug ?? '',
             'short_description' => $product->translation?->short_description ?? '',
-            'description' => $product->translation?->full_description ?? '', // 🔥 Переименовали для фронта
-            'ingredients' => null, // 🔥 Добавили поле (если будет в БД - заполнишь)
-
-            // Категория
+            'description' => $product->translation?->full_description ?? '',
+            'ingredients' => null,
             'category' => [
                 'id' => $product->category?->id,
                 'name' => $product->category?->translation?->name ?? '',
                 'slug' => $product->category?->translation?->slug ?? '',
                 'image_url' => $product->category?->image_url ?? '',
             ],
-
-            // Бренд
             'brand' => [
                 'id' => $product->brand?->id,
                 'name' => $product->brand?->translation?->name ?? '',
                 'slug' => $product->brand?->translation?->slug ?? '',
                 'logo_url' => $product->brand?->logo_url ?? '',
             ],
-
-            // 🔥 ИСПРАВЛЕНО: Главное изображение для совместимости с карточкой
             'image_url' => $product->main_image_url,
-
-            // Все изображения (галерея)
             'images' => $product->images->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -158,8 +153,6 @@ class ProductController extends Controller
                     'is_main' => $image->is_main,
                 ];
             }),
-
-            // Атрибуты (например: размер, острота)
             'attributes' => $product->attributeValues->groupBy(function ($attributeValue) {
                 return $attributeValue->attribute->id;
             })->map(function ($values, $attributeId) {
@@ -178,7 +171,7 @@ class ProductController extends Controller
             })->values(),
         ];
 
-        // Похожие товары из той же категории
+        // Похожие товары
         $relatedProducts = Product::with([
             'translation',
             'category.translation',
@@ -201,8 +194,26 @@ class ProductController extends Controller
                 ];
             });
 
-        // 🔥 ИСПРАВЛЕНО: Рендерим Product вместо Product/Show
+        // 🔥 ДОБАВЛЯЕМ SEO ДАННЫЕ
         return Inertia::render('Product', [
+            // SEO для ботов (с подстановкой данных товара)
+            'meta' => [
+                'title' => __('seo.product_title', [
+                    'name' => $product->translation?->name ?? ''
+                ]),
+                'description' => __('seo.product_description', [
+                    'name' => $product->translation?->name ?? '',
+                    'short_description' => $product->translation?->short_description ?? ''
+                ]),
+                // Используем главное фото товара для соцсетей
+                'image' => $product->main_image_url
+                    ? (str_starts_with($product->main_image_url, 'http')
+                        ? $product->main_image_url
+                        : asset($product->main_image_url))
+                    : asset('images/og-default.jpg'),
+            ],
+
+            // Данные страницы
             'product' => $productData,
             'relatedProducts' => $relatedProducts,
             'locale' => app()->getLocale(),

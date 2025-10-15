@@ -1,13 +1,6 @@
+# ВРЕМЕННО: Закрываем весь сайт от индексации
 User-agent: *
-Disallow: /admin/
-Disallow: /dashboard/
-Disallow: /profile/
-Disallow: /storage/app/
-Disallow: /.env
-
-# Временно закрываем весь сайт от индексации (удали эту строку когда будешь готов к индексации)
 Disallow: /
 
-# Когда будешь готов открыть сайт:
-# Allow: /
-# Sitemap: https://sushiko.md/sitemap.xml
+# Ссылка на карту сайта (можно оставить для теста)
+Sitemap: https://sushiko.md/sitemap.xml
