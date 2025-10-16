@@ -16,9 +16,9 @@
                         <div class="flex-1 text-center">
                             <div class="flex justify-center items-center space-x-6">
                                 <div>
-                                    <span class="text-lg font-semibold">060000000</span>
-                                    <span class="mx-2">|</span>
-                                    <span class="text-lg font-semibold">070000000</span>
+                                    <span class="text-lg font-semibold">078 12 55 33</span>
+                                    <!-- <span class="mx-2">|</span> -->
+                                    <!-- <span class="text-lg font-semibold">070000000</span> -->
                                 </div>
                             </div>
                             <div class="text-sm text-gray-300 mt-1">{{ t.phone_time }}</div>
@@ -52,7 +52,7 @@
             <div class="container mx-auto px-4 py-3 lg:py-2">
                 <div class="flex justify-between items-center">
                     <!-- 🎯 Категории - теперь с прокруткой вместо переходов -->
-                    <nav class="flex space-x-8 xl:space-x-8 lg:space-x-4">
+                    <nav class="flex space-x-8 xl:space-x-6 lg:space-x-4">
                         <a
                             v-for="category in categories"
                             :key="category.id"

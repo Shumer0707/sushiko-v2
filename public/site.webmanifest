@@ -1,0 +1,21 @@
+{
+    "name": "Sushiko - Доставка суши в Кишинёве",
+    "short_name": "Sushiko",
+    "description": "Закажите свежие суши и роллы с бесплатной доставкой по Кишинёву",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#D4AF37",
+    "background_color": "#342F2F",
+    "display": "standalone",
+    "start_url": "/ru"
+}

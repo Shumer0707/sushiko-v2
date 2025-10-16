@@ -41,7 +41,7 @@
                     <button
                         type="submit"
                         :class="[
-                            'w-full flex items-center space-x-3 px-4 py-3 text-left text-sushi-silver hover:bg-sushi-gold/40 transition-colors',
+                            'w-full flex items-center rounded-b-lg space-x-3 px-4 py-3 text-left text-sushi-silver hover:bg-sushi-gold/40 transition-colors',
                             currentLocale === locale ? 'bg-sushi-gold/70 font-medium' : '',
                         ]"
                     >

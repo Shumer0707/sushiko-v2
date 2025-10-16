@@ -14,7 +14,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@example.com'], // наш админ
             [
                 'name' => 'Admin',
-                'password' => Hash::make('password'), // замени на свой пароль
+                'password' => Hash::make('d[fl,bn$&HJ4184651dfh'), // замени на свой пароль
                 'role' => 'admin', // важно, чтобы в таблице users было поле role
             ]
         );

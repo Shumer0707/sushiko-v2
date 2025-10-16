@@ -9,17 +9,17 @@
             <div class="flex justify-between items-center">
                 <!-- Лого -->
                 <Link :href="localizedRoute('/')" class="flex items-center">
-                    <img src="/images/logo-v1.webp" alt="" class="w-32 lg:w-48" />
+                    <img src="/images/logo-v1.webp" alt="" class="w-32 2xl:w-48 lg:hidden xl:block" />
                 </Link>
 
                 <!-- 🎯 Навигация по категориям - теперь с прокруткой (только lg+ экраны) -->
-                <nav class="hidden lg:flex space-x-6 xl:space-x-6 lg:space-x-3 flex-1 justify-center">
+                <nav class="hidden lg:flex space-x-6 xl:space-x-4 lg:space-x-3 flex-1 justify-center">
                     <a
                         v-for="category in categories"
                         :key="category.id"
                         :href="`#category-${category.id}`"
                         @click.prevent="scrollToCategory(category.id)"
-                        class="text-white hover:text-sushi-gold transition-colors font-medium text-sm xl:text-sm lg:text-xs cursor-pointer"
+                        class="text-white hover:text-sushi-gold transition-colors 2xl:font-medium text-sm xl:text-sm lg:text-xs cursor-pointer"
                     >
                         {{ category.name }}
                     </a>
