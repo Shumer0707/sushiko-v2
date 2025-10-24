@@ -13,35 +13,15 @@ class BrandSeeder extends Seeder
         // Массив брендов
         $brands = [
             [
-                'logo' => 'brands/salmon-king.jpg',
+                'logo' => '',
                 'is_active' => true,
                 'sort_order' => 1,
                 'translations' => [
-                    'ru' => ['name' => 'SALMON KING', 'slug' => 'salmon-king'],
-                    'ro' => ['name' => 'SALMON KING', 'slug' => 'salmon-king'],
-                    'en' => ['name' => 'SALMON KING', 'slug' => 'salmon-king'],
+                    'ru' => ['name' => 'Sushiko', 'slug' => 'sushiko'],
+                    'ro' => ['name' => 'Sushiko', 'slug' => 'sushiko'],
+                    'en' => ['name' => 'Sushiko', 'slug' => 'sushiko'],
                 ]
             ],
-            [
-                'logo' => 'brands/rice-master.jpg',
-                'is_active' => true,
-                'sort_order' => 2,
-                'translations' => [
-                    'ru' => ['name' => 'RICE MASTER', 'slug' => 'rice-master'],
-                    'ro' => ['name' => 'RICE MASTER', 'slug' => 'rice-master'],
-                    'en' => ['name' => 'RICE MASTER', 'slug' => 'rice-master'],
-                ]
-            ],
-            [
-                'logo' => 'brands/ocean-fresh.jpg',
-                'is_active' => true,
-                'sort_order' => 3,
-                'translations' => [
-                    'ru' => ['name' => 'OCEAN FRESH', 'slug' => 'ocean-fresh'],
-                    'ro' => ['name' => 'OCEAN FRESH', 'slug' => 'ocean-fresh'],
-                    'en' => ['name' => 'OCEAN FRESH', 'slug' => 'ocean-fresh'],
-                ]
-            ]
         ];
 
         // Создаём бренды

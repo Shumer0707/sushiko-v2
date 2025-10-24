@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            CategorySeeder::class,      // 1. Сначала категории
-            BrandSeeder::class,          // 2. Потом бренды
-            AttributeSeeder::class,      // 3. Атрибуты (размер, острота)
-            ProductSeeder::class,        // 4. И наконец продукты
-            AdminUserSeeder::class,      // 5. Админ
+            CategorySeeder::class,
+            BrandSeeder::class,
+            AttributeSeeder::class,
+            ProductSeederHosomaki::class,
+            ProductSeederUromaki::class,
+            ProductSeederTempura::class,
+            ProductSeederBurger::class,
+            ProductSeederUdon::class,
+            ProductSeederSoups::class,
+            ProductSeederNigiri::class,
+            ProductSeederGunkane::class,
+            ProductSeederSashimi::class,
+            ProductSeederSunomono::class,
+            ProductSeederSets::class,
+            ProductSeederDrink::class,
+            // ProductAttributeSeeder::class,
+            AdminUserSeeder::class,
         ]);
 
         // User::factory(10)->create();

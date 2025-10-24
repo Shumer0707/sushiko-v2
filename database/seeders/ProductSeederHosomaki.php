@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\ProductTranslation;
 use App\Models\ProductImage;
 
-class ProductSeeder extends Seeder
+class ProductSeederHosomaki extends Seeder
 {
     public function run(): void
     {
@@ -127,7 +127,7 @@ class ProductSeeder extends Seeder
             'name' => 'CREM HOSOMAKI',
             'slug' => 'crem-hosomaki',
             'short_description' => 'Hosomaki clasice cu brânză cremoasă delicată',
-            'full_description' => 'Hosomaki rafinate cu orez și brânză cremoasă. Gust moale și textură aerisiță în fiecare bucată.',
+            'full_description' => 'Hosomaki rafinate cu orez și brânză cremoasă. Gust moale și textură aerisită în fiecare bucată.',
         ]);
 
         ProductTranslation::create([
