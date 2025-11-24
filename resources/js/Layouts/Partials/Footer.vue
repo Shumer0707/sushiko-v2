@@ -50,14 +50,14 @@
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 flex items-center justify-center sm:justify-start gap-2"
                                 >
                                     <i class="fa-solid fa-phone"></i>
-                                    <span>+373 60 123 456</span>
+                                    <span>{{ t.contacts_phone_number }}</span>
                                 </a>
                                 <a
                                     href="mailto:info@sushiko.md"
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 flex items-center justify-center sm:justify-start gap-2"
                                 >
                                     <i class="fa-solid fa-envelope"></i>
-                                    <span>info@sushiko.md</span>
+                                    <span>{{ t.contacts_email_address }}</span>
                                 </a>
                                 <a
                                     href="https://maps.google.com"
@@ -66,7 +66,7 @@
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 flex items-center justify-center sm:justify-start gap-2"
                                 >
                                     <i class="fa-solid fa-location-dot"></i>
-                                    <span> {{ t.footer_adress }}</span>
+                                    <span>{{ t.contacts_address_text }}</span>
                                 </a>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                     <div class="mt-6">
                         <div class="flex justify-center gap-4">
                             <a
-                                href="https://instagram.com/sushiko"
+                                href="https://instagram.com/sushiko.md"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="w-10 h-10 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -87,7 +87,7 @@
                                 ></i>
                             </a>
                             <a
-                                href="https://facebook.com/sushiko"
+                                href="https://www.facebook.com/sushiko.md"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="w-10 h-10 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -97,7 +97,7 @@
                                     class="fa-brands fa-facebook-f text-lg text-sushi-gold group-hover:text-sushi-dark transition-colors"
                                 ></i>
                             </a>
-                            <a
+                            <!-- <a
                                 href="https://t.me/sushiko"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -107,7 +107,7 @@
                                 <i
                                     class="fa-brands fa-telegram text-lg text-sushi-gold group-hover:text-sushi-dark transition-colors"
                                 ></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </div>

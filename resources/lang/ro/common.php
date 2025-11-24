@@ -6,7 +6,7 @@ return [
     'home' => 'Acasă',
     'about' => 'Despre noi',
     'contact' => 'Contacte',
-    'phone_time' => 'de la 10:00 la 22:00. Livrarea durează în medie 40 de minute.',
+    'phone_time' => 'de la 11:00 la 21:45. Livrarea durează în medie 60 de minute.',
     'navigation' => 'Navigare',
     'menu' => 'Meniu',
     'language' => 'Limba',
@@ -27,7 +27,7 @@ return [
     'home_ban_button_1' => 'Vezi meniul',
 
     'home_ban_title_2' => 'Livrare gratuită',
-    'home_ban_description_2' => 'La comenzi de la 500 lei livrăm gratuit în tot Chișinăul',
+    'home_ban_description_2' => 'La comenzi de la ' . config('shop.free_delivery_amount') . ' lei livrăm gratuit în tot Chișinăul',
     'home_ban_button_2' => 'Comandă acum',
 
     'home_ban_title_3' => 'Roluri proaspete în fiecare zi',
@@ -48,9 +48,9 @@ return [
     'home_seo_1_title' => 'Produse proaspete',
     'home_seo_1_des' => 'Doar ingrediente premium. Livrare de pește în fiecare zi.',
     'home_seo_2_title' => 'Livrare rapidă',
-    'home_seo_2_des' => 'Livrare în 60 de minute. Gratuit de la 500 lei.',
-    'home_seo_3_title' => 'Maeștri japonezi',
-    'home_seo_3_des' => 'Bucătarii noștri au studiat în Japonia. Rețete autentice.',
+    'home_seo_2_des' => 'Livrare în 60 de minute. Gratuit de la ' . config('shop.free_delivery_amount') . ' lei.',
+    'home_seo_3_title' => 'Maeștri în domeniul lor',
+    'home_seo_3_des' => 'Bucătarii noștri sunt profesioniști cu experiență. Gătim cu atenție și suflet.',
 
     // cat
     'home_cat_title' => 'Meniul nostru',
@@ -74,14 +74,14 @@ return [
     // Componenta ContactInfo
     'contacts_info_title' => 'Contactele noastre',
     'contacts_address_label' => 'Adresa',
-    'contacts_address_text' => 'str. Ștefan cel Mare 10, Chișinău, Moldova',
+    'contacts_address_text' => 'str. Ismail 10, Chișinău, Moldova',
     'contacts_phone_label' => 'Telefon',
-    'contacts_phone_number' => '+373 (22) 123-456',
+    'contacts_phone_number' => '+373 781 25 553',
     'contacts_email_label' => 'Email',
-    'contacts_email_address' => 'info@sushiko.md',
+    'contacts_email_address' => 'sushikoevgheni@gmail.com',
     'contacts_hours_label' => 'Program de lucru',
-    'contacts_hours_weekdays' => 'Lun-Vin:',
-    'contacts_hours_weekdays_time' => '10:00 - 23:00',
+    'contacts_hours_weekdays' => 'Lun-Dum:',
+    'contacts_hours_weekdays_time' => '11:00 - 21:45',
     'contacts_hours_weekend' => 'Sâm-Dum:',
     'contacts_hours_weekend_time' => '11:00 - 00:00',
     'contacts_social_title' => 'Suntem în rețelele sociale',
@@ -126,7 +126,7 @@ return [
     'cart_summary_delivery' => 'Livrare',
     'cart_summary_free_delivery' => 'Gratuit',
     'cart_summary_until_free' => 'Adăugați încă',
-    'cart_summary_until_free_text' => 'pentru livrare gratuită',
+    'cart_summary_until_free_text' => 'pentru livrare gratuită (gratuit de la ' . config('shop.free_delivery_amount') . ' lei)',
     'cart_summary_total' => 'De plată:',
     'cart_summary_checkout' => 'Plasați comanda',
     'cart_summary_continue' => 'Continuă cumpărăturile',
@@ -137,37 +137,7 @@ return [
     'cart_order_success' => 'Mulțumim pentru comandă',
     'cart_order_contact' => 'Vă vom contacta la numărul de telefon',
 
-    // Cart - page
-    'cart_page_title' => 'Cart',
-    'cart_items_count' => 'item|items|items',
-
-    // CartEmpty
-    'cart_empty_title' => 'Cart is empty',
-    'cart_empty_description' => 'Add items from the menu',
-    'cart_empty_button' => 'Go to menu',
-
-    // CartItem
-    'cart_item_remove' => 'Remove',
-    'cart_item_confirm_remove' => 'Remove item from cart?',
-
-    // CartSummary
-    'cart_summary_title' => 'Your order',
-    'cart_summary_products' => 'Products',
-    'cart_summary_delivery' => 'Delivery',
-    'cart_summary_free_delivery' => 'Free',
-    'cart_summary_until_free' => 'Add',
-    'cart_summary_until_free_text' => 'more for free delivery',
-    'cart_summary_total' => 'Total:',
-    'cart_summary_checkout' => 'Checkout',
-    'cart_summary_continue' => 'Continue shopping',
-    'cart_summary_clear' => 'Clear cart',
-    'cart_confirm_clear' => 'Clear entire cart?',
-
-    // After order placed
-    'cart_order_success' => 'Thank you for your order',
-    'cart_order_contact' => 'We will contact you at',
-
-     // Modalul de plasare a comenzii
+    // Modalul de plasare a comenzii
     'checkout_title' => 'Plasarea comenzii',
     'checkout_total_label' => 'Total de plată:',
     'checkout_items_in_order' => 'în comandă',
@@ -244,7 +214,7 @@ return [
     'footer_home' => 'Acasă',
     'footer_about' => 'Despre noi',
     'footer_contacts' => 'Contacte',
-    'footer_adress' => 'Chișinău, str. Exemplară 123',
+    'footer_adress' => 'Chișinău, str. Ismail 123',
     'footer_navigation' => 'Navigare',
     'footer_des_1' => 'Cel mai bun sushi și roluri în Chișinău. Ingrediente proaspete, rețete tradiționale, livrare rapidă.',
     'footer_des_2' => 'Mascota noastră supraveghează calitatea fiecărui sul!',

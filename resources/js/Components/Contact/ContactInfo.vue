@@ -73,9 +73,9 @@
                     <p class="text-white text-sm">
                         {{ t.contacts_hours_weekdays }}
                         <span class="text-sushi-gold">{{ t.contacts_hours_weekdays_time }}</span>
-                        <br />
+                        <!-- <br />
                         {{ t.contacts_hours_weekend }}
-                        <span class="text-sushi-gold">{{ t.contacts_hours_weekend_time }}</span>
+                        <span class="text-sushi-gold">{{ t.contacts_hours_weekend_time }}</span> -->
                     </p>
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <div class="flex justify-center gap-4">
                 <!-- Instagram -->
                 <a
-                    href="https://instagram.com/sushiko"
+                    href="https://instagram.com/sushiko.md"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -101,7 +101,7 @@
 
                 <!-- Facebook -->
                 <a
-                    href="https://facebook.com/sushiko"
+                    href="https://facebook.com/sushiko.md"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -111,7 +111,7 @@
                 </a>
 
                 <!-- Telegram -->
-                <a
+                <!-- <a
                     href="https://t.me/sushiko"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -119,7 +119,7 @@
                     aria-label="Telegram"
                 >
                     <i class="fa-brands fa-telegram text-xl text-sushi-gold group-hover:text-sushi-dark transition-colors"></i>
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
