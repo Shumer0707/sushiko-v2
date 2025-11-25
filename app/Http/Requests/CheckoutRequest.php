@@ -16,7 +16,7 @@ class CheckoutRequest extends FormRequest
         $rules = [
             'customer.name' => 'required|string|max:255',
             'customer.phone' => 'required|string|min:10|max:20',
-            'customer.email' => 'nullable|email|max:255',
+            'customer.email' => 'required|email|max:255',
             'delivery.method' => 'required|in:pickup,delivery',
             'payment' => 'required|in:cash,card',
             'comment' => 'nullable|string|max:1000',
@@ -39,7 +39,8 @@ class CheckoutRequest extends FormRequest
             if ($this->input('delivery.addressType') === 'apartment') {
                 $rules['delivery.apartmentNumber'] = 'required|string|max:50';
                 $rules['delivery.entrance'] = 'required|string|max:50';
-                $rules['delivery.floor'] = 'required|string|max:50';
+                $rules['delivery.floor'] = 'nullable|string|max:50';
+                $rules['delivery.intercom'] = 'nullable|string|max:50';
             }
         }
 

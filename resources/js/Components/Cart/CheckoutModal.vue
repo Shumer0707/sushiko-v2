@@ -62,35 +62,54 @@
                                 </p>
                             </div>
 
-                            <!-- Телефон с маской -->
+                            <!-- Телефон -->
                             <div>
                                 <label class="block text-sm font-medium text-sushi-silver mb-2">
                                     {{ t.checkout_phone_label }}
                                     <span class="text-red-400">{{ t.checkout_required }}</span>
                                 </label>
-                                <input
-                                    :value="phoneMask.formattedValue.value"
-                                    @input="phoneMask.handleInput"
-                                    type="text"
-                                    required
-                                    :class="[
-                                        'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
-                                        phoneError || getError('customer.phone') ? 'border-red-400' : 'border-sushi-dark',
-                                    ]"
-                                    :placeholder="t.checkout_phone_placeholder"
-                                />
-                                <p v-if="phoneError || getError('customer.phone')" class="text-red-400 text-xs mt-1">
-                                    {{ phoneError || getError('customer.phone') }}
+
+                                <div class="flex gap-2">
+                                    <!-- Код страны -->
+                                    <div class="relative">
+                                        <!-- Код страны -->
+                                        <select
+                                            v-model="form.phoneCode"
+                                            class="bg-sushi-first border border-sushi-dark rounded-lg px-3 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors w-28 appearance-none"
+                                        >
+                                            <option v-for="item in phoneCodes" :key="item.code" :value="item.code">
+                                                {{ item.flag }} {{ item.code }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Поле телефона -->
+                                    <input
+                                        v-model="form.phone"
+                                        type="text"
+                                        required
+                                        class="flex-1 bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors"
+                                        :class="getError('customer.phone') ? 'border-red-400' : 'border-sushi-dark'"
+                                        :placeholder="t.checkout_phone_placeholder"
+                                    />
+                                </div>
+
+                                <p v-if="getError('customer.phone')" class="text-red-400 text-xs mt-1">
+                                    {{ getError('customer.phone') }}
                                 </p>
                             </div>
                         </div>
 
                         <!-- Email (опционально, на всю ширину) -->
                         <div>
-                            <label class="block text-sm font-medium text-sushi-silver mb-2">{{ t.checkout_email_label }}</label>
+                            <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                {{ t.checkout_email_label }}
+                                <span class="text-red-400">{{ t.checkout_required }}</span>
+                            </label>
                             <input
                                 v-model="form.email"
                                 type="email"
+                                required
                                 :class="[
                                     'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                     getError('customer.email') ? 'border-red-400' : 'border-sushi-dark',
@@ -251,29 +270,27 @@
 
                             <!-- Номер квартиры, подъезд и этаж (только для многоквартирного) -->
                             <div v-if="form.addressType === 'apartment'" class="space-y-4">
-                                <!-- Квартира -->
-                                <div>
-                                    <label class="block text-sm font-medium text-sushi-silver mb-2">
-                                        {{ t.checkout_apartment_number_label }}
-                                        <span class="text-red-400">{{ t.checkout_required }}</span>
-                                    </label>
-                                    <input
-                                        v-model="form.apartmentNumber"
-                                        type="text"
-                                        :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
-                                        :class="[
-                                            'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
-                                            getError('delivery.apartmentNumber') ? 'border-red-400' : 'border-sushi-dark',
-                                        ]"
-                                        :placeholder="t.checkout_apartment_number_placeholder"
-                                    />
-                                    <p v-if="getError('delivery.apartmentNumber')" class="text-red-400 text-xs mt-1">
-                                        {{ getError('delivery.apartmentNumber') }}
-                                    </p>
-                                </div>
-
-                                <!-- Подъезд и Этаж (2 колонки) -->
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <!-- Квартира -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                            {{ t.checkout_apartment_number_label }}
+                                            <span class="text-red-400">{{ t.checkout_required }}</span>
+                                        </label>
+                                        <input
+                                            v-model="form.apartmentNumber"
+                                            type="text"
+                                            :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
+                                            :class="[
+                                                'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                                getError('delivery.apartmentNumber') ? 'border-red-400' : 'border-sushi-dark',
+                                            ]"
+                                            :placeholder="t.checkout_apartment_number_placeholder"
+                                        />
+                                        <p v-if="getError('delivery.apartmentNumber')" class="text-red-400 text-xs mt-1">
+                                            {{ getError('delivery.apartmentNumber') }}
+                                        </p>
+                                    </div>
                                     <!-- Подъезд -->
                                     <div>
                                         <label class="block text-sm font-medium text-sushi-silver mb-2">
@@ -295,17 +312,18 @@
                                         </p>
                                         <p v-else class="text-xs text-sushi-silver/50 mt-1">{{ t.checkout_entrance_hint }}</p>
                                     </div>
+                                </div>
 
+                                <!-- Этаж и домофон (2 колонки) -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <!-- Этаж -->
                                     <div>
                                         <label class="block text-sm font-medium text-sushi-silver mb-2">
                                             {{ t.checkout_floor_label }}
-                                            <span class="text-red-400">{{ t.checkout_required }}</span>
                                         </label>
                                         <input
                                             v-model="form.floor"
                                             type="text"
-                                            :required="form.deliveryMethod === 'delivery' && form.addressType === 'apartment'"
                                             :class="[
                                                 'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
                                                 getError('delivery.floor') ? 'border-red-400' : 'border-sushi-dark',
@@ -315,7 +333,31 @@
                                         <p v-if="getError('delivery.floor')" class="text-red-400 text-xs mt-1">
                                             {{ getError('delivery.floor') }}
                                         </p>
-                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">{{ t.checkout_floor_hint }}</p>
+                                        <!-- <p v-else class="text-xs text-sushi-silver/50 mt-1">
+                                            {{ t.checkout_floor_hint }}
+                                        </p> -->
+                                    </div>
+
+                                    <!-- Домофон -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-sushi-silver mb-2">
+                                            {{ t.checkout_intercom_label }}
+                                        </label>
+                                        <input
+                                            v-model="form.intercom"
+                                            type="text"
+                                            :class="[
+                                                'w-full bg-sushi-first border rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sushi-silver text-sm sm:text-base focus:border-sushi-gold focus:outline-none transition-colors',
+                                                getError('delivery.intercom') ? 'border-red-400' : 'border-sushi-dark',
+                                            ]"
+                                            :placeholder="t.checkout_intercom_placeholder"
+                                        />
+                                        <p v-if="getError('delivery.intercom')" class="text-red-400 text-xs mt-1">
+                                            {{ getError('delivery.intercom') }}
+                                        </p>
+                                        <p v-else class="text-xs text-sushi-silver/50 mt-1">
+                                            {{ t.checkout_intercom_hint }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -395,14 +437,21 @@
             </div>
         </div>
     </OverlayBackdrop>
+    <SuccessModal
+        :is-open="successOpen"
+        :title="t.checkout_success_title"
+        :message="t.checkout_success_message"
+        :button-text="t.checkout_success_close"
+        @close="successOpen = false"
+    />
 </template>
 
 <script setup>
     import { ref, computed, watch } from 'vue'
     import { router, usePage } from '@inertiajs/vue3'
     import { useCartStore } from '@/Stores/cart'
-    import { usePhoneMask } from '@/composables/usePhoneMask'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
+    import SuccessModal from '@/Components/Cart/SuccessModal.vue'
 
     const props = defineProps({
         isOpen: {
@@ -417,15 +466,13 @@
     const t = page.props.translations.common
     const cartStore = useCartStore()
 
-    // Инициализация маски телефона
-    const phoneMask = usePhoneMask()
-    const phoneError = ref('')
-
     // Ошибки валидации от Laravel
     const validationErrors = ref({})
 
     const form = ref({
         name: '',
+        phone: '',
+        phoneCode: '+373', // MD по умолчанию
         email: '',
         deliveryMethod: 'pickup',
         addressType: 'apartment',
@@ -434,12 +481,20 @@
         apartmentNumber: '',
         entrance: '',
         floor: '',
+        intercom: '',
         comment: '',
         payment: 'cash',
     })
 
+    const phoneCodes = [
+        { code: '+373', label: 'MD', flag: '🇲🇩' },
+        { code: '+40', label: 'RO', flag: '🇷🇴' },
+        { code: '+380', label: 'UA', flag: '🇺🇦' },
+    ]
+
     const isSubmitting = ref(false)
     const isClosing = ref(false)
+    const successOpen = ref(false)
 
     watch(
         () => props.isOpen,
@@ -487,13 +542,6 @@
         // Сброс ошибок валидации
         validationErrors.value = {}
 
-        // Валидация телефона на фронте
-        if (!phoneMask.isValid()) {
-            phoneError.value = t.checkout_phone_error
-            return
-        }
-        phoneError.value = ''
-
         isSubmitting.value = true
 
         // Преобразуем items: разворачиваем product в корневой уровень
@@ -507,7 +555,7 @@
         const orderData = {
             customer: {
                 name: form.value.name,
-                phone: phoneMask.getCleanValue(),
+                phone: form.value.phoneCode + form.value.phone.replace(/\s+/g, ''),
                 email: form.value.email,
             },
             delivery: {
@@ -520,6 +568,7 @@
                         apartmentNumber: form.value.apartmentNumber,
                         entrance: form.value.entrance,
                         floor: form.value.floor,
+                        intercom: form.value.intercom,
                     }),
                 }),
             },
@@ -542,6 +591,8 @@
 
                 form.value = {
                     name: '',
+                    phoneCode: '+373',
+                    phone: '',
                     email: '',
                     deliveryMethod: 'pickup',
                     addressType: 'apartment',
@@ -550,16 +601,14 @@
                     apartmentNumber: '',
                     entrance: '',
                     floor: '',
+                    intercom: '',
                     comment: '',
                     payment: 'cash',
                 }
 
-                phoneMask.formattedValue.value = ''
-                phoneError.value = ''
-
                 handleClose()
 
-                alert(t.checkout_success)
+                successOpen.value = true
             },
             onError: (errors) => {
                 // Сохраняем ошибки для отображения под полями

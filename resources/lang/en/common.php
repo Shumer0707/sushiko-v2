@@ -145,9 +145,9 @@ return [
     'checkout_name_label' => 'Your name',
     'checkout_name_placeholder' => 'John Doe',
     'checkout_phone_label' => 'Phone',
-    'checkout_phone_placeholder' => '+373 12 345 678',
+    'checkout_phone_placeholder' => '12 345 678',
     'checkout_phone_error' => 'Enter a valid phone number (at least 10 digits)',
-    'checkout_email_label' => 'Email (optional)',
+    'checkout_email_label' => 'Email',
     'checkout_email_placeholder' => 'your@email.com',
 
     // Delivery method
@@ -156,7 +156,7 @@ return [
     'checkout_delivery' => 'Delivery',
     'checkout_pickup_address_label' => 'Pickup address:',
     'checkout_pickup_address' => 'Pushkin str., 10',
-    'checkout_pickup_hours' => 'Working hours: 10:00 - 22:00',
+    'checkout_pickup_hours' => 'Working hours: 11:00 - 21:45',
 
     // Delivery address
     'checkout_address_type_label' => 'Address type',
@@ -173,6 +173,8 @@ return [
     'checkout_entrance_hint' => 'If no entrance — enter 1',
     'checkout_floor_label' => 'Floor',
     'checkout_floor_placeholder' => '5',
+    'checkout_intercom_label' => 'Intercom',
+    'checkout_intercom_placeholder' => '1234',
     'checkout_floor_hint' => 'If no floor — enter 1',
 
     // Payment method
@@ -192,6 +194,9 @@ return [
     // Messages
     'checkout_success' => 'Order placed successfully! We will contact you shortly.',
     'checkout_required' => '*',
+    'checkout_success_title' => 'Order received',
+    'checkout_success_message' => 'Your order has been placed. Please wait for our operator to call you.',
+    'checkout_success_close' => 'Close',
 
     // Email - email templates
     'email_contact_subject' => 'Message from website',

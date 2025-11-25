@@ -146,9 +146,9 @@ return [
     'checkout_name_label' => 'Numele dvs.',
     'checkout_name_placeholder' => 'Ion Popescu',
     'checkout_phone_label' => 'Telefon',
-    'checkout_phone_placeholder' => '+373 12 345 678',
+    'checkout_phone_placeholder' => '12 345 678',
     'checkout_phone_error' => 'Introduceți un număr de telefon valid (minim 10 cifre)',
-    'checkout_email_label' => 'Email (opțional)',
+    'checkout_email_label' => 'Email',
     'checkout_email_placeholder' => 'your@email.com',
 
     // Metoda de primire
@@ -157,7 +157,7 @@ return [
     'checkout_delivery' => 'Livrare',
     'checkout_pickup_address_label' => 'Adresa de ridicare:',
     'checkout_pickup_address' => 'str. Pușkin, 10',
-    'checkout_pickup_hours' => 'Program: 10:00 - 22:00',
+    'checkout_pickup_hours' => 'Program: 11:00 - 21:45',
 
     // Adresa de livrare
     'checkout_address_type_label' => 'Tipul adresei',
@@ -174,6 +174,8 @@ return [
     'checkout_entrance_hint' => 'Dacă nu există scară — indicați 1',
     'checkout_floor_label' => 'Etajul',
     'checkout_floor_placeholder' => '5',
+    'checkout_intercom_label' => 'Domofon',
+    'checkout_intercom_placeholder' => '1234',
     'checkout_floor_hint' => 'Dacă nu există etaj — indicați 1',
 
     // Metoda de plată
@@ -191,8 +193,11 @@ return [
     'checkout_cancel' => 'Anulare',
 
     // Mesaje
-    'checkout_success' => 'Comanda a fost plasată cu succes! Vă vom contacta în curând.',
+    // 'checkout_success' => 'Comanda a fost plasată cu succes! Vă vom contacta în curând.',
     'checkout_required' => '*',
+    'checkout_success_title' => 'Comanda a fost primită',
+    'checkout_success_message' => 'Comanda dvs. a fost trimisă. Așteptați apelul operatorului.',
+    'checkout_success_close' => 'Închide',
 
     // Email - șabloane de email
     'email_contact_subject' => 'Mesaj de pe site',

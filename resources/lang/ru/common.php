@@ -146,9 +146,9 @@ return [
     'checkout_name_label' => 'Ваше имя',
     'checkout_name_placeholder' => 'Иван Петров',
     'checkout_phone_label' => 'Телефон',
-    'checkout_phone_placeholder' => '+373 12 345 678',
+    'checkout_phone_placeholder' => '12 345 678',
     'checkout_phone_error' => 'Введите корректный номер телефона (минимум 10 цифр)',
-    'checkout_email_label' => 'Email (опционально)',
+    'checkout_email_label' => 'Email',
     'checkout_email_placeholder' => 'your@email.com',
 
     // Способ получения
@@ -157,7 +157,7 @@ return [
     'checkout_delivery' => 'Доставка',
     'checkout_pickup_address_label' => 'Адрес самовывоза:',
     'checkout_pickup_address' => 'ул. Пушкина, д. 10',
-    'checkout_pickup_hours' => 'Время работы: 10:00 - 22:00',
+    'checkout_pickup_hours' => 'Время работы: 11:00 - 21:45',
 
     // Адрес доставки
     'checkout_address_type_label' => 'Тип адреса',
@@ -174,6 +174,8 @@ return [
     'checkout_entrance_hint' => 'Если нет подъезда — укажите 1',
     'checkout_floor_label' => 'Этаж',
     'checkout_floor_placeholder' => '5',
+    'checkout_intercom_label' => 'Домофон',
+    'checkout_intercom_placeholder' => '1234',
     'checkout_floor_hint' => 'Если нет этажа — укажите 1',
 
     // Способ оплаты
@@ -191,8 +193,12 @@ return [
     'checkout_cancel' => 'Отмена',
 
     // Сообщения
-    'checkout_success' => 'Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.',
+    // 'checkout_success' => 'Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.',
     'checkout_required' => '*', // звездочка для обязательных полей
+
+    'checkout_success_title' => 'Заказ принят',
+    'checkout_success_message' => 'Ваш заказ успешно оформлен. Ожидайте звонка оператора.',
+    'checkout_success_close' => 'Закрыть',
 
     // Email - шаблоны писем
     'email_contact_subject' => 'Сообщение с сайта',
@@ -220,7 +226,7 @@ return [
     'footer_des_2' => 'Наш талисман следит за качеством каждого ролла!',
     'footer_des_prava' => 'Все права защищены.',
 
-        // 404 Error Page
+    // 404 Error Page
     'error_404_title' => 'Страница не найдена - 404',
     'error_404_description' => 'К сожалению, запрашиваемая страница не найдена. Вернитесь на главную и закажите вкусные суши!',
     'error_404_heading' => 'Страница не найдена',
