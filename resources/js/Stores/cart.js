@@ -5,10 +5,9 @@ export const useCartStore = defineStore('cart', {
     state: () => ({
         items: [], // Массив товаров в корзине
 
-        // Настройки доставки
         deliverySettings: {
-            freeDeliveryThreshold: 500, // Минимальная сумма для бесплатной доставки
-            deliveryCost: 50, // Стоимость доставки если не достигнут порог
+            freeDeliveryThreshold: 0,
+            deliveryCost: 0,
         },
     }),
 
@@ -86,6 +85,14 @@ export const useCartStore = defineStore('cart', {
     },
 
     actions: {
+        initDeliverySettings(settings) {
+            if (!settings) return
+
+            this.deliverySettings = {
+                freeDeliveryThreshold: settings.freeDeliveryThreshold ?? 0,
+                deliveryCost: settings.deliveryCost ?? 0,
+            }
+        },
         // Добавить товар в корзину
         addToCart(product, quantity = 1, selectedAttributes = {}) {
             const existingItem = this.items.find((item) => item.product.id === product.id)

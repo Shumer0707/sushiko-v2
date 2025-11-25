@@ -31,6 +31,10 @@ class PageController extends Controller
                 'description' => __('seo.cart_description'),
                 'image' => asset('images/og-default.jpg'),
             ],
+            'deliverySettings' => [
+            'freeDeliveryThreshold' => config('shop.free_delivery_amount'),
+            'deliveryCost'          => config('shop.delivery_cost', 50),
+        ],
         ]);
     }
 }

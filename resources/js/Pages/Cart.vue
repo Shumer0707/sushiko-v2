@@ -70,6 +70,12 @@
     const t = page.props.translations.common
     const cartStore = useCartStore()
 
+    if (page.props.deliverySettings) {
+        cartStore.initDeliverySettings(page.props.deliverySettings)
+    } else {
+        console.warn('⚠ deliverySettings не передан в props. Используются значения по умолчанию из стора.')
+    }
+    // cartStore.loadFromStorage()
     const showCheckoutModal = ref(false)
 
     // Склонение слова "товар"
