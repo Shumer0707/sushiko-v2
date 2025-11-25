@@ -123,6 +123,9 @@
     <div class="container">
         <div class="header">
             <h1 style="margin: 0;">🍱 НОВЫЙ ЗАКАЗ</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">
+                {{ __('mail.order_email_id') }}{{ $order['order_id'] }}
+            </p>
             <p style="margin: 5px 0 0 0;">Sushiko.md</p>
         </div>
 

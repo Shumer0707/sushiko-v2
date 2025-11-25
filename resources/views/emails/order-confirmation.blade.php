@@ -130,6 +130,9 @@
                 ]) !!}<br>
                 {{ __('mail.order_email_intro') }}
             </p>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">
+                {{ __('mail.order_email_id') }}{{$order['order_id']}}
+            </p>
         </div>
 
         <div style="text-align: center; margin-bottom: 30px;">

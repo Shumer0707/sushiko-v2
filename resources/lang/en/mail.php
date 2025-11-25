@@ -4,6 +4,7 @@ return [
     'order_email_title' => 'Thank you for your order!',
     'order_email_hello' => 'Hello, :name!',
     'order_email_intro' => 'Your order has been received. Please wait for our operator to call you for confirmation.',
+    'order_email_id' => 'Your order #',
 
     'order_email_note_confirm' => 'The order is considered confirmed after a call from our operator.',
     'order_email_note_call' => 'If the operator does not contact you within 10–15 minutes, please call us at the phone number below.',

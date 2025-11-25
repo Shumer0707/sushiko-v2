@@ -4,6 +4,7 @@ return [
     'order_email_title' => 'Vă mulțumim pentru comandă!',
     'order_email_hello' => 'Bună ziua, :name!',
     'order_email_intro' => 'Comanda dvs. a fost preluată. Așteptați apelul operatorului pentru confirmare.',
+    'order_email_id' => 'Zakazul vostru #',
 
     'order_email_note_confirm' => 'Comanda este considerată confirmată după apelul operatorului.',
     'order_email_note_call' => 'Dacă operatorul nu vă contactează în 10–15 minute, vă rugăm să ne sunați la numărul de mai jos.',
