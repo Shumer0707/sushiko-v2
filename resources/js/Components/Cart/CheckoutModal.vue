@@ -442,7 +442,7 @@
         :title="t.checkout_success_title"
         :message="t.checkout_success_message"
         :button-text="t.checkout_success_close"
-        @close="successOpen = false"
+        @close="handleSuccessClose"
     />
 </template>
 
@@ -559,12 +559,16 @@
         }
 
         // 4. Закрываем форму заказа
-        handleClose()
+        // handleClose()
 
         // 5. Открываем модалку успеха
         successOpen.value = true
     }
-
+    const handleSuccessClose = () => {
+        successOpen.value = false
+        // теперь закрываем уже основной checkout
+        handleClose()
+    }
     // Функция для получения ошибки по ключу
     const getError = (field) => {
         return validationErrors.value[field] ? validationErrors.value[field][0] : null
