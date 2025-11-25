@@ -533,6 +533,38 @@
         }, 250)
     }
 
+    const handleOrderSuccess = () => {
+        // 1. Чистим ошибки
+        validationErrors.value = {}
+
+        // 2. Очищаем корзину
+        cartStore.clearCart()
+
+        // 3. Сбрасываем форму
+        form.value = {
+            name: '',
+            phoneCode: '+373',
+            phone: '',
+            email: '',
+            deliveryMethod: 'pickup',
+            addressType: 'apartment',
+            address: '',
+            houseNumber: '',
+            apartmentNumber: '',
+            entrance: '',
+            floor: '',
+            intercom: '',
+            comment: '',
+            payment: 'cash',
+        }
+
+        // 4. Закрываем форму заказа
+        handleClose()
+
+        // 5. Открываем модалку успеха
+        successOpen.value = true
+    }
+
     // Функция для получения ошибки по ключу
     const getError = (field) => {
         return validationErrors.value[field] ? validationErrors.value[field][0] : null
@@ -585,33 +617,9 @@
         router.post(route('order.checkout'), orderData, {
             preserveScroll: true,
             onSuccess: () => {
-                // Успех - очищаем всё
-                validationErrors.value = {}
-                cartStore.clearCart()
-
-                form.value = {
-                    name: '',
-                    phoneCode: '+373',
-                    phone: '',
-                    email: '',
-                    deliveryMethod: 'pickup',
-                    addressType: 'apartment',
-                    address: '',
-                    houseNumber: '',
-                    apartmentNumber: '',
-                    entrance: '',
-                    floor: '',
-                    intercom: '',
-                    comment: '',
-                    payment: 'cash',
-                }
-
-                handleClose()
-
-                successOpen.value = true
+                handleOrderSuccess()
             },
             onError: (errors) => {
-                // Сохраняем ошибки для отображения под полями
                 validationErrors.value = errors
                 console.error('Ошибки валидации:', errors)
             },
