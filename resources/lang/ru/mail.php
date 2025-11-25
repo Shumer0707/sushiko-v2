@@ -19,8 +19,8 @@ return [
 
     'order_email_delivery_info' => 'Информация о доставке',
     'order_email_delivery_pickup' => 'Самовывоз из нашего ресторана',
-    'order_email_delivery_pickup_address' => 'г. Бельцы, ул. Примерная, 1 (укажешь свою позже 🙂)',
-    'order_email_delivery_pickup_hours' => 'Мы работаем ежедневно, подробнее время уточнит оператор.',
+    'order_email_delivery_pickup_address' => 'ул. Измаил 86, Кишинёв, Молдова',
+    'order_email_delivery_pickup_hours' => 'Время работы: Пн-Вс 11:00 - 21:45 ',
 
     'order_email_delivery_address_label' => 'Адрес доставки',
     'order_email_delivery_address_details' => 'Кв. :apartment, подъезд :entrance, этаж :floor',

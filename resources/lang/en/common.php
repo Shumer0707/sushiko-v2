@@ -155,8 +155,8 @@ return [
     'checkout_pickup' => 'Pickup',
     'checkout_delivery' => 'Delivery',
     'checkout_pickup_address_label' => 'Pickup address:',
-    'checkout_pickup_address' => 'Pushkin str., 10',
-    'checkout_pickup_hours' => 'Working hours: 11:00 - 21:45',
+    'checkout_pickup_address' => 'Ismail str. 10, Chisinau, Moldova',
+    'checkout_pickup_hours' => 'Working hours: ' . config('shop.work_time') . '',
 
     // Delivery address
     'checkout_address_type_label' => 'Address type',

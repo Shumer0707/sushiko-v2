@@ -156,8 +156,8 @@ return [
     'checkout_pickup' => 'Ridicare personală',
     'checkout_delivery' => 'Livrare',
     'checkout_pickup_address_label' => 'Adresa de ridicare:',
-    'checkout_pickup_address' => 'str. Pușkin, 10',
-    'checkout_pickup_hours' => 'Program: 11:00 - 21:45',
+    'checkout_pickup_address' => 'str. Ismail 10, Chișinău, Moldova',
+    'checkout_pickup_hours' => 'Program: ' . config('shop.work_time') . '',
 
     // Adresa de livrare
     'checkout_address_type_label' => 'Tipul adresei',

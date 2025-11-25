@@ -249,9 +249,9 @@
         <div class="contact-info">
             <strong>📞 {{ __('mail.order_email_questions') }}</strong><br>
             {{ __('mail.order_email_phone') }}
-            <a href="tel:+37312345678" style="color: #4caf50;">+373 12 345 678</a><br>
+            <a href="tel:{{ config('shop.phone_shop') }}" style="color: #4caf50;">{{ config('shop.phone_shop') }}</a><br>
             {{ __('mail.order_email_email') }}
-            <a href="mailto:info@sushiko.md" style="color: #4caf50;">info@sushiko.md</a>
+            <a href="mailto:{{ config('shop.email_shop') }}" style="color: #4caf50;">{{ config('shop.email_shop') }}</a>
         </div>
 
         <div class="footer">

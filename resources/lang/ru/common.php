@@ -82,7 +82,7 @@ return [
     'contacts_email_address' => 'sushikoevgheni@gmail.com',
     'contacts_hours_label' => 'Часы работы',
     'contacts_hours_weekdays' => 'Пн-Вс:',
-    'contacts_hours_weekdays_time' => '11:00 - 21:45',
+    'contacts_hours_weekdays_time' => '' . config('shop.work_time') . '',
     'contacts_hours_weekend' => 'Пн-Вс:',
     'contacts_hours_weekend_time' => '11:00 - 00:00',
     'contacts_social_title' => 'Мы в соцсетях',
@@ -156,8 +156,8 @@ return [
     'checkout_pickup' => 'Самовывоз',
     'checkout_delivery' => 'Доставка',
     'checkout_pickup_address_label' => 'Адрес самовывоза:',
-    'checkout_pickup_address' => 'ул. Пушкина, д. 10',
-    'checkout_pickup_hours' => 'Время работы: 11:00 - 21:45',
+    'checkout_pickup_address' => 'ул. Измаил 86, Кишинёв, Молдова',
+    'checkout_pickup_hours' => 'Время работы: ' . config('shop.work_time') . '',
 
     // Адрес доставки
     'checkout_address_type_label' => 'Тип адреса',
