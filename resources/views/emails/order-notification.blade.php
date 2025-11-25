@@ -166,28 +166,40 @@
                         {{ $order['delivery']['addressType'] === 'house' ? 'Частный дом' : 'Многоквартирный' }}
                     </span>
                 </div>
+
                 <div class="info-row">
                     <span class="label">Адрес:</span>
                     <span class="value">
                         {{ $order['delivery']['address'] }}, {{ $order['delivery']['houseNumber'] }}
                     </span>
                 </div>
-
                 @if ($order['delivery']['addressType'] === 'apartment')
                     <div class="info-row">
                         <span class="label">Квартира:</span>
                         <span class="value">{{ $order['delivery']['apartmentNumber'] }}</span>
                     </div>
+
                     <div class="info-row">
                         <span class="label">Подъезд:</span>
                         <span class="value">{{ $order['delivery']['entrance'] }}</span>
                     </div>
+
                     <div class="info-row">
                         <span class="label">Этаж:</span>
-                        <span class="value">{{ $order['delivery']['floor'] }}</span>
+                        <span class="value">
+                            {{ !empty($order['delivery']['floor']) ? $order['delivery']['floor'] : 'Не указал' }}
+                        </span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="label">Домофон:</span>
+                        <span class="value">
+                            {{ !empty($order['delivery']['intercom']) ? $order['delivery']['intercom'] : 'Не указал' }}
+                        </span>
                     </div>
                 @endif
             @endif
+
         </div>
 
         {{-- Товары --}}

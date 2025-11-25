@@ -126,7 +126,7 @@
             </h1>
             <p style="margin: 10px 0 0 0; font-size: 16px;">
                 {!! __('mail.order_email_hello', [
-                    'name' => '<strong>' . e($order['customer']['name']) . '</strong>'
+                    'name' => '<strong>' . e($order['customer']['name']) . '</strong>',
                 ]) !!}<br>
                 {{ __('mail.order_email_intro') }}
             </p>
@@ -195,13 +195,40 @@
                 <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px;">
                     <strong>{{ $order['delivery']['address'] }}, {{ $order['delivery']['houseNumber'] }}</strong>
                     @if ($order['delivery']['addressType'] === 'apartment')
-                        <br>
-                        {{ __('mail.order_email_delivery_address_details', [
-                            'apartment' => $order['delivery']['apartmentNumber'],
-                            'entrance' => $order['delivery']['entrance'],
-                            'floor' => $order['delivery']['floor'],
-                        ]) }}
+                        @php
+                            $details = [];
+
+                            if (!empty($order['delivery']['apartmentNumber'] ?? null)) {
+                                $details[] = __('mail.order_email_delivery_address_apartment', [
+                                    'apartment' => $order['delivery']['apartmentNumber'],
+                                ]);
+                            }
+
+                            if (!empty($order['delivery']['entrance'] ?? null)) {
+                                $details[] = __('mail.order_email_delivery_address_entrance', [
+                                    'entrance' => $order['delivery']['entrance'],
+                                ]);
+                            }
+
+                            if (!empty($order['delivery']['floor'] ?? null)) {
+                                $details[] = __('mail.order_email_delivery_address_floor', [
+                                    'floor' => $order['delivery']['floor'],
+                                ]);
+                            }
+
+                            if (!empty($order['delivery']['intercom'] ?? null)) {
+                                $details[] = __('mail.order_email_delivery_address_intercom', [
+                                    'intercom' => $order['delivery']['intercom'],
+                                ]);
+                            }
+                        @endphp
+
+                        @if (!empty($details))
+                            <br>
+                            {{ implode(', ', $details) }}
+                        @endif
                     @endif
+
                 </div>
             @endif
 
@@ -209,9 +236,7 @@
                 <span class="label">{{ __('mail.order_email_payment_method') }}</span>
                 <span class="value">
                     <strong>
-                        {{ $order['payment'] === 'cash'
-                            ? __('mail.order_email_payment_cash')
-                            : __('mail.order_email_payment_card') }}
+                        {{ $order['payment'] === 'cash' ? __('mail.order_email_payment_cash') : __('mail.order_email_payment_card') }}
                     </strong>
                 </span>
             </div>
@@ -237,4 +262,5 @@
         </div>
     </div>
 </body>
+
 </html>
