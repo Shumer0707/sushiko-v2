@@ -1,17 +1,11 @@
 <script setup>
+    import { ref, onMounted } from 'vue'
     import { useParallaxBackground } from '@/composables/useParallaxBackground'
 
     const props = defineProps({
         images: {
             type: Array,
-            // Массив картинок - можно передать из Home.vue или использовать дефолтные
-            default: () => [
-                '/images/s-1.webp',
-                '/images/s-3.webp',
-                '/images/s-5.webp',
-                '/images/s-7.webp',
-                '/images/s-15.webp',
-            ],
+            default: () => ['/images/s-1.webp', '/images/s-3.webp', '/images/s-5.webp', '/images/s-7.webp', '/images/s-15.webp'],
         },
         opacity: {
             type: Number,
@@ -23,71 +17,77 @@
         },
     })
 
+    const isMobile = ref(false)
+    const mobileImage = ref(null)
+
+    // на мобилках показываем случайную картинку
+    const pickRandomMobileImage = () => {
+        const arr = props.images
+        const rand = arr[Math.floor(Math.random() * arr.length)]
+        mobileImage.value = rand
+    }
+
+    onMounted(() => {
+        if (typeof window !== 'undefined') {
+            isMobile.value = window.innerWidth < 768
+            if (isMobile.value) {
+                pickRandomMobileImage()
+            }
+        }
+    })
+
+    // параллакс только для десктопа
     const backgroundRef = useParallaxBackground(props.speed)
 
-    // Дублируем картинки чтобы была бесконечная лента
-    // (первый набор + второй набор + третий набор)
+    // повторяем ленту как у тебя было
     const repeatedImages = [...props.images, ...props.images, ...props.images]
 </script>
 
 <template>
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <!-- Лента из картинок с параллаксом -->
-        <div :ref="backgroundRef" class="image-strip" :style="{ opacity: opacity }">
-            <!-- Каждая картинка в красивой рамке -->
+        <!-- 📱 Мобильная версия: статичный фон + рандом -->
+        <div
+            v-if="isMobile"
+            class="mobile-bg"
+            :style="{
+                backgroundImage: `url(${mobileImage})`,
+                opacity: opacity,
+            }"
+        ></div>
+
+        <!-- 💻 Десктопная версия: параллакс -->
+        <div v-else :ref="backgroundRef" class="image-strip" :style="{ opacity: opacity }">
             <div v-for="(image, index) in repeatedImages" :key="index" class="image-card">
-
-                    <!-- Сама картинка -->
-                    <div class="image-content" :style="{ backgroundImage: `url(${image})` }"></div>
-
+                <div class="image-content" :style="{ backgroundImage: `url(${image})` }"></div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-    /* Лента из картинок */
+    /* ======= Desktop Parallax ======= */
     .image-strip {
         position: absolute;
-        top: -100%; /* Большой запас для параллакса */
+        top: -100%;
         left: 0;
         width: 100%;
         will-change: transform;
     }
-    /* Сама картинка */
+
     .image-content {
         width: 100%;
-        height: 100vh; /* Высота картинки */
+        height: 100vh;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        border-bottom: 10px solid red;
     }
 
-    /* На мобилках */
-    @media (max-width: 768px) {
-        .image-strip {
-            padding: 1rem;
-        }
-
-        .image-card {
-            margin-bottom: 1.5rem;
-        }
-
-        .image-frame {
-            border-width: 3px;
-            padding: 0.75rem;
-        }
-
-        .image-content {
-            height: 40vh; /* Меньше высота на мобилках */
-        }
-    }
-
-    /* На планшетах */
-    @media (min-width: 768px) and (max-width: 1024px) {
-        .image-content {
-            height: 50vh;
-        }
+    /* ======= Mobile Static BG (random) ======= */
+    .mobile-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 </style>

@@ -1,47 +1,64 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 /**
- * Композабл для параллакс-фона (fixed элементов)
+ * Параллакс-фон
  *
- * @param {number} speed - скорость параллакса (чем МЕНЬШЕ - тем медленнее)
- *   0.1 = очень медленно (почти незаметно)
- *   0.2 = медленно (рекомендуется для фона)
- *   0.3 = средне
- *   0.5 = быстро
+ * @param {number} speed - скорость параллакса (0.1–0.3)
+ * @param {number} breakpoint - ширина, ниже которой параллакс отключаем (мобилки)
  */
-export function useParallaxBackground(speed = 0.2) {
+export function useParallaxBackground(speed = 0.2, breakpoint = 768) {
     const elementRef = ref(null)
     let ticking = false
-
-    const handleScroll = () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                updatePosition()
-                ticking = false
-            })
-            ticking = true
-        }
-    }
+    let isActive = false
 
     const updatePosition = () => {
-        if (!elementRef.value) return
+        const el = elementRef.value
+        if (!el) return
 
-        const scrolled = window.pageYOffset
+        // читаем скролл один раз, внутри rAF
+        const scrolled = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0
+
         const offset = scrolled * speed
 
-        // Двигаем фон вверх при скролле вниз
-        elementRef.value.style.transform = `translate3d(0, ${-offset}px, 0)`
+        // только запись transform — без дополнительных чтений layout
+        el.style.transform = `translate3d(0, ${-offset}px, 0)`
+    }
+
+    const handleScroll = () => {
+        if (!isActive) return
+        if (ticking) return
+
+        ticking = true
+        window.requestAnimationFrame(() => {
+            updatePosition()
+            ticking = false
+        })
     }
 
     onMounted(() => {
+        if (typeof window === 'undefined') return
+
+        // 👉 На мобилках вообще не включаем параллакс
+        if (window.innerWidth < breakpoint) {
+            isActive = false
+            return
+        }
+
+        isActive = true
         window.addEventListener('scroll', handleScroll, { passive: true })
+
+        // начальная позиция
         updatePosition()
     })
 
     onUnmounted(() => {
-        window.removeEventListener('scroll', handleScroll)
+        if (isActive) {
+            window.removeEventListener('scroll', handleScroll)
+        }
+        isActive = false
     })
 
+    // ref-callback для :ref="backgroundRef"
     return (el) => {
         elementRef.value = el
     }
