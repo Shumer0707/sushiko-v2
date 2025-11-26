@@ -101,8 +101,11 @@
     }
 
     /* Плавное появление секций */
-    .category-section {
-        animation: fadeIn 0.6s ease-out;
+    /* сделаем только для md+ */
+    @media (min-width: 768px) {
+        .category-section {
+            animation: fadeIn 0.6s ease-out;
+        }
     }
 
     @keyframes fadeIn {

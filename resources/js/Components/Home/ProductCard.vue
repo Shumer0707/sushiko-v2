@@ -1,6 +1,6 @@
 <template>
     <div
-        class="product-card bg-sushi-dark bg-opacity-80 backdrop-blur-sm rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 hover:border-opacity-50 hover:shadow-2xl shadow-lg transition-all duration-300 group cursor-pointer"
+        class="product-card bg-sushi-dark bg-opacity-80 rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 shadow-sm cursor-pointer group md:backdrop-blur-sm md:shadow-lg md:hover:shadow-2xl md:hover:border-opacity-50 md:transition-all md:duration-300"
     >
         <!-- Картинка товара - без изменений -->
         <div @click="goToProduct" class="relative aspect-square overflow-hidden bg-sushi-first">
@@ -8,7 +8,7 @@
                 v-if="product.image_url"
                 :src="product.image_url"
                 :alt="product.name"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                class="w-full h-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-110"
                 loading="lazy"
             />
 
@@ -97,8 +97,9 @@
                         </span>
 
                         <button
-                            @click.stop="incrementQuantity"
-                            class="h-full px-2 md:px-3 bg-sushi-red/20 hover:bg-sushi-red/40 text-sushi-gold text-xs md:text-base font-bold transition-colors duration-200"
+                            v-if="!itemInCart"
+                            @click.stop="addToCart"
+                            class="h-full px-2 md:px-3 bg-sushi-red hover:bg-sushi-red/80 text-white rounded-lg text-[12px] md:text-sm font-medium shadow-md whitespace-nowrap md:transition-all md:duration-300 md:hover:scale-105 md:active:scale-95 md:hover:shadow-lg"
                         >
                             +
                         </button>
