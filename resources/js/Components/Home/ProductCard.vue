@@ -75,7 +75,7 @@
                     <button
                         v-if="!itemInCart"
                         @click.stop="addToCart"
-                        class="h-full px-2 md:px-3 bg-sushi-red hover:bg-sushi-red/80 text-white rounded-lg text-[12px] md:text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg whitespace-nowrap"
+                        class="h-full px-2 md:px-3 bg-sushi-red hover:bg-sushi-red/80 text-white rounded-lg text-[12px] md:text-sm font-medium shadow-md whitespace-nowrap md:transition-all md:duration-300 md:hover:scale-105 md:active:scale-95 md:hover:shadow-lg"
                     >
                         {{ t.home_menu_in_cart }}
                     </button>
@@ -97,9 +97,8 @@
                         </span>
 
                         <button
-                            v-if="!itemInCart"
-                            @click.stop="addToCart"
-                            class="h-full px-2 md:px-3 bg-sushi-red hover:bg-sushi-red/80 text-white rounded-lg text-[12px] md:text-sm font-medium shadow-md whitespace-nowrap md:transition-all md:duration-300 md:hover:scale-105 md:active:scale-95 md:hover:shadow-lg"
+                            @click.stop="incrementQuantity"
+                            class="h-full px-2 md:px-3 bg-sushi-red/20 hover:bg-sushi-red/40 text-sushi-gold text-xs md:text-base font-bold transition-colors duration-200"
                         >
                             +
                         </button>
@@ -145,16 +144,16 @@
 
     const addToCart = () => {
         cartStore.addToCart(props.product)
-        console.log('➕ Добавлено в корзину:', props.product.name)
+        // console.log('➕ Добавлено в корзину:', props.product.name)
     }
 
     const incrementQuantity = () => {
         cartStore.incrementQuantity(props.product.id)
-        console.log('➕ Увеличено:', props.product.name)
+        // console.log('➕ Увеличено:', props.product.name)
     }
 
     const decrementQuantity = () => {
         cartStore.decrementQuantity(props.product.id)
-        console.log('➖ Уменьшено:', props.product.name)
+        // console.log('➖ Уменьшено:', props.product.name)
     }
 </script>
