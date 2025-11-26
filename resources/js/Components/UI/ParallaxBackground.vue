@@ -6,11 +6,11 @@
             type: Array,
             // Массив картинок - можно передать из Home.vue или использовать дефолтные
             default: () => [
-                '/images/sinsai-1.webp',
-                '/images/sinsai-3.webp',
-                '/images/sinsai-5.webp',
-                '/images/sinsai-7.webp',
-                '/images/sinsai-15.webp',
+                '/images/s-1.webp',
+                '/images/s-3.webp',
+                '/images/s-5.webp',
+                '/images/s-7.webp',
+                '/images/s-15.webp',
             ],
         },
         opacity: {
