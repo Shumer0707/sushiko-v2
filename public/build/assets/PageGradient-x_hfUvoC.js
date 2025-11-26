@@ -1,8 +1,0 @@
-import{D as g,q as m,U as f,_ as p,c as l,o as i,a as c,F as y,r as _,V as d,e as b}from"./app-CCVwc9sH.js";function v(t=.2){const e=g(null);let a=!1;const s=()=>{a||(window.requestAnimationFrame(()=>{o(),a=!1}),a=!0)},o=()=>{if(!e.value)return;const n=window.pageYOffset*t;e.value.style.transform=`translate3d(0, ${-n}px, 0)`};return m(()=>{window.addEventListener("scroll",s,{passive:!0}),o()}),f(()=>{window.removeEventListener("scroll",s)}),r=>{e.value=r}}const w={class:"fixed inset-0 z-0 overflow-hidden pointer-events-none"},$={__name:"ParallaxBackground",props:{images:{type:Array,default:()=>["/images/s-1.webp","/images/s-3.webp","/images/s-5.webp","/images/s-7.webp","/images/s-15.webp"]},opacity:{type:Number,default:.3},speed:{type:Number,default:.15}},setup(t){const e=t,a=v(e.speed),s=[...e.images,...e.images,...e.images];return(o,r)=>(i(),l("div",w,[c("div",{ref:b(a),class:"image-strip",style:d({opacity:t.opacity})},[(i(),l(y,null,_(s,(n,u)=>c("div",{key:u,class:"image-card"},[c("div",{class:"image-content",style:d({backgroundImage:`url(${n})`})},null,4)])),64))],4)]))}},I=p($,[["__scopeId","data-v-26fc3ace"]]),x={__name:"PageGradient",props:{color:{type:String,default:"52, 48, 47"},opacity:{type:Array,default:()=>[1,0,.3,.7,1]},zIndex:{type:Number,default:1}},setup(t){const e=t,a={background:`linear-gradient(
-            to bottom,
-            rgba(${e.color}, ${e.opacity[0]}) 0%,
-            rgba(${e.color}, ${e.opacity[1]}) 30%,
-            rgba(${e.color}, ${e.opacity[2]}) 50%,
-            rgba(${e.color}, ${e.opacity[3]}) 70%,
-            rgba(${e.color}, ${e.opacity[4]}) 100%
-        )`,zIndex:e.zIndex};return(s,o)=>(i(),l("div",{class:"page-gradient",style:a}))}},P=p(x,[["__scopeId","data-v-3f5d6180"]]);export{I as P,P as a};
