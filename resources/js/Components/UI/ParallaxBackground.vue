@@ -84,6 +84,8 @@
 
     /* ======= Mobile Static BG (random) ======= */
     .mobile-bg {
+        width: 432px;
+        height: 768px;
         position: absolute;
         inset: 0;
         background-size: cover;
