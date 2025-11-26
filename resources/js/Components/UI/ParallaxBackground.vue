@@ -1,46 +1,89 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import { useParallaxBackground } from '@/composables/useParallaxBackground'
+    import { Swiper, SwiperSlide } from 'swiper/vue'
+    import { Navigation, Pagination, Autoplay } from 'swiper/modules'
+    import { router, usePage } from '@inertiajs/vue3'
+
+    import 'swiper/css'
+    import 'swiper/css/navigation'
+    import 'swiper/css/pagination'
+
+    const page = usePage()
+    const t = page.props.translations.common
+
+    const modules = [Navigation, Pagination, Autoplay]
 
     const props = defineProps({
-        images: {
+        banners: {
             type: Array,
-            default: () => ['/images/s-1.webp', '/images/s-3.webp', '/images/s-5.webp', '/images/s-7.webp', '/images/s-15.webp'],
-        },
-        opacity: {
-            type: Number,
-            default: 0.3,
-        },
-        speed: {
-            type: Number,
-            default: 0.15,
+            default: () => [],
         },
     })
 
-    const isMobile = ref(false)
-    const mobileImage = ref(null)
+    const bannersDefolt = [
+        {
+            id: 1,
+            title: t.home_ban_title_1,
+            description: t.home_ban_description_1,
+            image: '/images/banners/header-1.webp',
+            buttonText: t.home_ban_button_1,
+            link: '/catalog',
+        },
+        {
+            id: 2,
+            title: t.home_ban_title_2,
+            description: t.home_ban_description_2,
+            image: '/images/banners/header-2.webp',
+            buttonText: t.home_ban_button_2,
+            link: '/catalog',
+        },
+        {
+            id: 3,
+            title: t.home_ban_title_3,
+            description: t.home_ban_description_3,
+            image: '/images/banners/header-4.webp',
+            buttonText: t.home_ban_button_3,
+            link: '/about',
+        },
+    ]
 
-    // на мобилках показываем случайную картинку
-    const pickRandomMobileImage = () => {
-        const arr = props.images
-        const rand = arr[Math.floor(Math.random() * arr.length)]
-        mobileImage.value = rand
-    }
+    const displayBanners = props.banners.length > 0 ? props.banners : bannersDefolt
+
+    // 👇 Определяем мобилку один раз, без resize
+    const isMobile = ref(false)
 
     onMounted(() => {
         if (typeof window !== 'undefined') {
             isMobile.value = window.innerWidth < 768
-            if (isMobile.value) {
-                pickRandomMobileImage()
-            }
         }
     })
 
-    // параллакс только для десктопа
-    const backgroundRef = useParallaxBackground(props.speed)
+    // 👇 Хелпер картинок
+    const getBannerSrc = (banner, type = 'desktop') => {
+        if (type === 'mobile' && banner.imageMobile) return banner.imageMobile
+        if (type === 'desktop' && banner.imageDesktop) return banner.imageDesktop
 
-    // повторяем ленту как у тебя было
-    const repeatedImages = [...props.images, ...props.images, ...props.images]
+        const base = banner.image || ''
+        const [path, query] = base.split('?')
+        const dotIndex = path.lastIndexOf('.')
+
+        if (dotIndex === -1) return base
+
+        const suffix = type === 'mobile' ? '-768' : '-1920'
+        const withSuffix = path.slice(0, dotIndex) + suffix + path.slice(dotIndex)
+
+        return query ? `${withSuffix}?${query}` : withSuffix
+    }
+
+    const handleBannerClick = (banner) => {
+        if (banner.link) {
+            if (banner.link.startsWith('http')) {
+                window.open(banner.link, '_blank')
+            } else {
+                router.visit(banner.link)
+            }
+        }
+    }
 </script>
 
 <template>
@@ -80,6 +123,7 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+        border-bottom: 10px solid red;
     }
 
     /* ======= Mobile Static BG (random) ======= */

@@ -33,6 +33,7 @@
                             :loading="index === 0 ? 'eager' : 'lazy'"
                             :fetchpriority="index === 0 ? 'high' : 'auto'"
                             decoding="async"
+                            @load="index === 0 && notifyPageReady()"
                         />
                     </picture>
 
@@ -84,6 +85,17 @@
             default: () => [],
         },
     })
+
+    let firstBannerReady = false
+
+    const notifyPageReady = () => {
+        if (firstBannerReady) return
+        firstBannerReady = true
+
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new Event('sushi:page-ready'))
+        }
+    }
 
     const bannersDefolt = [
         {
