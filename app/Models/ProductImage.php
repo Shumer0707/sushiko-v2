@@ -13,12 +13,13 @@ class ProductImage extends Model
     protected $fillable = [
         'product_id',
         'path',
+        'small_path',
         'is_main',
         'sort_order',
     ];
 
     protected $casts = [
-        'is_main'   => 'boolean',
+        'is_main'    => 'boolean',
         'sort_order' => 'integer',
     ];
 
@@ -27,9 +28,15 @@ class ProductImage extends Model
         return $this->belongsTo(Product::class);
     }
 
-    /* Удобный URL (если понадобится в списках изображений) */
     public function getUrlAttribute(): string
     {
         return asset('storage/' . $this->path);
+    }
+
+    public function getSmallUrlAttribute(): ?string
+    {
+        return $this->small_path
+            ? asset('storage/' . $this->small_path)
+            : null;
     }
 }

@@ -39,7 +39,8 @@ return new class extends Migration {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
-            $table->string('path');
+            $table->string('path');              // большое / основное фото
+            $table->string('small_path')->nullable(); // маленькое фото для сетки
             $table->boolean('is_main')->default(false);
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();

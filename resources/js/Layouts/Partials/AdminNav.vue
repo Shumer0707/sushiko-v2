@@ -9,6 +9,7 @@
         { name: 'Бренды', route: 'admin.brands.index', path: '/admin/brands' },
         { name: 'Товары', route: 'admin.products.index', path: '/admin/products' },
         { name: 'Атрибуты', route: 'admin.attributes.index', path: '/admin/attributes' },
+        { name: 'Заказы', route: 'admin.orders.index', path: '/admin/orders' },
     ]
 </script>
 
@@ -24,7 +25,8 @@
                           !isActivePath('/admin/categories') &&
                           !isActivePath('/admin/brands') &&
                           !isActivePath('/admin/attributes') &&
-                          !isActivePath('/admin/products')
+                          !isActivePath('/admin/products')&&
+                          !isActivePath('/admin/orders')
                             ? 'bg-gray-900 text-white'
                             : 'bg-gray-100 hover:bg-gray-200'
                         : isActivePath(item.path)
