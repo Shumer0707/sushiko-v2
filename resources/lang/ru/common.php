@@ -119,6 +119,10 @@ return [
     // CartItem
     'cart_item_remove' => 'Удалить',
     'cart_item_confirm_remove' => 'Удалить товар из корзины?',
+    'cart_item_removed' => 'Товар удалён из корзины',
+
+    // Undo
+    'common_undo' => 'Отменить',
 
     // CartSummary
     'cart_summary_title' => 'Ваш заказ',

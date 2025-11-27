@@ -119,6 +119,10 @@ return [
     // CartItem
     'cart_item_remove' => 'Șterge',
     'cart_item_confirm_remove' => 'Ștergeți produsul din coș?',
+    'cart_item_removed' => 'Produsul a fost șters din coș',
+
+    // Undo
+    'common_undo' => 'Anulează',
 
     // CartSummary
     'cart_summary_title' => 'Comanda dvs.',

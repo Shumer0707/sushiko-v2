@@ -117,7 +117,11 @@ return [
 
     // CartItem
     'cart_item_remove' => 'Remove',
-    'cart_item_confirm_remove' => 'Remove item from cart?',
+    'cart_item_confirm_remove' => 'Remove this item from the cart?',
+    'cart_item_removed' => 'Item removed from the cart',
+
+    // Undo
+    'common_undo' => 'Undo',
 
     // CartSummary
     'cart_summary_title' => 'Your order',
