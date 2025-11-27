@@ -1,6 +1,6 @@
 <script setup>
     import { useForm, Link } from '@inertiajs/vue3'
-    import { onMounted } from 'vue'
+    import { onMounted, ref, onBeforeUnmount } from 'vue'
 
     const props = defineProps({
         brands: { type: Array, default: () => [] },
@@ -21,13 +21,43 @@
             ro: { name: '', slug: '', short_description: '', full_description: '' },
             en: { name: '', slug: '', short_description: '', full_description: '' },
         },
-        images: [],
+        images: [], // файлы галереи
+        main_image_index: null, // индекс основного
+        small_image_index: null, // индекс small для сетки
         attributes: {}, // { [attributeId: number]: number[] }
     })
 
-    const onImages = (e) => {
-        form.images = Array.from(e.target.files || [])
+    // локальное хранилище превью
+    const imagePreviews = ref([]) // [{ url, name, size }]
+
+    const revokePreviews = () => {
+        imagePreviews.value.forEach((img) => {
+            if (img.url) URL.revokeObjectURL(img.url)
+        })
+        imagePreviews.value = []
     }
+
+    const onImages = (e) => {
+        const files = Array.from(e.target.files || [])
+
+        // чистим старые превью
+        revokePreviews()
+
+        form.images = files
+        form.main_image_index = null
+        form.small_image_index = null
+
+        imagePreviews.value = files.map((file) => ({
+            url: URL.createObjectURL(file),
+            name: file.name,
+            size: file.size,
+        }))
+    }
+
+    // подчистим URL при уходе со страницы
+    onBeforeUnmount(() => {
+        revokePreviews()
+    })
 
     // Инициализируем массивы под каждый атрибут
     onMounted(() => {
@@ -53,7 +83,10 @@
             normalized[attrId] = arr.map((v) => Number(v)).filter((v) => Number.isInteger(v) && allow[attrId].has(v))
         })
 
-        return { ...data, attributes: normalized }
+        return {
+            ...data,
+            attributes: normalized,
+        }
     })
 
     const submit = () => {
@@ -174,10 +207,65 @@
             </div>
 
             <!-- Галерея -->
-            <div class="space-y-2">
+            <div class="space-y-4">
                 <h2 class="text-lg font-semibold">Галерея</h2>
-                <input type="file" multiple @change="onImages" />
-                <div v-if="form.errors['images.0']" class="text-red-500 text-sm mt-1">Проверьте форматы и размер файлов</div>
+
+                <!-- Выбор файлов -->
+                <div class="space-y-2">
+                    <label class="block font-semibold">Фотографии товара</label>
+                    <input type="file" multiple @change="onImages" />
+                    <p class="text-sm text-gray-500">
+                        Загрузите все нужные фотографии, затем ниже выберите одну
+                        <span class="font-semibold">основную</span>
+                        и одну
+                        <span class="font-semibold">для сетки</span>
+                        .
+                    </p>
+                    <div v-if="form.errors['images.0']" class="text-red-500 text-sm mt-1">Проверьте форматы и размер файлов</div>
+                </div>
+
+                <!-- Превью + выбор основной и small -->
+                <div v-if="imagePreviews.length" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                    <div
+                        v-for="(img, index) in imagePreviews"
+                        :key="index"
+                        class="relative rounded-lg overflow-hidden border bg-white shadow-sm"
+                        :class="[
+                            form.main_image_index === index ? 'border-green-500 ring-2 ring-green-400' : '',
+                            form.small_image_index === index ? 'border-blue-500 ring-2 ring-blue-400' : '',
+                        ]"
+                    >
+                        <img :src="img.url" :alt="img.name" class="w-full h-40 object-cover" />
+
+                        <div class="p-2 space-y-1 text-xs">
+                            <div class="truncate font-medium">{{ img.name }}</div>
+
+                            <div class="flex flex-col gap-1 mt-1">
+                                <!-- Основное изображение -->
+                                <label class="inline-flex items-center gap-1">
+                                    <input type="radio" name="main_image" :value="index" v-model="form.main_image_index" />
+                                    <span class="text-green-700 font-semibold">Основное</span>
+                                </label>
+
+                                <!-- Small для сетки -->
+                                <label class="inline-flex items-center gap-1">
+                                    <input type="radio" name="small_image" :value="index" v-model="form.small_image_index" />
+                                    <span class="text-blue-700 font-semibold">Для сетки (small)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ошибки по индексу -->
+                <div class="space-y-1">
+                    <div v-if="form.errors.main_image_index" class="text-red-500 text-sm">
+                        {{ form.errors.main_image_index }}
+                    </div>
+                    <div v-if="form.errors.small_image_index" class="text-red-500 text-sm">
+                        {{ form.errors.small_image_index }}
+                    </div>
+                </div>
             </div>
 
             <!-- Атрибуты -->

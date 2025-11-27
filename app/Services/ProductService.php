@@ -78,13 +78,13 @@ class ProductService
     {
         return DB::transaction(function () use ($data) {
             $product = Product::create([
-                'brand_id'   => $data['brand_id'] ?? null,
+                'brand_id'    => $data['brand_id'] ?? null,
                 'category_id' => $data['category_id'] ?? null,
-                'sku'        => $data['sku'],
-                'price'      => $data['price'] ?? 0,
-                'currency'   => $data['currency'] ?? 'MDL',
-                'is_active'  => $data['is_active'] ?? true,
-                'sort_order' => $data['sort_order'] ?? 0,
+                'sku'         => $data['sku'],
+                'price'       => $data['price'] ?? 0,
+                'currency'    => $data['currency'] ?? 'MDL',
+                'is_active'   => $data['is_active'] ?? true,
+                'sort_order'  => $data['sort_order'] ?? 0,
             ]);
 
             $this->upsertTranslations($product, $data['translations'] ?? []);
@@ -92,9 +92,16 @@ class ProductService
             // атрибуты
             $this->syncAttributes($product, $data['attributes'] ?? []);
 
-            // картинки (массив файлов) + основной
+            // картинки (массив файлов)
             $created = $this->storeImages($product, $data['images'] ?? []);
-            $this->markMainImage($product, $data['main_image_id'] ?? null, $created);
+
+            // 🔹 назначаем main + small по индексам (НО внутри всё делает общий хелпер)
+            $this->applyMainAndSmallFromIndexes(
+                $product,
+                isset($data['main_image_index']) ? (int) $data['main_image_index'] : null,
+                isset($data['small_image_index']) ? (int) $data['small_image_index'] : null,
+                $created
+            );
 
             return $product->load([
                 'translations',
@@ -109,13 +116,13 @@ class ProductService
     {
         return DB::transaction(function () use ($product, $data) {
             $product->fill([
-                'brand_id'   => $data['brand_id'] ?? $product->brand_id,
+                'brand_id'    => $data['brand_id'] ?? $product->brand_id,
                 'category_id' => $data['category_id'] ?? $product->category_id,
-                'sku'        => $data['sku'] ?? $product->sku,
-                'price'      => $data['price'] ?? $product->price,
-                'currency'   => $data['currency'] ?? $product->currency,
-                'is_active'  => $data['is_active'] ?? $product->is_active,
-                'sort_order' => $data['sort_order'] ?? $product->sort_order,
+                'sku'         => $data['sku'] ?? $product->sku,
+                'price'       => $data['price'] ?? $product->price,
+                'currency'    => $data['currency'] ?? $product->currency,
+                'is_active'   => $data['is_active'] ?? $product->is_active,
+                'sort_order'  => $data['sort_order'] ?? $product->sort_order,
             ])->save();
 
             if (!empty($data['translations'])) {
@@ -127,14 +134,21 @@ class ProductService
 
             // новая порция картинок
             $created = $this->storeImages($product, $data['images'] ?? []);
+
             // удаление картинок по id
             if (!empty($data['delete_image_ids']) && is_array($data['delete_image_ids'])) {
                 $this->deleteImagesByIds($product, $data['delete_image_ids']);
             }
-            // назначение главной
-            $this->markMainImage($product, $data['main_image_id'] ?? null, $created);
 
-            // пересортировка (опционально массив вида [image_id => sort_order])
+            // 🔹 единый хелпер по id
+            $this->applyMainAndSmallFromIds(
+                $product,
+                $data['main_image_id'] ?? null,
+                $data['small_image_id'] ?? null,
+                $created
+            );
+
+            // пересортировка
             if (!empty($data['images_sort']) && is_array($data['images_sort'])) {
                 $this->reorderImages($product, $data['images_sort']);
             }
@@ -147,6 +161,7 @@ class ProductService
             ]);
         });
     }
+
 
     public function delete(Product $product): void
     {
@@ -239,10 +254,68 @@ class ProductService
         $product->images()->whereKey($mainImageId)->update(['is_main' => true]);
     }
 
+
     private function deleteFile(?string $path): void
     {
         if ($path && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
+        }
+    }
+
+    private function applyMainAndSmallFromIndexes(
+        Product $product,
+        ?int $mainIndex,
+        ?int $smallIndex,
+        array $created
+    ): void {
+        if (empty($created)) {
+            return;
+        }
+
+        $mainImageId = null;
+        $smallImageId = null;
+
+        if ($mainIndex !== null && isset($created[$mainIndex])) {
+            $mainImageId = $created[$mainIndex]->id;
+        }
+
+        if ($smallIndex !== null && isset($created[$smallIndex])) {
+            $smallImageId = $created[$smallIndex]->id;
+        }
+
+        $this->applyMainAndSmallFromIds($product, $mainImageId, $smallImageId, $created);
+    }
+
+    private function applyMainAndSmallFromIds(
+        Product $product,
+        $mainImageId = null,
+        $smallImageId = null,
+        array $created = []
+    ): void {
+        $mainImageId  = $mainImageId ? (int) $mainImageId : null;
+        $smallImageId = $smallImageId ? (int) $smallImageId : null;
+
+        // 🔹 если main не задан, но есть новые картинки — делаем первую новой главной
+        if (!$mainImageId && !empty($created)) {
+            $mainImageId = $created[0]->id ?? null;
+        }
+
+        if ($mainImageId) {
+            $this->markMainImage($product, $mainImageId, $created);
+        }
+
+        // 🔹 small: очищаем у всех и ставим на выбранную
+        if ($smallImageId) {
+            // сбрасываем small_path у всех
+            $product->images()->update(['small_path' => null]);
+
+            $img = $product->images()->whereKey($smallImageId)->first();
+            if ($img) {
+                // сейчас кладём тот же путь, позже можно подключить реальный ресайз
+                $img->update([
+                    'small_path' => $img->path,
+                ]);
+            }
         }
     }
 }

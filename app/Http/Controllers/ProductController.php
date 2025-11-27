@@ -62,8 +62,11 @@ class ProductController extends Controller
                         'logo_url' => $product->brand?->logo_url ?? '',
                     ],
 
-                    // Главное изображение
-                    'image_url' => $product->main_image_url,
+                    // 🔹 здесь маленькая, если есть, иначе — главная
+                    'image_url'        => $product->small_image_url,
+
+                    // 🔹 а если где-то на фронте понадобится строго главное — оно тоже есть
+                    'main_image_url'   => $product->main_image_url,
                 ];
             });
 

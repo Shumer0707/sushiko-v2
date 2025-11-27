@@ -15,8 +15,8 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         $uniqueSlug = fn(string $lang) =>
-            Rule::unique('product_translations', 'slug')
-                ->where(fn($q) => $q->where('language', $lang));
+        Rule::unique('product_translations', 'slug')
+            ->where(fn($q) => $q->where('language', $lang));
 
         return [
             'brand_id'    => ['nullable', 'exists:brands,id'],
@@ -38,14 +38,18 @@ class StoreProductRequest extends FormRequest
             'translations.*.short_description' => ['nullable', 'string'],
             'translations.*.full_description'  => ['nullable', 'string'],
 
-            // изображения
+            // 🔹 изображения
             'images'            => ['nullable', 'array'],
             'images.*'          => ['file', 'image', 'max:4096'],
 
+            // индексы основной и small-картинки
+            'main_image_index'  => ['required_with:images', 'nullable', 'integer', 'min:0'],
+            'small_image_index' => ['required_with:images', 'nullable', 'integer', 'min:0'],
+
             // 🔹 атрибуты (формат attribute_id => [value_id, ...])
-            'attributes'        => ['nullable', 'array'],
-            'attributes.*'      => ['array'],
-            'attributes.*.*'    => ['integer', 'exists:attribute_values,id'],
+            'attributes'     => ['nullable', 'array'],
+            'attributes.*'   => ['array'],
+            'attributes.*.*' => ['integer', 'exists:attribute_values,id'],
         ];
     }
 }

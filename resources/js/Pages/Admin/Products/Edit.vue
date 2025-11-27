@@ -44,6 +44,7 @@
         images: [], // новые файлы
         delete_image_ids: [], // id картинок к удалению
         main_image_id: props.product.images?.find((i) => i.is_main)?.id ?? null,
+        small_image_id: props.product.images?.find((i) => i.small_path)?.id ?? null,
         // атрибуты: { [attributeId:number]: number[] } — id значений
         attributes: {},
     })
@@ -91,6 +92,7 @@
             }
 
             form.main_image_id = p.images?.find((i) => i.is_main)?.id ?? null
+            form.small_image_id = p.images?.find((i) => i.small_path)?.id ?? null
 
             // сбрасываем и наполняем атрибуты заново
             form.attributes = {}
@@ -127,12 +129,15 @@
 
         const cleanedMainId = data.main_image_id != null && data.main_image_id !== '' ? Number(data.main_image_id) : null
 
+        const cleanedSmallId = data.small_image_id != null && data.small_image_id !== '' ? Number(data.small_image_id) : null
+
         return {
             ...data,
             _method: 'put',
             attributes: normalizedAttrs,
             delete_image_ids: cleanedDeleteIds,
             main_image_id: cleanedMainId,
+            small_image_id: cleanedSmallId,
         }
     })
 
@@ -248,16 +253,34 @@
                 <h2 class="text-lg font-semibold">Галерея</h2>
 
                 <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
-                    <div v-for="img in props.product.images || []" :key="img.id" class="border rounded p-2">
+                    <div
+                        v-for="img in props.product.images || []"
+                        :key="img.id"
+                        class="p-2 rounded border space-y-2 bg-white/70"
+                        :class="[
+                            form.main_image_id === img.id ? 'border-green-500 ring-2 ring-green-400' : '',
+                            form.small_image_id === img.id ? 'border-blue-500 ring-2 ring-blue-400' : '',
+                        ]"
+                    >
                         <img :src="`/storage/${img.path}`" class="w-full h-24 object-cover rounded border" />
-                        <div class="mt-2 flex items-center justify-between text-sm">
-                            <label class="flex items-center gap-1">
+
+                        <div class="mt-2 flex flex-col gap-1 text-xs">
+                            <!-- удалить -->
+                            <label class="inline-flex items-center gap-1">
                                 <input type="checkbox" :value="img.id" v-model="form.delete_image_ids" />
                                 <span>Удалить</span>
                             </label>
-                            <label class="flex items-center gap-1">
-                                <input type="radio" name="main" :value="img.id" v-model="form.main_image_id" />
-                                <span>Главное</span>
+
+                            <!-- главное -->
+                            <label class="inline-flex items-center gap-1">
+                                <input type="radio" name="main_image" :value="img.id" v-model="form.main_image_id" />
+                                <span class="text-green-700 font-semibold">Главное</span>
+                            </label>
+
+                            <!-- small -->
+                            <label class="inline-flex items-center gap-1">
+                                <input type="radio" name="small_image" :value="img.id" v-model="form.small_image_id" />
+                                <span class="text-blue-700 font-semibold">Для сетки (small)</span>
                             </label>
                         </div>
                     </div>

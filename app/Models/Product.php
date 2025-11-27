@@ -25,16 +25,64 @@ class Product extends Model
         'price'     => 'decimal:2',
     ];
 
-    protected $appends = ['main_image_url'];
+    // 🔹 теперь аппендим два accessors
+    protected $appends = ['main_image_url', 'small_image_url'];
 
-    /* Accessors */
-    public function getMainImageUrlAttribute(): ?string
+    /* ---------- Accessors ---------- */
+
+    // вспомогательно: получаем коллекцию изображений, учитывая eager loading
+    protected function getAllImages()
     {
-        $img = $this->images()->where('is_main', true)->first() ?? $this->images()->orderBy('sort_order')->first();
-        return $img ? asset('storage/' . $img->path) : asset('images/default-product-v1.webp');
+        return $this->relationLoaded('images')
+            ? $this->images
+            : $this->images()->get();
     }
 
-    /* Relations */
+    protected function resolveMainImage(): ?ProductImage
+    {
+        $images = $this->getAllImages();
+        if ($images->isEmpty()) {
+            return null;
+        }
+
+        // сначала ищем помеченную как is_main
+        $main = $images->firstWhere('is_main', true);
+        if ($main) {
+            return $main;
+        }
+
+        // иначе — с минимальным sort_order
+        return $images->sortBy('sort_order')->first();
+    }
+
+    public function getMainImageUrlAttribute(): string
+    {
+        $img = $this->resolveMainImage();
+
+        return $img
+            ? asset('storage/' . $img->path)
+            : asset('images/default-product-v1.webp');
+    }
+
+    public function getSmallImageUrlAttribute(): string
+    {
+        $images = $this->getAllImages();
+
+        // 1) пробуем найти картинку с small_path
+        $small = $images->first(function ($image) {
+            return !empty($image->small_path);
+        });
+
+        if ($small) {
+            return asset('storage/' . $small->small_path);
+        }
+
+        // 2) если нет small — используем ту же логику, что и для main
+        return $this->main_image_url;
+    }
+
+    /* ---------- Relations ---------- */
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -60,7 +108,8 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    /* Scopes */
+    /* ---------- Scopes / Attributes ---------- */
+
     public function scopeActive($q)
     {
         return $q->where('is_active', true);
@@ -69,7 +118,7 @@ class Product extends Model
     public function attributeValues()
     {
         return $this->belongsToMany(AttributeValue::class, 'product_attribute_values')
-            ->withPivot('attribute_id') // чтобы знать, к какому атрибуту относится
+            ->withPivot('attribute_id')
             ->withTimestamps();
     }
 

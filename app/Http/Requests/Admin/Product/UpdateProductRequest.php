@@ -53,10 +53,17 @@ class UpdateProductRequest extends StoreProductRequest
                 Rule::exists('product_images', 'id')->where(fn($q) => $q->where('product_id', $productId)),
             ],
 
+            // 🔹 назначение small-картинки
+            'small_image_id'     => [
+                'nullable',
+                'integer',
+                Rule::exists('product_images', 'id')->where(fn($q) => $q->where('product_id', $productId)),
+            ],
+
             // сортировка картинок
             'images_sort'       => ['nullable', 'array'],
 
-            // 🔹 атрибуты (формат attribute_id => [value_id, ...])
+            // атрибуты
             'attributes'        => ['nullable', 'array'],
             'attributes.*'      => ['array'],
             'attributes.*.*'    => ['integer', 'exists:attribute_values,id'],
