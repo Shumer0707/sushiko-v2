@@ -1,19 +1,64 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3'
+    import { ref } from 'vue'
+    import { Link, router } from '@inertiajs/vue3'
 
-    defineProps({ products: { type: Array, default: () => [] } })
+    const props = defineProps({
+        products: {
+            type: Array,
+            default: () => [],
+        },
+        categories: {
+            type: Array,
+            default: () => [],
+        },
+        filters: {
+            type: Object,
+            default: () => ({}),
+        },
+    })
+
+    // локальное состояние выбранной категории
+    const selectedCategoryId = ref(props.filters?.category_id ?? '')
+
+    const onCategoryChange = () => {
+        const value = selectedCategoryId.value || null
+
+        router.get(route('admin.products.index'), value ? { category_id: value } : {}, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        })
+    }
 </script>
 
 <template>
     <div class="p-6 max-w-7xl mx-auto space-y-6">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h1 class="text-xl font-semibold text-admin-text">Товары</h1>
-            <Link
-                :href="route('admin.products.create')"
-                class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition"
-            >
-                Добавить
-            </Link>
+
+            <div class="flex flex-col md:flex-row gap-3 md:items-center">
+                <!-- Фильтр по категории -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-admin-text/80">Категория:</span>
+                    <select
+                        v-model="selectedCategoryId"
+                        @change="onCategoryChange"
+                        class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-admin-text bg-white focus:outline-none focus:ring-2 focus:ring-admin-primary/60"
+                    >
+                        <option value="">Все</option>
+                        <option v-for="c in categories" :key="c.id" :value="c.id">
+                            {{ c.translation?.name || `Категория #${c.id}` }}
+                        </option>
+                    </select>
+                </div>
+
+                <Link
+                    :href="route('admin.products.create')"
+                    class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition text-sm"
+                >
+                    Добавить
+                </Link>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

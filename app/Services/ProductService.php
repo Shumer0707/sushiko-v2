@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Models\ProductImage;
 use App\Models\ProductTranslation;
 use Illuminate\Http\UploadedFile;
@@ -12,15 +14,64 @@ use Illuminate\Support\Str;
 
 class ProductService
 {
-    public function list()
+    protected string $categoryFilterSessionKey = 'admin.products.category_id';
+
+    /**
+     * Формируем и сохраняем/читаем фильтры (через Request + Session)
+     */
+    public function resolveFilters(Request $request): array
+    {
+        $sessionKey = $this->categoryFilterSessionKey;
+        $categoryId = null;
+
+        if ($request->has('category_id')) {
+            // пользователь меняет фильтр
+            $raw = $request->input('category_id');
+
+            if ($raw === '' || $raw === null) {
+                // выбор "Все" → очищаем фильтр
+                $request->session()->forget($sessionKey);
+                $categoryId = null;
+            } else {
+                $categoryId = (int) $raw ?: null;
+                $request->session()->put($sessionKey, $categoryId);
+            }
+        } else {
+            // просто зашли на страницу → берём последнее значение из сессии
+            $categoryId = $request->session()->get($sessionKey);
+        }
+
+        return [
+            'category_id' => $categoryId,
+        ];
+    }
+
+    /**
+     * Список товаров с учётом фильтров
+     */
+    public function list(array $filters = [])
     {
         return Product::with([
             'translation',
             'images' => fn($q) => $q->orderByDesc('is_main')->orderBy('sort_order'),
-            'attributeValues.attribute.translations'
+            'attributeValues.attribute.translations',
         ])
+            ->when(
+                !empty($filters['category_id']),
+                fn($q) => $q->where('category_id', $filters['category_id'])
+            )
             ->orderBy('sort_order')
             ->get();
+    }
+
+    /**
+     * Категории для селекта фильтра
+     */
+    public function getFilterCategories()
+    {
+        return Category::with('translation')
+            ->orderBy('sort_order')
+            ->get(['id']);
     }
 
     public function create(array $data): Product

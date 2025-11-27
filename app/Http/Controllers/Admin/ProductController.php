@@ -10,16 +10,21 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductAttribute;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function __construct(private ProductService $service) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $this->service->resolveFilters($request);
+
         return Inertia::render('Admin/Products/Index', [
-            'products' => $this->service->list(), // с translation и images (см. сервис)
+            'products'   => $this->service->list($filters),
+            'categories' => $this->service->getFilterCategories(),
+            'filters'    => $filters,
         ]);
     }
 
