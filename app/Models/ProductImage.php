@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class ProductImage extends Model
 {
@@ -23,6 +24,8 @@ class ProductImage extends Model
         'sort_order' => 'integer',
     ];
 
+    protected $appends = ['url', 'small_url', 'size_kb'];
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
@@ -38,5 +41,15 @@ class ProductImage extends Model
         return $this->small_path
             ? asset('storage/' . $this->small_path)
             : null;
+    }
+
+    public function getSizeKbAttribute(): ?int
+    {
+        if (!$this->path) return null;
+
+        $disk = Storage::disk('public');
+        if (!$disk->exists($this->path)) return null;
+
+        return (int) ceil($disk->size($this->path) / 1024);
     }
 }

@@ -264,6 +264,14 @@
                     >
                         <img :src="`/storage/${img.path}`" class="w-full h-24 object-cover rounded border" />
 
+                        <div class="flex items-center justify-between text-[11px] text-admin-text/70">
+                            <span v-if="img.size_kb != null">{{ img.size_kb }} KB</span>
+                            <span v-else>—</span>
+
+                            <span v-if="img.small_path" class="text-blue-700 font-semibold">SMALL</span>
+                            <span v-else-if="img.is_main" class="text-green-700 font-semibold">MAIN</span>
+                        </div>
+
                         <div class="mt-2 flex flex-col gap-1 text-xs">
                             <!-- удалить -->
                             <label class="inline-flex items-center gap-1">
