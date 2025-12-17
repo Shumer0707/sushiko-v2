@@ -33,10 +33,10 @@
                                     {{ t.footer_home }}
                                 </Link>
                                 <Link
-                                    href="/contact"
+                                    :href="localizedRoute('/contact')"
                                     class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 text-sm"
                                 >
-                                    {{ t.footer_about }}
+                                    {{ t.contact }}
                                 </Link>
                             </nav>
                         </div>
@@ -147,9 +147,12 @@
 <script setup>
     import { Link } from '@inertiajs/vue3'
     import { usePage } from '@inertiajs/vue3'
+    import { useLocale } from '@/composables/useLocale'
 
     const page = usePage()
     const t = page.props.translations.common
+
+    const { localizedRoute } = useLocale()
 </script>
 
 <style scoped>

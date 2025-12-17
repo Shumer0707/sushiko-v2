@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ProductSeederSets::class,
             ProductSeederDrink::class,
             // ProductAttributeSeeder::class,
+            ProductSeederRice::class,
             AdminUserSeeder::class,
         ]);
 
