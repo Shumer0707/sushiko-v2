@@ -58,7 +58,7 @@ export const useProductsStore = defineStore('products', {
                 this.products = products
                 this.categories = categories
                 this.loaded = true
-                console.log('✅ Products initialized from SSR:', products.length, 'products')
+                // console.log('✅ Products initialized from SSR:', products.length, 'products')
             }
         },
 
@@ -75,7 +75,7 @@ export const useProductsStore = defineStore('products', {
                 this.categories = response.data.categories
                 this.loaded = true
 
-                console.log('✅ Products refreshed from API')
+                // console.log('✅ Products refreshed from API')
             } catch (error) {
                 console.error('❌ Error refreshing products:', error)
             } finally {

@@ -115,7 +115,7 @@ export const useCartStore = defineStore('cart', {
             }
 
             this.saveToStorage()
-            console.log('✅ Добавлено в корзину:', product.name, 'x', quantity)
+            // console.log('✅ Добавлено в корзину:', product.name, 'x', quantity)
         },
 
         // Удалить товар из корзины
@@ -127,7 +127,7 @@ export const useCartStore = defineStore('cart', {
                 this.items.splice(index, 1)
                 this.saveToStorage()
 
-                console.log('🗑️ Удалено из корзины:', removedItem.product.name)
+                // console.log('🗑️ Удалено из корзины:', removedItem.product.name)
             }
         },
 
@@ -142,7 +142,7 @@ export const useCartStore = defineStore('cart', {
                     item.quantity = quantity
                     this.saveToStorage()
 
-                    console.log('🔄 Обновлено количество:', item.product.name, '→', quantity)
+                    // console.log('🔄 Обновлено количество:', item.product.name, '→', quantity)
                 }
             }
         },
@@ -173,7 +173,7 @@ export const useCartStore = defineStore('cart', {
         clearCart() {
             this.items = []
             this.saveToStorage()
-            console.log('🧹 Корзина очищена')
+            // console.log('🧹 Корзина очищена')
         },
 
         // Обновить настройки доставки (если нужно менять из админки)
@@ -197,7 +197,7 @@ export const useCartStore = defineStore('cart', {
                 const saved = localStorage.getItem('sushiko_cart')
                 if (saved) {
                     this.items = JSON.parse(saved)
-                    console.log('✅ Корзина загружена из localStorage:', this.items.length, 'товаров')
+                    // console.log('✅ Корзина загружена из localStorage:', this.items.length, 'товаров')
                 }
             } catch (error) {
                 console.error('❌ Ошибка загрузки корзины:', error)

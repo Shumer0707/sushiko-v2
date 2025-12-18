@@ -571,7 +571,11 @@
     }
     // Функция для получения ошибки по ключу
     const getError = (field) => {
-        return validationErrors.value[field] ? validationErrors.value[field][0] : null
+        const err = validationErrors.value?.[field]
+        if (!err) return null
+
+        // Laravel/Inertia обычно даёт строку, но на всякий случай поддержим и массив
+        return Array.isArray(err) ? err[0] : err
     }
 
     const submitOrder = async () => {

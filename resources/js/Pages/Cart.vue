@@ -66,7 +66,7 @@
     </div>
 
     <!-- Модалка оформления заказа -->
-    <CheckoutModal :is-open="showCheckoutModal" @close="showCheckoutModal = false" @submit="handleOrderSubmit" />
+    <CheckoutModal :is-open="showCheckoutModal" @close="showCheckoutModal = false"/>
 </template>
 
 <script setup>

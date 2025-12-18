@@ -58,7 +58,7 @@
 
     const fullTitle = computed(() => {
         const result = props.title.trim()
-        console.log('🔥 AppHead fullTitle:', result) // 🔥 ДОБАВЬ ЭТО
+        // console.log('🔥 AppHead fullTitle:', result)
         return result
     })
 
