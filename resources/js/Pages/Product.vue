@@ -5,6 +5,7 @@
     import PageGradient from '@/Components/UI/PageGradient.vue'
     import { useCartStore } from '@/Stores/cart'
     import { router, usePage } from '@inertiajs/vue3'
+    import { useInternalBack } from '@/composables/useInternalBack'
 
     const page = usePage()
     const t = page.props.translations.common
@@ -15,6 +16,13 @@
             required: true,
         },
     })
+
+    const { getBackUrl } = useInternalBack()
+
+    const goBackSmart = () => {
+        const fallback = route('home', { locale: page.props.locale })
+        router.visit(getBackUrl(fallback), { preserveScroll: true })
+    }
 
     const cartStore = useCartStore()
 
@@ -68,13 +76,14 @@
         <div class="container mx-auto px-4 max-w-7xl">
             <!-- Кнопка "Назад" -->
             <div class="mb-4">
-                <a
-                    href="/"
+                <button
+                    type="button"
+                    @click="goBackSmart"
                     class="inline-flex items-center gap-2 text-sushi-gold hover:text-sushi-silver transition-colors text-sm"
                 >
                     <i class="fas fa-arrow-left"></i>
                     <span>{{ t.product_back_to_menu }}</span>
-                </a>
+                </button>
             </div>
 
             <!-- Основной контент (2 колонки) -->

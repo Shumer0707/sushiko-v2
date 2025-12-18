@@ -8,6 +8,7 @@
     import HashCleanup from '@/Components/UI/HashCleanup.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
+    import { useInternalBack } from '@/composables/useInternalBack'
 
     async function fetchData() {
         // Ждём, пока страница скажет "я готова" (например, баннер загрузился)
@@ -31,6 +32,8 @@
             // страховка: если событие не пришло — снимаем прелоадер сами
             setTimeout(finish, timeout)
         })
+
+        useInternalBack().init()
     }
 
     const { isReady, load } = useInitialLoad(fetchData)

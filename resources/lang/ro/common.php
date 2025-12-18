@@ -100,7 +100,7 @@ return [
     'contacts_submit_button' => 'Trimite mesajul',
 
     // Pagina produsului
-    'product_back_to_menu' => 'Înapoi la meniu',
+    'product_back_to_menu' => 'Înapoi',
     'product_photo_soon' => 'Fotografia va apărea curând',
     'product_description_title' => 'Descriere',
     'product_ingredients_title' => 'Compoziție',

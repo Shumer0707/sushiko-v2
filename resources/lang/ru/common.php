@@ -101,7 +101,7 @@ return [
     'contacts_submit_button' => 'Отправить сообщение',
 
     // Страница продукта
-    'product_back_to_menu' => 'Вернуться к меню',
+    'product_back_to_menu' => 'Назад',
     'product_photo_soon' => 'Фото скоро появится',
     'product_description_title' => 'Описание',
     'product_ingredients_title' => 'Состав',

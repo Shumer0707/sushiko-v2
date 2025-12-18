@@ -100,7 +100,7 @@ return [
     'contacts_submit_button' => 'Send Message',
 
     // Product page
-    'product_back_to_menu' => 'Back to menu',
+    'product_back_to_menu' => 'Back',
     'product_photo_soon' => 'Photo coming soon',
     'product_description_title' => 'Description',
     'product_ingredients_title' => 'Ingredients',
