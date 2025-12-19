@@ -1,6 +1,24 @@
-# ВРЕМЕННО: Закрываем весь сайт от индексации
 User-agent: *
-Disallow: /
+Allow: /
 
-# Ссылка на карту сайта (можно оставить для теста)
+# Закрываем админку и приватные разделы
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+
+# Закрываем служебные директории
+Disallow: /vendor/
+Disallow: /node_modules/
+Disallow: /bootstrap/cache/
+
+# Закрываем API
+Disallow: /api/
+
+# Основной домен
+Host: https://sushiko.md
+
+# Sitemap
 Sitemap: https://sushiko.md/sitemap.xml
