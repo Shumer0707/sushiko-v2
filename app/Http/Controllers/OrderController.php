@@ -21,6 +21,21 @@ class OrderController extends Controller
 
         DB::beginTransaction();
 
+        $method = $data['delivery']['method'] ?? 'delivery';
+
+        $freeFrom = (float) config('shop.free_delivery_amount', 0);  // порог бесплатной доставки
+        $deliveryFee = (float) config('shop.delivery_cost', 0);      // стоимость доставки
+
+        $total = (float) $data['total'];
+
+        if ($method === 'pickup') {
+            $deliveryCost = 0;
+        } else {
+            $deliveryCost = ($freeFrom > 0 && $total >= $freeFrom) ? 0 : $deliveryFee;
+        }
+
+        $totalWithDelivery = $total + $deliveryCost;
+
         try {
             // 1) Сохраняем заказ
             $order = Order::create([
@@ -41,8 +56,8 @@ class OrderController extends Controller
                 'comment'              => $data['comment'] ?? null,
 
                 'total'                => $data['total'],
-                'delivery_cost'        => $data['deliveryCost'],
-                'total_with_delivery'  => $data['totalWithDelivery'],
+                'delivery_cost'        => $deliveryCost,
+                'total_with_delivery'  => $totalWithDelivery,
                 'currency'             => $data['currency'],
 
                 // статус по умолчанию

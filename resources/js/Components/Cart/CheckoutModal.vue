@@ -22,14 +22,35 @@
                 <!-- Содержимое -->
                 <div class="p-4 sm:p-6">
                     <!-- Итоговая сумма заказа -->
-                    <div class="bg-sushi-first/30 border border-sushi-gold/30 rounded-lg p-3 sm:p-4 mb-6">
+                    <div class="bg-sushi-first/30 border border-sushi-gold/30 rounded-lg p-3 sm:p-4 mb-6 space-y-2">
                         <div class="flex justify-between items-center flex-wrap gap-2">
                             <span class="text-sushi-silver/80 text-sm sm:text-base">{{ t.checkout_total_label }}</span>
                             <span class="text-xl sm:text-2xl font-bold text-sushi-gold">
-                                {{ cartStore.totalWithDelivery }} {{ cartStore.currency }}
+                                {{ money(totalWithDeliveryView) }} {{ cartStore.currency }}
                             </span>
                         </div>
-                        <p class="text-xs sm:text-sm text-sushi-silver/60 mt-2">{{ cartStore.totalItems }} {{ itemsWord }}</p>
+
+                        <!-- Расшифровка -->
+                        <div class="text-xs sm:text-sm text-sushi-silver/70 space-y-1">
+                            <div class="flex justify-between">
+                                <span>{{ t.cart_summary_products }}</span>
+                                <span class="text-sushi-silver">{{ money(cartStore.totalPrice) }} {{ cartStore.currency }}</span>
+                            </div>
+
+                            <div class="flex justify-between">
+                                <span>{{ t.cart_summary_delivery }}</span>
+                                <span class="text-sushi-silver">{{ money(deliveryCostView) }} {{ cartStore.currency }}</span>
+                            </div>
+
+                            <!-- <div class="flex justify-between pt-1 border-t border-sushi-gold/20">
+                                <span class="text-sushi-silver">{{ t.cart_summary_total }}</span>
+                                <span class="text-sushi-gold font-semibold">
+                                    {{ money(totalWithDeliveryView) }} {{ cartStore.currency }}
+                                </span>
+                            </div> -->
+                        </div>
+
+                        <p class="text-xs text-sushi-silver/60">{{ cartStore.totalItems }} {{ itemsWord }}</p>
                     </div>
 
                     <!-- Общая ошибка корзины/товаров -->
@@ -526,6 +547,20 @@
         return t.item_5 // товаров
     })
 
+    const deliveryCostView = computed(() => {
+        return form.value.deliveryMethod === 'pickup' ? 0 : parseFloat(cartStore.deliveryCost || 0)
+    })
+
+    const totalWithDeliveryView = computed(() => {
+        const total = parseFloat(cartStore.totalPrice || 0)
+        return total + deliveryCostView.value
+    })
+
+    const money = (val) => {
+        const n = parseFloat(val || 0)
+        return Number.isFinite(n) ? n.toFixed(2) : '0.00'
+    }
+
     const handleClose = () => {
         isClosing.value = true
         setTimeout(() => {
@@ -616,8 +651,8 @@
             comment: form.value.comment,
             items: formattedItems,
             total: parseFloat(cartStore.totalPrice),
-            deliveryCost: parseFloat(cartStore.deliveryCost),
-            totalWithDelivery: parseFloat(cartStore.totalWithDelivery),
+            deliveryCost: deliveryCostView.value,
+            totalWithDelivery: totalWithDeliveryView.value,
             currency: cartStore.currency,
         }
 
