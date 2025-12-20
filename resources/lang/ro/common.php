@@ -74,7 +74,7 @@ return [
     // Componenta ContactInfo
     'contacts_info_title' => 'Contactele noastre',
     'contacts_address_label' => 'Adresa',
-    'contacts_address_text' => 'str. Ismail 10, Chișinău, Moldova',
+    'contacts_address_text' => 'str. Ismail 86, Chișinău, Moldova',
     'contacts_phone_label' => 'Telefon',
     'contacts_phone_number' => config('shop.phone_shop'),
     'contacts_email_label' => 'Email',

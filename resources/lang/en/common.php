@@ -74,7 +74,7 @@ return [
     // ContactInfo component
     'contacts_info_title' => 'Our Contacts',
     'contacts_address_label' => 'Address',
-    'contacts_address_text' => 'Ismail str. 10, Chisinau, Moldova',
+    'contacts_address_text' => 'Ismail str. 86, Chisinau, Moldova',
     'contacts_phone_label' => 'Phone',
     'contacts_phone_number' => config('shop.phone_shop'),
     'contacts_email_label' => 'Email',
