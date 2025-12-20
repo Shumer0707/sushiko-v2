@@ -106,6 +106,7 @@ return [
     'product_ingredients_title' => 'Compoziție',
     'product_add_to_cart' => 'Adaugă în coș',
     'product_remove_from_cart' => 'Șterge din coș',
+    'product_present' => 'Prezent',
 
     // Coș - pagina
     'cart_page_title' => 'Coș',

@@ -107,6 +107,8 @@ return [
     'product_ingredients_title' => 'Состав',
     'product_add_to_cart' => 'Добавить в корзину',
     'product_remove_from_cart' => 'Удалить из корзины',
+    'product_present' => 'Подарок',
+
 
     // Корзина - страница
     'cart_page_title' => 'Корзина',

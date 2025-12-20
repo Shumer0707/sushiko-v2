@@ -31,6 +31,47 @@
         return cartStore.getCartItem(props.product.id)
     })
 
+    /**
+     * Promotions (MVP for UI)
+     * ожидаем с бэка:
+     * - product.has_promotion (bool)
+     * - product.promotion_type ('discount'|'gift'|null)
+     * - product.final_price (string/number) для скидки
+     * - product.gift_product { name, slug, quantity } для подарка
+     */
+    const hasPromotion = computed(() => !!props.product.has_promotion)
+    const isDiscount = computed(() => hasPromotion.value && props.product.promotion_type === 'discount')
+    const isGift = computed(() => hasPromotion.value && props.product.promotion_type === 'gift')
+
+    const displayPrice = computed(() => {
+        if (isDiscount.value && props.product.final_price != null && props.product.final_price !== '') {
+            return props.product.final_price
+        }
+        return props.product.price
+    })
+
+    const savingAmount = computed(() => {
+        if (!isDiscount.value) return ''
+        const base = Number(props.product.price || 0)
+        const final = Number(props.product.final_price || 0)
+        const diff = base - final
+        return diff > 0 ? diff.toFixed(0) : '0'
+    })
+
+    const giftName = computed(() => props.product.gift_product?.name || '')
+    const giftSlug = computed(() => props.product.gift_product?.slug || '')
+
+    const goToGiftProduct = () => {
+        if (!giftSlug.value) return
+
+        router.visit(
+            route('product.show', {
+                locale: page.props.locale,
+                slug: giftSlug.value,
+            })
+        )
+    }
+
     // 🔥 ИСПОЛЬЗУЕМ ГОТОВЫЕ meta из контроллера
     const meta = computed(() => page.props.meta || {})
 
@@ -120,6 +161,19 @@
                                 {{ product.category.name }}
                             </span>
                         </div>
+                        <!-- PROMO badge -->
+                        <div v-if="hasPromotion" class="absolute top-3 right-3">
+                            <span
+                                class="inline-flex items-center gap-1 px-3 py-1.5 bg-sushi-red_promo/90 backdrop-blur-sm text-xs font-bold text-white rounded-full border border-white/20 shadow"
+                            >
+                                <template v-if="isDiscount">
+                                    -
+                                    <span class="font-semibold opacity-90">{{ savingAmount }} {{ product.currency }}</span>
+                                </template>
+
+                                <template v-else-if="isGift">🎁 {{ t.product_present }}</template>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -130,6 +184,15 @@
                     <!-- Название -->
                     <h1 class="text-2xl md:text-3xl font-bold text-sushi-gold mb-3">
                         {{ product.name }}
+
+                        <span
+                            v-if="isGift && giftName"
+                            @click.stop="goToGiftProduct"
+                            class="ml-2 text-sm md:text-base font-bold text-sushi-red_promo underline cursor-pointer hover:opacity-100 opacity-90 transition whitespace-nowrap"
+                            :title="t.home_menu_more"
+                        >
+                            + {{ giftName }}
+                        </span>
                     </h1>
 
                     <!-- Короткое описание -->
@@ -164,13 +227,26 @@
 
                     <!-- Цена -->
                     <div class="mb-4">
-                        <div class="flex items-baseline gap-2">
-                            <span class="text-3xl font-bold text-sushi-gold">
-                                {{ product.price }}
-                            </span>
-                            <span class="text-lg text-sushi-silver opacity-70">
-                                {{ product.currency }}
-                            </span>
+                        <div class="flex flex-col leading-tight">
+                            <!-- Discount: old price -->
+                            <div v-if="isDiscount" class="flex items-baseline gap-2">
+                                <span class="text-base text-sushi-gold line-through">
+                                    {{ product.price }}
+                                </span>
+                                <span class="text-sm text-sushi-silver/60">
+                                    {{ product.currency }}
+                                </span>
+                            </div>
+
+                            <!-- Current price -->
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold" :class="isDiscount ? 'text-sushi-red_promo' : 'text-sushi-gold'">
+                                    {{ displayPrice }}
+                                </span>
+                                <span class="text-lg text-sushi-silver opacity-70">
+                                    {{ product.currency }}
+                                </span>
+                            </div>
                         </div>
                     </div>
 

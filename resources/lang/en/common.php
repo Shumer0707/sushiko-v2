@@ -106,6 +106,7 @@ return [
     'product_ingredients_title' => 'Ingredients',
     'product_add_to_cart' => 'Add to cart',
     'product_remove_from_cart' => 'Remove from cart',
+    'product_present' => 'Present',
 
     // Cart - page
     'cart_page_title' => 'Cart',
