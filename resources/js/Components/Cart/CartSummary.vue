@@ -13,11 +13,34 @@
                     <div class="flex-grow min-w-0 pr-2">
                         <span class="truncate block">{{ item.product.name }}</span>
                         <span class="text-xs text-sushi-silver/60">
-                            {{ item.quantity }} × {{ item.product.price }} {{ currency }}
+                            {{ item.quantity }} ×
+                            <span
+                                v-if="item.product.has_promotion && item.product.promotion_type === 'discount'"
+                                class="text-sushi-gold line-through"
+                            >
+                                {{ item.product.price }}
+                            </span>
+                            <span
+                                :class="
+                                    item.product.has_promotion && item.product.promotion_type === 'discount'
+                                        ? 'text-sushi-red_promo font-bold ml-1'
+                                        : ''
+                                "
+                            >
+                                {{ cartStore.unitPrice(item.product).toFixed(2) }}
+                            </span>
+                            {{ currency }}
+
+                            <span
+                                v-if="isGiftPromo(item.product) && giftName(item.product)"
+                                class="ml-2 text-sushi-red_promo font-bold"
+                            >
+                                🎁 + {{ giftName(item.product) }}
+                            </span>
                         </span>
                     </div>
                     <span class="font-medium text-sushi-gold flex-shrink-0">
-                        {{ (item.product.price * item.quantity).toFixed(2) }} {{ currency }}
+                        {{ (cartStore.unitPrice(item.product) * item.quantity).toFixed(2) }}
                     </span>
                 </div>
             </div>
@@ -42,7 +65,7 @@
 
                 <!-- Подсказка до бесплатной доставки -->
                 <div
-                    v-if="!isFreeDelivery && amountUntilFree > 0"
+                    v-if="!isFreeDelivery && Number(amountUntilFree) > 0"
                     class="text-xs text-sushi-gold/80 bg-sushi-first/20 rounded p-2"
                 >
                     💡 {{ t.cart_summary_until_free }} {{ amountUntilFree }} {{ currency }} {{ t.cart_summary_until_free_text }}
@@ -85,6 +108,7 @@
 
 <script setup>
     import { Link, usePage } from '@inertiajs/vue3'
+    import { useCartStore } from '@/Stores/cart'
 
     const page = usePage()
     const t = page.props.translations.common
@@ -127,6 +151,15 @@
             required: true,
         },
     })
+    const cartStore = useCartStore()
+
+    const isGiftPromo = (product) => {
+        return !!product?.has_promotion && product?.promotion_type === 'gift'
+    }
+
+    const giftName = (product) => {
+        return product?.gift_product?.name || ''
+    }
 
     defineEmits(['checkout', 'clear'])
 </script>

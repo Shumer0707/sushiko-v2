@@ -24,7 +24,29 @@
                     >
                         {{ item.product.name }}
                     </Link>
-                    <p class="text-sm text-sushi-silver/60 mt-1">{{ item.product.price }} {{ item.product.currency }}</p>
+                    <div class="text-sm mt-1">
+                        <template v-if="isDiscount">
+                            <span class="text-sushi-gold line-through">{{ item.product.price }}</span>
+                            <span class="text-sushi-silver/60 ml-1">{{ item.product.currency }}</span>
+
+                            <span class="ml-2 text-sushi-red_promo font-bold">
+                                {{ unitPrice.toFixed(2) }}
+                            </span>
+                        </template>
+
+                        <template v-else>
+                            <span class="text-sushi-silver/60">{{ unitPrice.toFixed(2) }} {{ item.product.currency }}</span>
+                        </template>
+
+                        <div
+                            v-if="isGift && giftName"
+                            @click.stop="giftSlug && goToGiftProduct()"
+                            class="text-xs text-sushi-red_promo font-bold mt-1 w-fit"
+                            :class="giftSlug ? 'underline cursor-pointer hover:opacity-100 opacity-90 transition' : 'opacity-80'"
+                        >
+                            🎁 + {{ giftName }}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -75,8 +97,9 @@
 </template>
 
 <script setup>
-    import { Link, usePage } from '@inertiajs/vue3'
+    import { Link, usePage, router } from '@inertiajs/vue3'
     import { computed } from 'vue'
+    import { useCartStore } from '@/Stores/cart'
 
     const page = usePage()
     const t = page.props.translations.common
@@ -94,7 +117,29 @@
 
     defineEmits(['increment', 'decrement', 'remove'])
 
+    const cartStore = useCartStore()
+
+    const isDiscount = computed(() => props.item.product?.has_promotion && props.item.product?.promotion_type === 'discount')
+    const isGift = computed(() => props.item.product?.has_promotion && props.item.product?.promotion_type === 'gift')
+
+    const unitPrice = computed(() => cartStore.unitPrice(props.item.product))
+
     const itemTotal = computed(() => {
-        return (props.item.product.price * props.item.quantity).toFixed(2)
+        return (unitPrice.value * props.item.quantity).toFixed(2)
     })
+
+    const giftName = computed(() => props.item.product?.gift_product?.name || '')
+
+    const giftSlug = computed(() => props.item.product?.gift_product?.slug || '')
+
+    const goToGiftProduct = () => {
+        if (!giftSlug.value) return
+
+        router.visit(
+            route('product.show', {
+                locale: props.locale,
+                slug: giftSlug.value,
+            })
+        )
+    }
 </script>

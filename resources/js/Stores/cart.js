@@ -12,76 +12,54 @@ export const useCartStore = defineStore('cart', {
     }),
 
     getters: {
-        // Общее количество товаров в корзине
-        totalItems: (state) => {
-            return state.items.reduce((sum, item) => sum + item.quantity, 0)
-        },
+        unitPrice: (state) => (product) => {
+            const toNumber = (v) => Number(String(v).replace(',', '.').trim())
 
-        // Общая сумма корзины
-        totalPrice: (state) => {
-            return state.items
-                .reduce((sum, item) => {
-                    return sum + item.product.price * item.quantity
-                }, 0)
-                .toFixed(2)
-        },
-
-        // Валюта (берём у первого товара, обычно у всех одна)
-        currency: (state) => {
-            return state.items[0]?.product?.currency || 'MDL'
-        },
-
-        // Стоимость доставки (зависит от суммы заказа)
-        deliveryCost: (state) => {
-            const total = state.items.reduce((sum, item) => {
-                return sum + item.product.price * item.quantity
-            }, 0)
-
-            // Если сумма >= порога - доставка бесплатно
-            if (total >= state.deliverySettings.freeDeliveryThreshold) {
-                return 0
+            if (
+                product?.has_promotion &&
+                product?.promotion_type === 'discount' &&
+                product?.final_price != null &&
+                product?.final_price !== ''
+            ) {
+                return toNumber(product.final_price) || 0
             }
 
-            return state.deliverySettings.deliveryCost
+            return toNumber(product?.price || 0) || 0
         },
 
-        // Бесплатная ли доставка
-        isFreeDelivery: (state) => {
-            const total = state.items.reduce((sum, item) => {
-                return sum + item.product.price * item.quantity
-            }, 0)
+        totalItems: (state) => state.items.reduce((sum, item) => sum + item.quantity, 0),
 
-            return total >= state.deliverySettings.freeDeliveryThreshold
+        totalPrice() {
+            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            return total.toFixed(2)
         },
 
-        // Сколько не хватает до бесплатной доставки
-        amountUntilFreeDelivery: (state) => {
-            const total = state.items.reduce((sum, item) => {
-                return sum + item.product.price * item.quantity
-            }, 0)
+        currency: (state) => state.items[0]?.product?.currency || 'MDL',
 
-            const remaining = state.deliverySettings.freeDeliveryThreshold - total
+        deliveryCost() {
+            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            return total >= this.deliverySettings.freeDeliveryThreshold ? 0 : this.deliverySettings.deliveryCost
+        },
 
+        isFreeDelivery() {
+            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            return total >= this.deliverySettings.freeDeliveryThreshold
+        },
+
+        amountUntilFreeDelivery() {
+            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            const remaining = this.deliverySettings.freeDeliveryThreshold - total
             return remaining > 0 ? remaining.toFixed(2) : 0
         },
 
-        // Итоговая сумма с доставкой
         totalWithDelivery(state) {
             const subtotal = parseFloat(this.totalPrice)
             const delivery = this.deliveryCost
-
             return (subtotal + delivery).toFixed(2)
         },
 
-        // Проверка: есть ли товар в корзине
-        isInCart: (state) => (productId) => {
-            return state.items.some((item) => item.product.id === productId)
-        },
-
-        // Получить товар из корзины
-        getCartItem: (state) => (productId) => {
-            return state.items.find((item) => item.product.id === productId)
-        },
+        isInCart: (state) => (productId) => state.items.some((item) => item.product.id === productId),
+        getCartItem: (state) => (productId) => state.items.find((item) => item.product.id === productId),
     },
 
     actions: {
@@ -108,6 +86,18 @@ export const useCartStore = defineStore('cart', {
                         price: product.price,
                         currency: product.currency,
                         image_url: product.image_url,
+
+                        // ✅ Promotions (важно для корзины)
+                        has_promotion: !!product.has_promotion,
+                        promotion_type: product.promotion_type || null,
+                        final_price: product.final_price ?? null,
+                        gift_product: product.gift_product
+                            ? {
+                                  name: product.gift_product.name,
+                                  slug: product.gift_product.slug,
+                                  quantity: product.gift_product.quantity ?? 1,
+                              }
+                            : null,
                     },
                     quantity,
                     selectedAttributes,
