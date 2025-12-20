@@ -25,8 +25,8 @@ class Product extends Model
         'price'     => 'decimal:2',
     ];
 
-    // 🔹 теперь аппендим два accessors
-    protected $appends = ['main_image_url', 'small_image_url'];
+    protected $appends = ['main_image_url', 'small_image_url', 'final_price', 'promotion_type', 'gift', 'has_active_promotion'];
+
 
     /* ---------- Accessors ---------- */
 
@@ -126,5 +126,30 @@ class Product extends Model
     {
         return $this->belongsToMany(ProductAttribute::class, 'product_attribute_values', 'product_id', 'attribute_id')
             ->withTimestamps();
+    }
+
+    public function promotion()
+    {
+        return $this->hasOne(\App\Models\Promotion::class);
+    }
+
+    public function getHasActivePromotionAttribute(): bool
+    {
+        return app(\App\Services\PromotionApplierService::class)->hasActivePromotion($this);
+    }
+
+    public function getPromotionTypeAttribute(): ?string
+    {
+        return app(\App\Services\PromotionApplierService::class)->promotionType($this);
+    }
+
+    public function getFinalPriceAttribute(): string
+    {
+        return app(\App\Services\PromotionApplierService::class)->finalPrice($this);
+    }
+
+    public function getGiftAttribute(): ?array
+    {
+        return app(\App\Services\PromotionApplierService::class)->gift($this);
     }
 }

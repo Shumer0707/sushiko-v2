@@ -20,11 +20,15 @@ class ProductController extends Controller
 
         // Загружаем ВСЕ активные товары с нужными связями
         $products = Product::with([
-            'translation',           // Перевод товара на текущем языке
-            'category.translation',  // Категория с переводом
-            'brand.translation',     // Бренд с переводом
+            'translation',
+            'category.translation',
+            'brand.translation',
+            'promotion', // важно
+            'promotion.giftProduct.translation',
+            'promotion.giftProduct.images' => function ($q) {
+                $q->orderBy('is_main', 'desc')->orderBy('sort_order', 'asc');
+            },
             'images' => function ($query) {
-                // Берём главное фото или первое по порядку
                 $query->orderBy('is_main', 'desc')
                     ->orderBy('sort_order', 'asc');
             }
@@ -61,6 +65,22 @@ class ProductController extends Controller
                         'slug' => $product->brand?->translation?->slug ?? '',
                         'logo_url' => $product->brand?->logo_url ?? '',
                     ],
+
+                    //promotions
+                    'has_promotion'  => $product->has_active_promotion,
+                    'promotion_type' => $product->promotion_type,  // discount | gift | null
+                    'final_price'    => $product->final_price,     // "95.00" (если скидка), иначе обычная цена
+                    'gift_product' => (
+                        $product->promotion_type === 'gift'
+                        && $product->promotion
+                        && $product->promotion->giftProduct
+                    ) ? [
+                        'id' => $product->promotion->giftProduct->id,
+                        'name' => $product->promotion->giftProduct->translation?->name ?? '',
+                        'slug' => $product->promotion->giftProduct->translation?->slug ?? '',
+                        'image_url' => $product->promotion->giftProduct->small_image_url,
+                        'quantity' => (int) ($product->promotion->gift_quantity ?? 1),
+                    ] : null,
 
                     // 🔹 здесь маленькая, если есть, иначе — главная
                     'image_url'        => $product->small_image_url,
@@ -112,6 +132,11 @@ class ProductController extends Controller
             'translation',
             'category.translation',
             'brand.translation',
+            'promotion',
+            'promotion.giftProduct.translation',
+            'promotion.giftProduct.images' => function ($q) {
+                $q->orderBy('is_main', 'desc')->orderBy('sort_order', 'asc');
+            },
             'images' => function ($query) {
                 $query->orderBy('is_main', 'desc')
                     ->orderBy('sort_order', 'asc');
@@ -148,6 +173,21 @@ class ProductController extends Controller
                 'slug' => $product->brand?->translation?->slug ?? '',
                 'logo_url' => $product->brand?->logo_url ?? '',
             ],
+            'has_promotion'  => $product->has_active_promotion,
+            'promotion_type' => $product->promotion_type,
+            'final_price'    => $product->final_price,
+
+            'gift_product' => (
+                $product->promotion_type === 'gift'
+                && $product->promotion
+                && $product->promotion->giftProduct
+            ) ? [
+                'id' => $product->promotion->giftProduct->id,
+                'name' => $product->promotion->giftProduct->translation?->name ?? '',
+                'slug' => $product->promotion->giftProduct->translation?->slug ?? '',
+                'image_url' => $product->promotion->giftProduct->small_image_url,
+                'quantity' => (int) ($product->promotion->gift_quantity ?? 1),
+            ] : null,
             'image_url' => $product->main_image_url,
             'images' => $product->images->map(function ($image) {
                 return [
