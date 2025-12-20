@@ -77,7 +77,7 @@ return [
     'contacts_address_label' => 'Адрес',
     'contacts_address_text' => 'ул. Измаил 86, Кишинёв, Молдова',
     'contacts_phone_label' => 'Телефон',
-    'contacts_phone_number' => '+373 781 25 553',
+    'contacts_phone_number' => config('shop.phone_shop'),
     'contacts_email_label' => 'Email',
     'contacts_email_address' => 'sushikoevgheni@gmail.com',
     'contacts_hours_label' => 'Часы работы',

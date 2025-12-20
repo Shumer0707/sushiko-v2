@@ -76,7 +76,7 @@ return [
     'contacts_address_label' => 'Adresa',
     'contacts_address_text' => 'str. Ismail 10, Chișinău, Moldova',
     'contacts_phone_label' => 'Telefon',
-    'contacts_phone_number' => '+373 781 25 553',
+    'contacts_phone_number' => config('shop.phone_shop'),
     'contacts_email_label' => 'Email',
     'contacts_email_address' => 'sushikoevgheni@gmail.com',
     'contacts_hours_label' => 'Program de lucru',

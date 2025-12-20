@@ -76,7 +76,7 @@ return [
     'contacts_address_label' => 'Address',
     'contacts_address_text' => 'Ismail str. 10, Chisinau, Moldova',
     'contacts_phone_label' => 'Phone',
-    'contacts_phone_number' => '+373 781 25 553',
+    'contacts_phone_number' => config('shop.phone_shop'),
     'contacts_email_label' => 'Email',
     'contacts_email_address' => 'sushikoevgheni@gmail.com',
     'contacts_hours_label' => 'Working Hours',
