@@ -26,13 +26,24 @@ class OrderController extends Controller
         $freeFrom = (float) config('shop.free_delivery_amount', 0);  // порог бесплатной доставки
         $deliveryFee = (float) config('shop.delivery_cost', 0);      // стоимость доставки
 
-        $total = (float) $data['total'];
+        $total = 0;
+
+        foreach ($data['items'] as $item) {
+            $price = (float) ($item['price'] ?? 0);
+            $qty   = (int) ($item['quantity'] ?? 1);
+
+            $total += $price * $qty;
+        }
+
+        $total = round($total, 2);
 
         if ($method === 'pickup') {
             $deliveryCost = 0;
         } else {
             $deliveryCost = ($freeFrom > 0 && $total >= $freeFrom) ? 0 : $deliveryFee;
         }
+
+        $totalWithDelivery = round($total + $deliveryCost, 2);
 
         $totalWithDelivery = $total + $deliveryCost;
 
@@ -55,7 +66,7 @@ class OrderController extends Controller
                 'payment'              => $data['payment'],
                 'comment'              => $data['comment'] ?? null,
 
-                'total'                => $data['total'],
+                'total'                => $total,
                 'delivery_cost'        => $deliveryCost,
                 'total_with_delivery'  => $totalWithDelivery,
                 'currency'             => $data['currency'],

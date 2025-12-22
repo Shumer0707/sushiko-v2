@@ -29,6 +29,13 @@ class CheckoutRequest extends FormRequest
             'deliveryCost' => 'required|numeric|min:0',
             'totalWithDelivery' => 'required|numeric|min:0',
             'currency' => 'required|string|max:10',
+            'items.*.base_price' => 'nullable|numeric|min:0',
+            'items.*.has_promotion' => 'nullable|boolean',
+            'items.*.promotion_type' => 'nullable|in:discount,gift',
+            'items.*.gift_product' => 'nullable|array',
+            'items.*.gift_product.name' => 'nullable|string|max:255',
+            'items.*.gift_product.slug' => 'nullable|string|max:255',
+            'items.*.gift_product.quantity' => 'nullable|integer|min:1',
         ];
 
         if ($this->input('delivery.method') === 'delivery') {

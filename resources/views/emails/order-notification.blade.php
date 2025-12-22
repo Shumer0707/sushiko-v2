@@ -204,7 +204,27 @@
             @endif
 
         </div>
+        @php
+            $currency = $order['currency'] ?? 'MDL';
 
+            $isDiscount = fn($item) => !empty($item['has_promotion']) &&
+                ($item['promotion_type'] ?? null) === 'discount';
+            $isGift = fn($item) => !empty($item['has_promotion']) && ($item['promotion_type'] ?? null) === 'gift';
+
+            // то что реально продаём (после скидки)
+            $salePrice = fn($item) => (float) ($item['price'] ?? 0);
+
+            // базовая цена (до скидки)
+            $basePrice = fn($item) => (float) ($item['base_price'] ?? ($item['price'] ?? 0));
+
+            $giftText = function ($item) {
+                if (empty($item['gift_product']['name'])) {
+                    return null;
+                }
+                $qty = $item['gift_product']['quantity'] ?? 1;
+                return $item['gift_product']['name'] . ' × ' . $qty;
+            };
+        @endphp
         {{-- Товары --}}
         <div class="section">
             <h2>🛒 Состав заказа</h2>
@@ -219,15 +239,46 @@
                 </thead>
                 <tbody>
                     @foreach ($order['items'] as $item)
+                        @php
+                            $qty = (int) ($item['quantity'] ?? 1);
+                            $sale = $salePrice($item);
+                            $base = $basePrice($item);
+                            $line = $sale * $qty;
+                            $gift = $giftText($item);
+                        @endphp
+
                         <tr>
-                            <td>{{ $item['name'] }}</td>
-                            <td style="text-align: center;">{{ $item['quantity'] }}</td>
-                            <td style="text-align: right;">{{ $item['price'] }} {{ $order['currency'] }}</td>
-                            <td style="text-align: right;">
-                                <strong>{{ $item['price'] * $item['quantity'] }} {{ $order['currency'] }}</strong>
+                            <td>
+                                {{ $item['name'] }}
+
+                                @if ($isGift($item) && $gift)
+                                    <div style="margin-top:4px; color:#F43F5E; font-weight:bold;">
+                                        🎁 + {{ $gift }}
+                                    </div>
+                                @endif
+                            </td>
+
+                            <td style="text-align: center;">{{ $qty }}</td>
+
+                            <td style="text-align: right; white-space:nowrap;">
+                                @if ($isDiscount($item) && $base > $sale)
+                                    <div style="font-size:12px; color:#D4AF37; text-decoration:line-through;">
+                                        {{ number_format($base, 0, '.', '') }} {{ $currency }}
+                                    </div>
+                                    <strong style="color:#F43F5E;">
+                                        {{ number_format($sale, 0, '.', '') }} {{ $currency }}
+                                    </strong>
+                                @else
+                                    <strong>{{ number_format($sale, 0, '.', '') }} {{ $currency }}</strong>
+                                @endif
+
+                                <div style="font-size:12px; color:#999; margin-top:2px;">
+                                    = {{ number_format($line, 0, '.', '') }} {{ $currency }}
+                                </div>
                             </td>
                         </tr>
                     @endforeach
+
                 </tbody>
             </table>
 

@@ -620,12 +620,31 @@
         isSubmitting.value = true
 
         // Преобразуем items: разворачиваем product в корневой уровень
-        const formattedItems = cartStore.items.map((item) => ({
-            id: item.product.id,
-            name: item.product.name,
-            price: parseFloat(item.product.price), // преобразуем строку в число
-            quantity: item.quantity,
-        }))
+        const formattedItems = cartStore.items.map((item) => {
+            const salePrice = Number(cartStore.unitPrice(item.product) || 0)
+            const basePrice = Number(item.product.price || 0)
+
+            return {
+                id: item.product.id,
+                name: item.product.name,
+                quantity: item.quantity,
+
+                // ✅ важно: бек и БД будут использовать это поле
+                price: salePrice,
+
+                // 👇 доп. поля только для писем/отображения (в БД не пишем)
+                base_price: basePrice,
+                has_promotion: !!item.product.has_promotion,
+                promotion_type: item.product.promotion_type || null,
+                gift_product: item.product.gift_product
+                    ? {
+                          name: item.product.gift_product.name,
+                          slug: item.product.gift_product.slug,
+                          quantity: item.product.gift_product.quantity ?? 1,
+                      }
+                    : null,
+            }
+        })
 
         const orderData = {
             customer: {
@@ -650,9 +669,9 @@
             payment: form.value.payment,
             comment: form.value.comment,
             items: formattedItems,
-            total: parseFloat(cartStore.totalPrice),
-            deliveryCost: deliveryCostView.value,
-            totalWithDelivery: totalWithDeliveryView.value,
+            total: toNumber(cartStore.totalPrice),
+            deliveryCost: toNumber(deliveryCostView.value),
+            totalWithDelivery: toNumber(totalWithDeliveryView.value),
             currency: cartStore.currency,
         }
 
@@ -670,6 +689,19 @@
                 isSubmitting.value = false
             },
         })
+    }
+
+    const toNumber = (v) => {
+        const n = Number(
+            String(v ?? '')
+                .replace(',', '.')
+                .trim()
+        )
+        return Number.isFinite(n) ? n : 0
+    }
+
+    const unitPrice = (product) => {
+        return cartStore.unitPrice(product) // берем из стора (у тебя уже учтена скидка)
     }
 </script>
 
