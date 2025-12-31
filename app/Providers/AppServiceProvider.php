@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
             'translations' => fn() => [
                 'common' => trans('common'),
                 'seo' => trans('seo'),
+                'maintenance' => trans('maintenance'),
             ],
         ]);
     }

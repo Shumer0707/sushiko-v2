@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,7 +16,8 @@ use Inertia\Inertia;
 |--------------------------------------------------------------------------
 */
 
-Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en']], function () {
+Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en'], 'middleware' => ['public.maintenance'],],  function () {
+    Route::get('/maintenance', [PageController::class, 'maintenance'])->name('maintenance');
     Route::get('/', [ProductController::class, 'index'])->name('home');
     Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/cart', [PageController::class, 'cart'])->name('cart.index');
@@ -34,7 +36,7 @@ Route::post('/switch-locale', [LocaleController::class, 'switch'])->name('locale
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
+    Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('verified')
         ->name('dashboard');
 

@@ -32,9 +32,23 @@ class PageController extends Controller
                 'image' => asset('images/og-default.jpg'),
             ],
             'deliverySettings' => [
-            'freeDeliveryThreshold' => config('shop.free_delivery_amount'),
-            'deliveryCost'          => config('shop.delivery_cost', 50),
-        ],
+                'freeDeliveryThreshold' => config('shop.free_delivery_amount'),
+                'deliveryCost'          => config('shop.delivery_cost', 50),
+            ],
+        ]);
+    }
+
+    /**
+     * Страница техработ
+     */
+    public function maintenance()
+    {
+        return Inertia::render('Maintenance', [
+            'meta' => [
+                'title' => __('seo.maintenance_title'),
+                'description' => __('seo.maintenance_description'),
+                'image' => asset('images/og-default.jpg'),
+            ],
         ]);
     }
 }
