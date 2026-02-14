@@ -56,12 +56,10 @@ class ProductService
             'images' => fn($q) => $q->orderByDesc('is_main')->orderBy('sort_order'),
             'attributeValues.attribute.translations',
         ])
-            ->when(
-                !empty($filters['category_id']),
-                fn($q) => $q->where('category_id', $filters['category_id'])
-            )
+            ->when(!empty($filters['category_id']), fn($q) => $q->where('category_id', $filters['category_id']))
             ->orderBy('sort_order')
-            ->get();
+            ->paginate(20)
+            ->withQueryString();
     }
 
     /**

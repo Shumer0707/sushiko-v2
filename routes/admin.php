@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::post('/activate-all', 'activateAll')->name('activateAll');
+        Route::post('/deactivate-all', 'deactivateAll')->name('deactivateAll');
     });
 
     // Атрибуты

@@ -79,4 +79,16 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Товар удалён');
     }
+
+    public function activateAll()
+    {
+        Product::query()->update(['is_active' => true]);
+        return redirect()->back()->with('success', 'Все товары активированы');
+    }
+
+    public function deactivateAll()
+    {
+        Product::query()->update(['is_active' => false]);
+        return redirect()->back()->with('success', 'Все товары деактивированы');
+    }
 }

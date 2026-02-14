@@ -4,8 +4,8 @@
 
     const props = defineProps({
         products: {
-            type: Array,
-            default: () => [],
+            type: Object, // теперь объект с пагинацией
+            default: () => ({ data: [], current_page: 1, last_page: 1, prev_page_url: null, next_page_url: null }),
         },
         categories: {
             type: Array,
@@ -20,14 +20,31 @@
     // локальное состояние выбранной категории
     const selectedCategoryId = ref(props.filters?.category_id ?? '')
 
+    // фильтр по категории
     const onCategoryChange = () => {
         const value = selectedCategoryId.value || null
-
         router.get(route('admin.products.index'), value ? { category_id: value } : {}, {
             preserveState: true,
             preserveScroll: true,
             replace: true,
         })
+    }
+
+    // массовая активация/деактивация
+    const activateAll = () => {
+        if (!confirm('Вы точно хотите активировать все товары?')) return
+        router.post(route('admin.products.activateAll'), {}, { preserveState: true, preserveScroll: true })
+    }
+
+    const deactivateAll = () => {
+        if (!confirm('Вы точно хотите деактивировать все товары?')) return
+        router.post(route('admin.products.deactivateAll'), {}, { preserveState: true, preserveScroll: true })
+    }
+
+    // пагинация
+    const goToPage = (url) => {
+        if (!url) return
+        router.get(url, {}, { preserveState: true, preserveScroll: true })
     }
 </script>
 
@@ -52,6 +69,22 @@
                     </select>
                 </div>
 
+                <!-- Кнопки массовой активации -->
+                <div class="flex gap-2">
+                    <button
+                        @click.prevent="activateAll"
+                        class="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                    >
+                        Активировать все
+                    </button>
+                    <button
+                        @click.prevent="deactivateAll"
+                        class="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    >
+                        Деактивировать все
+                    </button>
+                </div>
+
                 <Link
                     :href="route('admin.products.create')"
                     class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition text-sm"
@@ -74,7 +107,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="p in products" :key="p.id" class="border-t hover:bg-gray-100">
+                    <tr v-for="p in products.data" :key="p.id" class="border-t hover:bg-gray-100">
                         <td class="px-4 py-2 border">{{ p.id }}</td>
                         <td class="px-4 py-2 border">
                             <img :src="p.main_image_url" class="w-12 h-12 object-cover border rounded" />
@@ -101,6 +134,25 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="mt-4 flex justify-between items-center">
+            <button
+                :disabled="!products.prev_page_url"
+                @click="goToPage(products.prev_page_url)"
+                class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+                Назад
+            </button>
+            <span>Страница {{ products.current_page }} из {{ products.last_page }}</span>
+            <button
+                :disabled="!products.next_page_url"
+                @click="goToPage(products.next_page_url)"
+                class="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+                Вперёд
+            </button>
         </div>
     </div>
 </template>
