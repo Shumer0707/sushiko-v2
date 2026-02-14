@@ -16,7 +16,7 @@ class SiteToggleController extends Controller
 
         ShopSetting::setValue(ShopSetting::KEY_PUBLIC_DISABLED, $newValue);
 
-        return redirect()->route('dashboard')->with(
+        return redirect()->route('admin.dashboard')->with(
             'success',
             $newValue === '1'
                 ? 'Публичная часть сайта выключена'
