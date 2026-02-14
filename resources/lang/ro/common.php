@@ -48,7 +48,7 @@ return [
     'home_seo_1_title' => 'Produse proaspete',
     'home_seo_1_des' => 'Doar ingrediente premium. Livrare de pește în fiecare zi.',
     'home_seo_2_title' => 'Livrare rapidă',
-    'home_seo_2_des' => 'Livrare în 60 de minute. Gratuit de la ' . config('shop.free_delivery_amount') . ' lei.',
+    'home_seo_2_des' => 'Livrare de la 60 de minute. Gratuit în Chișinău pentru comenzile de peste ' . config('shop.free_delivery_amount') . ' lei.',
     'home_seo_3_title' => 'Maeștri în domeniul lor',
     'home_seo_3_des' => 'Bucătarii noștri sunt profesioniști cu experiență. Gătim cu atenție și suflet.',
 

@@ -48,7 +48,7 @@ return [
     'home_seo_1_title' => 'Fresh products',
     'home_seo_1_des' => 'Only premium ingredients. Fish delivery every day.',
     'home_seo_2_title' => 'Fast delivery',
-    'home_seo_2_des' => 'Delivery in 60 minutes. Free from ' . config('shop.free_delivery_amount') . ' lei.',
+    'home_seo_2_des' => 'Delivery from 60 minutes. Free in Chișinău for orders over ' . config('shop.free_delivery_amount') . ' lei.',
     'home_seo_3_title' => 'Masters of Their Craft',
     'home_seo_3_des' => 'Our chefs are experienced professionals. We cook with care and heart.',
 
