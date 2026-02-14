@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Site-ul este temporar indisponibil',
-    'text' => 'Preluarea comenzilor este temporar suspendată. Activitatea va fi reluată pe 02.01.2026, începând cu ora 12:00.',
-    'happy_new_year' => 'Echipa Sushiko vă urează La mulți ani și toate cele bune! 🎄 Vă mulțumim că ne alegeți.',
+    'title' => 'Stimați oaspeți!',
+    'text' => 'Din cauza gradului ridicat de încărcare, preluarea comenzilor este temporar suspendată. Vă mulțumim pentru înțelegere.',
+    'happy_new_year' => 'Vă dorim o Zi a Îndrăgostiților fericită! ❤️',
 ];

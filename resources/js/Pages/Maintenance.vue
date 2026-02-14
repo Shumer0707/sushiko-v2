@@ -3,7 +3,7 @@
 
     <div class="min-h-screen flex items-center justify-center px-4">
         <div class="w-full max-w-xl text-center bg-white/5 backdrop-blur rounded-2xl p-8 border border-white/10">
-            <div class="text-4xl mb-4">🎄</div>
+            <div class="text-4xl mb-4">❤️</div>
 
             <h1 class="text-2xl font-semibold text-white">
                 {{ t.title }}
