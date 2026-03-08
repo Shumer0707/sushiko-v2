@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Stimați oaspeți!',
-    'text' => 'Din cauza gradului ridicat de încărcare, preluarea comenzilor este temporar suspendată. Vă mulțumim pentru înțelegere.',
-    'happy_new_year' => 'Vă dorim o Zi a Îndrăgostiților fericită! ❤️',
+    'title' => 'Dragi oaspeți!',
+    'text' => 'Din cauza numărului mare de comenzi, preluarea comenzilor este temporar suspendată. Vă mulțumim pentru înțelegere.',
+    'holiday' => 'La mulți ani de Ziua Internațională a Femeii! 🌷',
 ];

@@ -2,6 +2,6 @@
 
 return [
     'title' => 'Dear guests!',
-    'text' => 'Due to high demand, order acceptance is temporarily paused. Thank you for your understanding.',
-    'happy_new_year' => 'Happy Valentine\'s Day! ❤️',
+    'text' => 'Due to the high number of orders, order acceptance is temporarily suspended. Thank you for your understanding.',
+    'holiday' => 'Happy International Women’s Day! 🌷',
 ];
