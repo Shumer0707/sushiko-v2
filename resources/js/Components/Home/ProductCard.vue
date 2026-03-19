@@ -21,13 +21,22 @@
 
             <!-- Категория -->
             <div class="absolute top-1 md:top-2 left-1 md:left-2 flex items-center gap-1 max-w-[90%]">
+                <!-- Категория -->
                 <span
                     class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
                 >
                     {{ product.category.name }}
                 </span>
 
-                <!-- PROMO badge -->
+                <!-- 🔥 ВЕС / КОЛ-ВО -->
+                <span
+                    v-if="product.weight"
+                    class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
+                >
+                    {{ product.weight }}
+                </span>
+
+                <!-- PROMO -->
                 <span
                     v-if="hasPromotion"
                     class="inline-flex items-center gap-1 w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-red_promo/90 backdrop-blur-sm text-[9px] md:text-xs font-bold text-white rounded-full border border-white/20 shadow max-w-full"
@@ -41,6 +50,12 @@
                 </span>
             </div>
 
+            <span
+                v-if="product.measure"
+                class="inline-flex px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-white rounded-full border border-white/20"
+            >
+                {{ product.measure }}
+            </span>
             <!-- Кол-во в корзине -->
             <div v-if="itemInCart" class="absolute top-1 md:top-2 right-1 md:right-2">
                 <span

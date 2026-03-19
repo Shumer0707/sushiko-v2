@@ -154,11 +154,20 @@
                         </div>
 
                         <!-- Бейдж категории -->
-                        <div class="absolute top-3 left-3">
+                        <div class="absolute top-3 left-3 flex items-center gap-2 max-w-[90%]">
+                            <!-- Категория -->
                             <span
                                 class="px-3 py-1.5 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
                             >
                                 {{ product.category.name }}
+                            </span>
+
+                            <!-- 🔥 ВЕС -->
+                            <span
+                                v-if="product.weight"
+                                class="px-3 py-1.5 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
+                            >
+                                {{ product.weight }}
                             </span>
                         </div>
                         <!-- PROMO badge -->

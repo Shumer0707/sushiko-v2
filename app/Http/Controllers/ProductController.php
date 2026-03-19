@@ -15,15 +15,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // Получаем текущий язык (ru, ro, en)
         $locale = app()->getLocale();
 
-        // Загружаем ВСЕ активные товары с нужными связями
         $products = Product::with([
             'translation',
             'category.translation',
             'brand.translation',
-            'promotion', // важно
+            'promotion',
             'promotion.giftProduct.translation',
             'promotion.giftProduct.images' => function ($q) {
                 $q->orderBy('is_main', 'desc')->orderBy('sort_order', 'asc');
@@ -31,14 +29,28 @@ class ProductController extends Controller
             'images' => function ($query) {
                 $query->orderBy('is_main', 'desc')
                     ->orderBy('sort_order', 'asc');
-            }
+            },
+
+            // 🔥 ДОБАВИЛИ АТРИБУТЫ
+            'attributeValues.attribute.translation',
+            'attributeValues.translation',
         ])
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($product) {
-                // Форматируем данные для фронта
+
+                $weight = null;
+
+                foreach ($product->attributeValues as $value) {
+                    $attrName = strtoupper($value->attribute?->translations->firstWhere('language', 'en')?->name ?? '');
+                    if ($attrName === 'WEIGHT') {
+                        $weight = $value->translation?->value;
+                        break; // 🔥 сразу выходим — быстрее
+                    }
+                }
+
                 return [
                     'id' => $product->id,
                     'sku' => $product->sku,
@@ -66,10 +78,13 @@ class ProductController extends Controller
                         'logo_url' => $product->brand?->logo_url ?? '',
                     ],
 
-                    //promotions
+                    'weight' => $weight,
+
+                    // Promotions
                     'has_promotion'  => $product->has_active_promotion,
-                    'promotion_type' => $product->promotion_type,  // discount | gift | null
-                    'final_price'    => $product->final_price,     // "95.00" (если скидка), иначе обычная цена
+                    'promotion_type' => $product->promotion_type,
+                    'final_price'    => $product->final_price,
+
                     'gift_product' => (
                         $product->promotion_type === 'gift'
                         && $product->promotion
@@ -82,17 +97,13 @@ class ProductController extends Controller
                         'quantity' => (int) ($product->promotion->gift_quantity ?? 1),
                     ] : null,
 
-                    // 🔹 здесь маленькая, если есть, иначе — главная
-                    'image_url'        => $product->small_image_url,
-
-                    // 🔹 а если где-то на фронте понадобится строго главное — оно тоже есть
-                    'main_image_url'   => $product->main_image_url,
+                    'image_url'      => $product->small_image_url,
+                    'main_image_url' => $product->main_image_url,
                 ];
             });
 
-        // Загружаем категории для фильтров
         $categories = Category::with('translation')
-            ->whereNull('parent_id') // Только родительские
+            ->whereNull('parent_id')
             ->get()
             ->map(function ($category) {
                 return [
@@ -103,12 +114,11 @@ class ProductController extends Controller
                 ];
             });
 
-        // Отправляем на главную страницу
         return Inertia::render('Home', [
             'meta' => [
                 'title' => __('seo.home_title'),
                 'description' => __('seo.home_description'),
-                'image' => asset('images/og-home.jpg'), // Создашь позже
+                'image' => asset('images/og-home.jpg'),
             ],
             'products' => $products,
             'categories' => $categories,
@@ -149,6 +159,20 @@ class ProductController extends Controller
             })
             ->where('is_active', true)
             ->firstOrFail();
+
+        $weight = null;
+
+        foreach ($product->attributeValues as $value) {
+            $attrName = strtoupper(
+                $value->attribute?->translations
+                    ->firstWhere('language', 'en')?->name ?? ''
+            );
+
+            if ($attrName === 'WEIGHT') {
+                $weight = $value->translation?->value;
+                break;
+            }
+        }
 
         // Форматируем данные
         $productData = [
@@ -212,6 +236,7 @@ class ProductController extends Controller
                     })->values(),
                 ];
             })->values(),
+            'weight' => $weight,
         ];
 
         // Похожие товары
