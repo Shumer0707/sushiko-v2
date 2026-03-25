@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ShopSetting;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
@@ -17,12 +18,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Inertia::share([
             'locale' => fn() => app()->getLocale(),
-            'current_locale' => fn() => request()->segment(1) ?: 'ru', // локаль из URL
+            'current_locale' => fn() => request()->segment(1) ?: 'ru',
             'csrf_token' => fn() => csrf_token(),
             'translations' => fn() => [
                 'common' => trans('common'),
                 'seo' => trans('seo'),
-                'maintenance' => trans('maintenance'),
+                'maintenance' => ShopSetting::getPublicStatusContent(app()->getLocale()),
             ],
         ]);
     }

@@ -21,6 +21,7 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en'], 'midd
     Route::get('/', [ProductController::class, 'index'])->name('home');
     Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/cart', [PageController::class, 'cart'])->name('cart.index');
+    Route::post('/api/cart/products', [ProductController::class, 'cartProducts'])->name('cart.products');
     Route::get('/about', [PageController::class, 'about'])->name('about');
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');

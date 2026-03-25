@@ -11,10 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Dashboard', [
-            'siteDisabled' => ShopSetting::getValue(
-                ShopSetting::KEY_PUBLIC_DISABLED,
-                '0'
-            ) === '1',
+            'siteDisabled' => ShopSetting::getBool(ShopSetting::KEY_PUBLIC_DISABLED),
         ]);
     }
 }

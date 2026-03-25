@@ -1,5 +1,6 @@
 <script setup>
-    import { onMounted } from 'vue'
+    import { onMounted, onUnmounted } from 'vue'
+    import { router, usePage } from '@inertiajs/vue3'
     import Header from './Partials/Header.vue'
     import Footer from './Partials/Footer.vue'
     import PageLoaderWrapper from '@/Components/Common/PageLoaderWrapper.vue'
@@ -40,8 +41,23 @@
     load()
 
     const cartStore = useCartStore()
+    const page = usePage()
+    let removeFinishListener = null
+
     onMounted(() => {
         cartStore.loadFromStorage()
+        cartStore.syncCartProducts(page.props.locale || 'ru')
+
+        removeFinishListener = router.on('finish', () => {
+            cartStore.syncCartProducts(page.props.locale || 'ru')
+        })
+    })
+
+    onUnmounted(() => {
+        if (typeof removeFinishListener === 'function') {
+            removeFinishListener()
+            removeFinishListener = null
+        }
     })
 </script>
 

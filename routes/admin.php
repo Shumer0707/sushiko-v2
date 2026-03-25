@@ -1,31 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminPromotionController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeValueController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\AdminPromotionController;
-use App\Http\Controllers\Admin\SiteToggleController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PublicStatusController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
 |--------------------------------------------------------------------------
-| Все административные роуты собраны здесь
-| Требуют авторизации и роль admin
 */
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-
-    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Категории
     Route::controller(CategoryController::class)->prefix('categories')->name('categories.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -35,7 +29,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    // Бренды
     Route::controller(BrandController::class)->prefix('brands')->name('brands.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -45,7 +38,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    // Продукты
     Route::controller(ProductController::class)->prefix('products')->name('products.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -57,7 +49,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::post('/deactivate-all', 'deactivateAll')->name('deactivateAll');
     });
 
-    // Атрибуты
     Route::controller(AttributeController::class)->prefix('attributes')->name('attributes.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -67,7 +58,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('/{attribute}', 'destroy')->name('destroy');
     });
 
-    // Значения атрибутов (выносим из вложенной группы)
     Route::controller(AttributeValueController::class)->prefix('attributes/{attribute}/values')->name('attribute-values.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -77,13 +67,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('/{value}', 'destroy')->name('destroy');
     });
 
-    // Заказы
     Route::controller(OrderController::class)->prefix('orders')->name('orders.')->group(function () {
         Route::get('/', 'index')->name('index');
     });
 
     Route::controller(AdminPromotionController::class)->prefix('promotions')->name('promotions.')->group(function () {
-
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
@@ -92,6 +80,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-    Route::post('/site-toggle', [SiteToggleController::class, 'toggle'])
-        ->name('site.toggle');
+    Route::get('/public-status', [PublicStatusController::class, 'edit'])->name('public-status.edit');
+    Route::put('/public-status', [PublicStatusController::class, 'update'])->name('public-status.update');
 });

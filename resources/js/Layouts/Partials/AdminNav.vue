@@ -11,6 +11,7 @@
         { name: 'Атрибуты', route: 'admin.attributes.index', path: '/admin/attributes' },
         { name: 'Заказы', route: 'admin.orders.index', path: '/admin/orders' },
         { name: 'Акции', route: 'admin.promotions.index', path: '/admin/promotions' },
+        { name: 'Статус сайта', route: 'admin.public-status.edit', path: '/admin/public-status' },
     ]
 </script>
 
@@ -26,14 +27,15 @@
                           !isActivePath('/admin/categories') &&
                           !isActivePath('/admin/brands') &&
                           !isActivePath('/admin/attributes') &&
-                          !isActivePath('/admin/products')&&
-                          !isActivePath('/admin/orders')&&
-                          !isActivePath('/admin/promotions')
+                          !isActivePath('/admin/products') &&
+                          !isActivePath('/admin/orders') &&
+                          !isActivePath('/admin/promotions') &&
+                          !isActivePath('/admin/public-status')
                             ? 'bg-gray-900 text-white'
                             : 'bg-gray-100 hover:bg-gray-200'
                         : isActivePath(item.path)
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-gray-100 hover:bg-gray-200',
+                          ? 'bg-gray-900 text-white'
+                          : 'bg-gray-100 hover:bg-gray-200',
                 ]"
             >
                 {{ item.name }}

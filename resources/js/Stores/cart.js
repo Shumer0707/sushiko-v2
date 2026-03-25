@@ -1,18 +1,20 @@
 // resources/js/Stores/cart.js
+import axios from 'axios'
 import { defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
-        items: [], // Массив товаров в корзине
+        items: [],
 
         deliverySettings: {
             freeDeliveryThreshold: 0,
             deliveryCost: 0,
         },
+        isSyncing: false,
     }),
 
     getters: {
-        unitPrice: (state) => (product) => {
+        unitPrice: () => (product) => {
             const toNumber = (v) => Number(String(v).replace(',', '.').trim())
 
             if (
@@ -52,7 +54,7 @@ export const useCartStore = defineStore('cart', {
             return remaining > 0 ? remaining.toFixed(2) : 0
         },
 
-        totalWithDelivery(state) {
+        totalWithDelivery() {
             const subtotal = parseFloat(this.totalPrice)
             const delivery = this.deliveryCost
             return (subtotal + delivery).toFixed(2)
@@ -71,7 +73,7 @@ export const useCartStore = defineStore('cart', {
                 deliveryCost: settings.deliveryCost ?? 0,
             }
         },
-        // Добавить товар в корзину
+
         addToCart(product, quantity = 1, selectedAttributes = {}) {
             const existingItem = this.items.find((item) => item.product.id === product.id)
 
@@ -86,8 +88,6 @@ export const useCartStore = defineStore('cart', {
                         price: product.price,
                         currency: product.currency,
                         image_url: product.image_url,
-
-                        // ✅ Promotions (важно для корзины)
                         has_promotion: !!product.has_promotion,
                         promotion_type: product.promotion_type || null,
                         final_price: product.final_price ?? null,
@@ -105,23 +105,17 @@ export const useCartStore = defineStore('cart', {
             }
 
             this.saveToStorage()
-            // console.log('✅ Добавлено в корзину:', product.name, 'x', quantity)
         },
 
-        // Удалить товар из корзины
         removeFromCart(productId) {
             const index = this.items.findIndex((item) => item.product.id === productId)
 
             if (index !== -1) {
-                const removedItem = this.items[index]
                 this.items.splice(index, 1)
                 this.saveToStorage()
-
-                // console.log('🗑️ Удалено из корзины:', removedItem.product.name)
             }
         },
 
-        // Обновить количество товара
         updateQuantity(productId, quantity) {
             const item = this.items.find((item) => item.product.id === productId)
 
@@ -131,13 +125,10 @@ export const useCartStore = defineStore('cart', {
                 } else {
                     item.quantity = quantity
                     this.saveToStorage()
-
-                    // console.log('🔄 Обновлено количество:', item.product.name, '→', quantity)
                 }
             }
         },
 
-        // Увеличить количество на 1
         incrementQuantity(productId) {
             const item = this.items.find((item) => item.product.id === productId)
             if (item) {
@@ -146,7 +137,6 @@ export const useCartStore = defineStore('cart', {
             }
         },
 
-        // Уменьшить количество на 1
         decrementQuantity(productId) {
             const item = this.items.find((item) => item.product.id === productId)
             if (item) {
@@ -159,39 +149,73 @@ export const useCartStore = defineStore('cart', {
             }
         },
 
-        // Очистить всю корзину
         clearCart() {
             this.items = []
             this.saveToStorage()
-            // console.log('🧹 Корзина очищена')
         },
 
-        // Обновить настройки доставки (если нужно менять из админки)
         updateDeliverySettings(freeThreshold, cost) {
             this.deliverySettings.freeDeliveryThreshold = freeThreshold
             this.deliverySettings.deliveryCost = cost
         },
 
-        // Сохранить в localStorage
         saveToStorage() {
             try {
                 localStorage.setItem('sushiko_cart', JSON.stringify(this.items))
             } catch (error) {
-                console.error('❌ Ошибка сохранения корзины:', error)
+                console.error('Cart save error:', error)
             }
         },
 
-        // Загрузить из localStorage
         loadFromStorage() {
             try {
                 const saved = localStorage.getItem('sushiko_cart')
                 if (saved) {
                     this.items = JSON.parse(saved)
-                    // console.log('✅ Корзина загружена из localStorage:', this.items.length, 'товаров')
                 }
             } catch (error) {
-                console.error('❌ Ошибка загрузки корзины:', error)
+                console.error('Cart load error:', error)
                 this.items = []
+            }
+        },
+
+        async syncCartProducts(locale = 'ru') {
+            if (this.isSyncing || this.items.length === 0) return
+
+            this.isSyncing = true
+
+            try {
+                const ids = this.items.map((item) => item?.product?.id).filter(Boolean)
+
+                if (ids.length === 0) return
+
+                const response = await axios.post(route('cart.products', { locale }), { ids })
+                const freshProducts = response.data?.products ?? []
+                const freshMap = new Map(freshProducts.map((product) => [product.id, product]))
+
+                this.items = this.items
+                    .map((item) => {
+                        const freshProduct = freshMap.get(item.product.id)
+
+                        if (!freshProduct) {
+                            return null
+                        }
+
+                        return {
+                            ...item,
+                            product: {
+                                ...item.product,
+                                ...freshProduct,
+                            },
+                        }
+                    })
+                    .filter(Boolean)
+
+                this.saveToStorage()
+            } catch (error) {
+                console.error('Cart sync failed:', error)
+            } finally {
+                this.isSyncing = false
             }
         },
     },

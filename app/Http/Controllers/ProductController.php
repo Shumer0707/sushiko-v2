@@ -335,4 +335,87 @@ class ProductController extends Controller
             ]
         ]);
     }
+
+    public function cartProducts(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'distinct'],
+        ]);
+
+        $products = Product::with([
+            'translation',
+            'category.translation',
+            'brand.translation',
+            'promotion',
+            'promotion.giftProduct.translation',
+            'promotion.giftProduct.images' => function ($q) {
+                $q->orderBy('is_main', 'desc')->orderBy('sort_order', 'asc');
+            },
+            'images' => function ($query) {
+                $query->orderBy('is_main', 'desc')
+                    ->orderBy('sort_order', 'asc');
+            },
+            'attributeValues.attribute.translation',
+            'attributeValues.translation',
+        ])
+            ->whereIn('id', $validated['ids'])
+            ->where('is_active', true)
+            ->get()
+            ->map(function ($product) {
+                $weight = null;
+
+                foreach ($product->attributeValues as $value) {
+                    $attrName = strtoupper($value->attribute?->translations->firstWhere('language', 'en')?->name ?? '');
+                    if ($attrName === 'WEIGHT') {
+                        $weight = $value->translation?->value;
+                        break;
+                    }
+                }
+
+                return [
+                    'id' => $product->id,
+                    'sku' => $product->sku,
+                    'price' => $product->price,
+                    'currency' => $product->currency,
+                    'name' => $product->translation?->name ?? 'No name',
+                    'slug' => $product->translation?->slug ?? '',
+                    'short_description' => $product->translation?->short_description ?? '',
+                    'category' => [
+                        'id' => $product->category?->id,
+                        'name' => $product->category?->translation?->name ?? '',
+                        'slug' => $product->category?->translation?->slug ?? '',
+                        'image_url' => $product->category?->image_url ?? '',
+                    ],
+                    'brand' => [
+                        'id' => $product->brand?->id,
+                        'name' => $product->brand?->translation?->name ?? '',
+                        'slug' => $product->brand?->translation?->slug ?? '',
+                        'logo_url' => $product->brand?->logo_url ?? '',
+                    ],
+                    'weight' => $weight,
+                    'has_promotion'  => $product->has_active_promotion,
+                    'promotion_type' => $product->promotion_type,
+                    'final_price'    => $product->final_price,
+                    'gift_product' => (
+                        $product->promotion_type === 'gift'
+                        && $product->promotion
+                        && $product->promotion->giftProduct
+                    ) ? [
+                        'id' => $product->promotion->giftProduct->id,
+                        'name' => $product->promotion->giftProduct->translation?->name ?? '',
+                        'slug' => $product->promotion->giftProduct->translation?->slug ?? '',
+                        'image_url' => $product->promotion->giftProduct->small_image_url,
+                        'quantity' => (int) ($product->promotion->gift_quantity ?? 1),
+                    ] : null,
+                    'image_url'      => $product->small_image_url,
+                    'main_image_url' => $product->main_image_url,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'products' => $products,
+        ]);
+    }
 }
