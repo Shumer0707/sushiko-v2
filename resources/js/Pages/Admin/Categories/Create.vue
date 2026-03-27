@@ -3,6 +3,7 @@
 
     const form = useForm({
         parent_id: null,
+        sort_order: 0,
         image: null,
         translations: {
             ru: { name: '', slug: '' },
@@ -20,7 +21,12 @@
 
         <form @submit.prevent="submit" class="space-y-8">
             <div class="space-y-4">
-                <h2 class="text-lg font-semibold">Изображение</h2>
+                <h2 class="text-lg font-semibold">Основные данные</h2>
+                <div class="space-y-2">
+                    <label class="font-semibold">Порядок сортировки</label>
+                    <input v-model.number="form.sort_order" type="number" min="0" class="form-input w-28" />
+                    <div v-if="form.errors.sort_order" class="text-red-500 text-sm">{{ form.errors.sort_order }}</div>
+                </div>
                 <div class="space-y-2">
                     <label class="font-semibold">Картинка</label>
                     <input type="file" @change="(e) => (form.image = e.target.files?.[0] ?? null)" />

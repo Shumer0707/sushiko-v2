@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -13,7 +14,10 @@ class CategoryService
 {
     public function listWithTranslations()
     {
-        return Category::with(['translations', 'translation'])->get();
+        return Category::with(['translations', 'translation'])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
     }
 
     public function create(array $data): Category
@@ -24,9 +28,11 @@ class CategoryService
             $category = Category::create([
                 'parent_id' => $data['parent_id'] ?? null,
                 'image'     => $imagePath,
+                'sort_order' => $data['sort_order'] ?? 0,
             ]);
 
             $this->upsertTranslations($category, $data['translations']);
+            $this->clearNavigationCache();
 
             return $category->load(['translations', 'translation']);
         });
@@ -41,9 +47,11 @@ class CategoryService
             }
 
             $category->parent_id = $data['parent_id'] ?? null;
+            $category->sort_order = $data['sort_order'] ?? 0;
             $category->save();
 
             $this->upsertTranslations($category, $data['translations']);
+            $this->clearNavigationCache();
 
             return $category->load(['translations', 'translation']);
         });
@@ -54,6 +62,7 @@ class CategoryService
         DB::transaction(function () use ($category) {
             $this->deleteOldImage($category->image);
             $category->delete();
+            $this->clearNavigationCache();
         });
     }
 
@@ -69,6 +78,12 @@ class CategoryService
         }
     }
 
+    private function clearNavigationCache(): void
+    {
+        foreach (['ru', 'ro', 'en'] as $locale) {
+            Cache::forget("navigation_categories_{$locale}");
+        }
+    }
 
 
     private function upsertTranslations(Category $category, array $translations): void

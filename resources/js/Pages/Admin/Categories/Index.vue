@@ -23,6 +23,7 @@
                 <thead class="bg-admin-background text-left">
                     <tr>
                         <th class="px-4 py-2 border">ID</th>
+                        <th class="px-4 py-2 border">Порядок</th>
                         <th class="px-4 py-2 border">Картинка</th>
                         <th class="px-4 py-2 border">Название</th>
                         <th class="px-4 py-2 border">Действия</th>
@@ -31,10 +32,11 @@
                 <tbody>
                     <tr v-for="category in categories" :key="category.id" class="border-t hover:bg-gray-100">
                         <td class="px-4 py-2 border">{{ category.id }}</td>
+                        <td class="px-4 py-2 border">{{ category.sort_order ?? 0 }}</td>
                         <td class="px-4 py-2 border">
                             <img :src="category.image_url" alt="" class="w-12 h-12 object-cover border rounded" />
                         </td>
-                        <td class="px-4 py-2 border">{{ category.translation?.name || '—' }}</td>
+                        <td class="px-4 py-2 border">{{ category.translation?.name || '-' }}</td>
                         <td class="px-4 py-2 border space-x-2 whitespace-nowrap">
                             <Link
                                 :href="route('admin.categories.edit', category.id)"

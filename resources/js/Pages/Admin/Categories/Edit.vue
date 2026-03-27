@@ -10,6 +10,7 @@
 
     const form = useForm({
         parent_id: props.category.parent_id,
+        sort_order: props.category.sort_order ?? 0,
         image: null,
         translations: {
             ru: { name: pick('ru', 'name'), slug: pick('ru', 'slug') },
@@ -36,7 +37,12 @@
 
         <form @submit.prevent="submit" class="space-y-8">
             <div class="space-y-4">
-                <h2 class="text-lg font-semibold">Изображение</h2>
+                <h2 class="text-lg font-semibold">Основные данные</h2>
+                <div class="space-y-2">
+                    <label class="font-semibold">Порядок сортировки</label>
+                    <input v-model.number="form.sort_order" type="number" min="0" class="form-input w-28" />
+                    <div v-if="form.errors.sort_order" class="text-red-500 text-sm">{{ form.errors.sort_order }}</div>
+                </div>
                 <div v-if="props.category.image_url">
                     <p class="text-sm text-gray-600 mb-2">Текущая картинка:</p>
                     <img :src="props.category.image_url" class="w-20 h-20 object-cover border rounded" />
@@ -51,7 +57,7 @@
             <div v-if="props.parents.length" class="space-y-4">
                 <h2 class="text-lg font-semibold">Родительская категория</h2>
                 <select v-model="form.parent_id" class="form-input w-full">
-                    <option :value="null">— без родителя —</option>
+                    <option :value="null">- без родителя -</option>
                     <option v-for="p in parents" :key="p.id" :value="p.id">
                         {{ p.translation?.name ?? `#${p.id}` }}
                     </option>

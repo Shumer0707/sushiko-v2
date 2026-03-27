@@ -16,6 +16,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'parent_id' => ['nullable', 'exists:categories,id'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
             'image'     => ['nullable', 'image', 'max:2048'],
 
             'translations.ru.name' => ['required', 'string', 'max:255'],

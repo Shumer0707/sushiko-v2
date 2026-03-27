@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
-    protected $fillable = ['parent_id', 'image'];
+    protected $fillable = ['parent_id', 'image', 'sort_order'];
 
     // Автодобавляем в JSON
     protected $appends = ['image_url'];
