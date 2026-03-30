@@ -104,6 +104,8 @@ class ProductController extends Controller
 
         $categories = Category::with('translation')
             ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('id')
             ->get()
             ->map(function ($category) {
                 return [
