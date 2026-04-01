@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HomeBanner;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -16,6 +17,25 @@ class ProductController extends Controller
     public function index()
     {
         $locale = app()->getLocale();
+
+        $banners = HomeBanner::with('translation')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(function ($banner) {
+                return [
+                    'id' => $banner->id,
+                    'title' => $banner->translation?->title,
+                    'description' => $banner->translation?->description,
+                    'buttonText' => $banner->translation?->button_text,
+                    'imageDesktop' => $banner->translation?->image_desktop_url,
+                    'imageMobile' => $banner->translation?->image_mobile_url,
+                    'link' => $banner->link,
+                    'openInNewTab' => $banner->open_in_new_tab,
+                ];
+            })
+            ->values();
 
         $products = Product::with([
             'translation',
@@ -122,6 +142,7 @@ class ProductController extends Controller
                 'description' => __('seo.home_description'),
                 'image' => asset('images/og-home.jpg'),
             ],
+            'banners' => $banners,
             'products' => $products,
             'categories' => $categories,
             'locale' => $locale,

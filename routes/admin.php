@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AttributeValueController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HomeBannerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PublicStatusController;
@@ -72,6 +73,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     });
 
     Route::controller(AdminPromotionController::class)->prefix('promotions')->name('promotions.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(HomeBannerController::class)->prefix('home-banners')->name('home-banners.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');

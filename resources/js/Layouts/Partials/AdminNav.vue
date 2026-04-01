@@ -11,6 +11,7 @@
         { name: 'Атрибуты', route: 'admin.attributes.index', path: '/admin/attributes' },
         { name: 'Заказы', route: 'admin.orders.index', path: '/admin/orders' },
         { name: 'Акции', route: 'admin.promotions.index', path: '/admin/promotions' },
+        { name: 'Баннеры', route: 'admin.home-banners.index', path: '/admin/home-banners' },
         { name: 'Статус сайта', route: 'admin.public-status.edit', path: '/admin/public-status' },
     ]
 </script>
@@ -30,6 +31,7 @@
                           !isActivePath('/admin/products') &&
                           !isActivePath('/admin/orders') &&
                           !isActivePath('/admin/promotions') &&
+                          !isActivePath('/admin/home-banners') &&
                           !isActivePath('/admin/public-status')
                             ? 'bg-gray-900 text-white'
                             : 'bg-gray-100 hover:bg-gray-200'
