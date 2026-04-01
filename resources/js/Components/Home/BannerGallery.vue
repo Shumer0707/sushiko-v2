@@ -32,7 +32,10 @@
                         />
                     </picture>
 
-                    <div class="absolute inset-0 bg-sushi-dark bg-opacity-0"></div>
+                    <div
+                        class="absolute inset-0 bg-sushi-dark"
+                        :class="usingFallbackBanners ? 'bg-opacity-20' : 'bg-opacity-0'"
+                    ></div>
 
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div class="text-center text-white px-4 max-w-4xl">
@@ -125,7 +128,8 @@
         },
     ]
 
-    const displayBanners = props.banners.length > 0 ? props.banners : bannersDefolt
+    const usingFallbackBanners = props.banners.length === 0
+    const displayBanners = usingFallbackBanners ? bannersDefolt : props.banners
 
     const getBannerSrc = (banner, type = 'desktop') => {
         if (type === 'mobile' && banner.imageMobile) return banner.imageMobile
