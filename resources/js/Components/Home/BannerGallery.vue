@@ -17,14 +17,14 @@
             class="banner-swiper"
         >
             <SwiperSlide v-for="(banner, index) in displayBanners" :key="banner.id" class="relative">
-                <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+                <div class="relative h-[650px] md:h-[600px] lg:h-[700px] overflow-hidden">
                     <picture>
                         <source :srcset="getBannerSrc(banner, 'mobile')" media="(max-width: 768px)" />
 
                         <img
                             :src="getBannerSrc(banner, 'desktop')"
                             :alt="banner.title || 'Banner'"
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-fill md:object-cover"
                             :loading="index === 0 ? 'eager' : 'lazy'"
                             :fetchpriority="index === 0 ? 'high' : 'auto'"
                             decoding="async"
