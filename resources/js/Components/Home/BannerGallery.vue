@@ -24,7 +24,7 @@
                         <img
                             :src="getBannerSrc(banner, 'desktop')"
                             :alt="banner.title || 'Banner'"
-                            class="w-full h-full object-fill md:object-cover"
+                            class="w-full h-full object-cover"
                             :loading="index === 0 ? 'eager' : 'lazy'"
                             :fetchpriority="index === 0 ? 'high' : 'auto'"
                             decoding="async"
