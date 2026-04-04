@@ -34,7 +34,7 @@
 
                     <div
                         class="absolute inset-0 bg-sushi-dark"
-                        :class="usingFallbackBanners ? 'bg-opacity-20' : 'bg-opacity-0'"
+                        :style="{ opacity: getOverlayOpacity(banner) }"
                     ></div>
 
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -145,6 +145,20 @@
         const withSuffix = path.slice(0, dotIndex) + suffix + path.slice(dotIndex)
 
         return query ? `${withSuffix}?${query}` : withSuffix
+    }
+
+    const getOverlayOpacity = (banner) => {
+        if (usingFallbackBanners) {
+            return 0.2
+        }
+
+        const opacity = Number(banner.overlayOpacity ?? 0)
+
+        if (Number.isNaN(opacity)) {
+            return 0
+        }
+
+        return Math.min(Math.max(opacity, 0), 100) / 100
     }
 
     const handleBannerClick = (banner) => {

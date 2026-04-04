@@ -4,6 +4,7 @@
     const form = useForm({
         is_active: true,
         sort_order: 0,
+        overlay_opacity: 0,
         link: '',
         open_in_new_tab: false,
         translations: {
@@ -34,6 +35,11 @@
                         <label class="font-semibold block mb-1">Порядок</label>
                         <input type="number" v-model.number="form.sort_order" class="form-input w-24" min="0" />
                         <div v-if="form.errors.sort_order" class="text-red-500 text-sm">{{ form.errors.sort_order }}</div>
+                    </div>
+                    <div>
+                        <label class="font-semibold block mb-1">Затемнение (%)</label>
+                        <input type="number" v-model.number="form.overlay_opacity" class="form-input w-24" min="0" max="100" />
+                        <div v-if="form.errors.overlay_opacity" class="text-red-500 text-sm">{{ form.errors.overlay_opacity }}</div>
                     </div>
                     <div class="flex-1 min-w-[280px]">
                         <label class="font-semibold block mb-1">Ссылка</label>

@@ -24,6 +24,7 @@
                     <tr>
                         <th class="px-4 py-2 border">ID</th>
                         <th class="px-4 py-2 border">Порядок</th>
+                        <th class="px-4 py-2 border">Затемнение</th>
                         <th class="px-4 py-2 border">Превью</th>
                         <th class="px-4 py-2 border">Заголовок</th>
                         <th class="px-4 py-2 border">Ссылка</th>
@@ -35,6 +36,7 @@
                     <tr v-for="banner in banners" :key="banner.id" class="border-t hover:bg-gray-100">
                         <td class="px-4 py-2 border">{{ banner.id }}</td>
                         <td class="px-4 py-2 border">{{ banner.sort_order }}</td>
+                        <td class="px-4 py-2 border">{{ banner.overlay_opacity ?? 0 }}%</td>
                         <td class="px-4 py-2 border">
                             <img
                                 v-if="banner.translation?.image_desktop_url"
@@ -73,7 +75,7 @@
                     </tr>
 
                     <tr v-if="banners.length === 0">
-                        <td colspan="7" class="px-4 py-6 text-center text-gray-500">Баннеров пока нет</td>
+                        <td colspan="8" class="px-4 py-6 text-center text-gray-500">Баннеров пока нет</td>
                     </tr>
                 </tbody>
             </table>

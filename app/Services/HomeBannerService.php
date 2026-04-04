@@ -24,6 +24,7 @@ class HomeBannerService
             $banner = HomeBanner::create([
                 'is_active' => $data['is_active'] ?? true,
                 'sort_order' => $data['sort_order'] ?? 0,
+                'overlay_opacity' => $data['overlay_opacity'] ?? 0,
                 'link' => $data['link'] ?? null,
                 'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
             ]);
@@ -40,6 +41,7 @@ class HomeBannerService
             $banner->update([
                 'is_active' => $data['is_active'] ?? $banner->is_active,
                 'sort_order' => $data['sort_order'] ?? $banner->sort_order,
+                'overlay_opacity' => $data['overlay_opacity'] ?? $banner->overlay_opacity,
                 'link' => $data['link'] ?? null,
                 'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
             ]);

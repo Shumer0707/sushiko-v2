@@ -11,6 +11,7 @@ class HomeBanner extends Model
     protected $fillable = [
         'is_active',
         'sort_order',
+        'overlay_opacity',
         'link',
         'open_in_new_tab',
     ];
@@ -19,6 +20,7 @@ class HomeBanner extends Model
         'is_active' => 'boolean',
         'open_in_new_tab' => 'boolean',
         'sort_order' => 'integer',
+        'overlay_opacity' => 'integer',
     ];
 
     public function translations(): HasMany

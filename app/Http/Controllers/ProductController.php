@@ -31,6 +31,7 @@ class ProductController extends Controller
                     'buttonText' => $banner->translation?->button_text,
                     'imageDesktop' => $banner->translation?->image_desktop_url,
                     'imageMobile' => $banner->translation?->image_mobile_url,
+                    'overlayOpacity' => $banner->overlay_opacity,
                     'link' => $banner->link,
                     'openInNewTab' => $banner->open_in_new_tab,
                 ];

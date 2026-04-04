@@ -16,6 +16,7 @@ class UpdateHomeBannerRequest extends FormRequest
         $rules = [
             'is_active' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
+            'overlay_opacity' => ['nullable', 'integer', 'min:0', 'max:100'],
             'link' => ['nullable', 'string', 'max:2048'],
             'open_in_new_tab' => ['nullable', 'boolean'],
         ];
