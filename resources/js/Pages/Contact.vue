@@ -61,7 +61,11 @@
         <!-- Карта (внизу, на всю ширину) -->
         <section class="py-6 md:py-8 pb-12">
             <div class="container mx-auto px-4">
-                <ContactMap :latitude="47.0172663050669" :longitude="28.848690504971803" :address="t.contacts_address_text" />
+                <ContactMap
+                    :latitude="t.contacts_latitude"
+                    :longitude="t.contacts_longitude"
+                    :address="t.contacts_address_text"
+                />
             </div>
         </section>
     </div>

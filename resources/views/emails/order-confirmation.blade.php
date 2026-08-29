@@ -298,7 +298,7 @@
         <div class="contact-info">
             <strong>📞 {{ __('mail.order_email_questions') }}</strong><br>
             {{ __('mail.order_email_phone') }}
-            <a href="tel:{{ config('shop.phone_shop') }}"
+            <a href="tel:{{ preg_replace('/\s+/', '', config('shop.phone_shop')) }}"
                 style="color: #4caf50;">{{ config('shop.phone_shop') }}</a><br>
             {{ __('mail.order_email_email') }}
             <a href="mailto:{{ config('shop.email_shop') }}"

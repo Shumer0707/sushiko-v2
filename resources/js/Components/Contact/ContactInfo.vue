@@ -35,7 +35,7 @@
                 <div>
                     <h4 class="text-sushi-gold font-semibold mb-1">{{ t.contacts_phone_label }}</h4>
                     <a
-                        :href="`tel:${t.contacts_phone_number}`"
+                        :href="`tel:${t.contacts_phone_number.replace(/\s+/g, '')}`"
                         class="text-white text-sm hover:text-sushi-gold transition-colors"
                     >
                         {{ t.contacts_phone_number }}
@@ -90,7 +90,7 @@
             <div class="flex justify-center gap-4">
                 <!-- Instagram -->
                 <a
-                    href="https://instagram.com/sushiko.md"
+                    :href="t.contacts_instagram_url"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -101,7 +101,7 @@
 
                 <!-- Facebook -->
                 <a
-                    href="https://facebook.com/sushiko.md"
+                    :href="t.contacts_facebook_url"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"
@@ -112,7 +112,7 @@
 
                 <!-- Telegram -->
                 <!-- <a
-                    href="https://t.me/sushiko"
+                    :href="t.contacts_telegram_url"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="w-12 h-12 rounded-full bg-sushi-gold bg-opacity-20 border-2 border-sushi-gold flex items-center justify-center hover:bg-sushi-gold hover:scale-110 transition-all duration-300 group"

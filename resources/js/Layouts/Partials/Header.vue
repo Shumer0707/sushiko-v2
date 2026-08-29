@@ -16,7 +16,7 @@
                         <div class="flex-1 text-center">
                             <div class="flex justify-center items-center space-x-6">
                                 <div>
-                                    <span class="text-lg font-semibold">078 12 55 33</span>
+                                    <span class="text-lg font-semibold">{{ t.contacts_phone_number }}</span>
                                     <!-- <span class="mx-2">|</span> -->
                                     <!-- <span class="text-lg font-semibold">070000000</span> -->
                                 </div>
