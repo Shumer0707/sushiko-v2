@@ -21,12 +21,12 @@
 <template>
     <div class="p-6 max-w-7xl mx-auto space-y-6">
         <!-- Header -->
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h1 class="text-xl font-semibold text-admin-text">Акции</h1>
 
             <Link
                 :href="route('admin.promotions.create')"
-                class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition"
+                class="rounded-lg bg-admin-primary px-4 py-2 text-center text-white transition hover:bg-admin-muted"
             >
                 Добавить акцию
             </Link>

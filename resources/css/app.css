@@ -5,3 +5,41 @@
 html {
   scrollbar-gutter: stable;
 }
+
+.admin-content {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.admin-content .overflow-x-auto {
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-content input,
+.admin-content select,
+.admin-content textarea {
+  max-width: 100%;
+}
+
+.admin-content input[type='file'] {
+  width: 100%;
+}
+
+@media (max-width: 639px) {
+  .admin-content > div {
+    padding: 1rem;
+  }
+
+  .admin-content .p-6 {
+    padding: 1rem;
+  }
+
+  .admin-content input[type='file'] {
+    font-size: 0.75rem;
+  }
+
+  .admin-content > div > .overflow-x-auto > table {
+    min-width: 42rem;
+  }
+}

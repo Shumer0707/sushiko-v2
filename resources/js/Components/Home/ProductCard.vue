@@ -1,9 +1,9 @@
 <template>
     <div
-        class="product-card bg-sushi-dark bg-opacity-90 rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 shadow-sm cursor-pointer group md:shadow-lg md:hover:shadow-2xl md:hover:border-opacity-50 md:transition-all md:duration-300"
+        class="product-card flex h-full flex-col bg-sushi-dark bg-opacity-90 rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 shadow-sm cursor-pointer group md:shadow-lg md:hover:shadow-2xl md:hover:border-opacity-50 md:transition-all md:duration-300"
     >
         <!-- Картинка товара -->
-        <div @click="goToProduct" class="relative aspect-square overflow-hidden bg-sushi-first">
+        <div @click="goToProduct" class="relative aspect-square flex-none overflow-hidden bg-sushi-first">
             <FadeImage
                 :src="product.image_url"
                 :alt="product.name"
@@ -75,10 +75,10 @@
         </div>
 
         <!-- Информация о товаре -->
-        <div class="p-2 md:p-3">
+        <div class="flex flex-1 flex-col p-2.5 md:p-3">
             <h3
                 @click="goToProduct"
-                class="text-xs md:text-base font-semibold text-sushi-silver mb-1 md:mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2.5rem] group-hover:text-sushi-gold transition-colors duration-300"
+                class="h-8 md:h-12 text-xs md:text-base font-semibold text-sushi-silver mb-1 md:mb-2 line-clamp-2 group-hover:text-sushi-gold transition-colors duration-300"
             >
                 {{ product.name }}
                 <span
@@ -91,14 +91,13 @@
             </h3>
 
             <p
-                v-if="product.short_description"
-                class="hidden md:block text-xs text-sushi-silver opacity-70 mb-3 line-clamp-2 min-h-[2rem]"
+                class="hidden h-8 md:block text-xs text-sushi-silver opacity-70 mb-3 line-clamp-2"
             >
                 {{ product.short_description }}
             </p>
 
             <!-- Цена и кнопки -->
-            <div class="flex items-center justify-between mt-2 md:mt-3">
+            <div class="mt-auto flex min-h-[42px] items-end justify-between md:min-h-[48px]">
                 <!-- Price block -->
                 <div class="flex flex-col leading-tight">
                     <!-- Discount: old price -->

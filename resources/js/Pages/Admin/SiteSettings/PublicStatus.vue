@@ -38,7 +38,7 @@
     <Head title="Статус сайта" />
 
     <div class="p-6 max-w-7xl mx-auto space-y-8 text-admin-text">
-        <div class="flex justify-between items-center gap-4">
+        <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
                 <h1 class="text-xl font-semibold">Страница недоступности сайта</h1>
                 <p class="text-sm text-gray-600 mt-1">
@@ -46,7 +46,7 @@
                 </p>
             </div>
 
-            <Link :href="route('admin.dashboard')" class="px-4 py-2 border rounded-lg hover:bg-white transition">
+            <Link :href="route('admin.dashboard')" class="rounded-lg border px-4 py-2 text-center transition hover:bg-white">
                 Назад
             </Link>
         </div>

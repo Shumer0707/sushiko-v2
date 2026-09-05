@@ -53,33 +53,33 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h1 class="text-xl font-semibold text-admin-text">Товары</h1>
 
-            <div class="flex flex-col md:flex-row gap-3 md:items-center">
+            <div class="flex flex-col gap-3 md:flex-row md:items-center">
                 <!-- Фильтр по категории -->
-                <div class="flex items-center gap-2">
+                <label class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
                     <span class="text-sm text-admin-text/80">Категория:</span>
                     <select
                         v-model="selectedCategoryId"
                         @change="onCategoryChange"
-                        class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-admin-text bg-white focus:outline-none focus:ring-2 focus:ring-admin-primary/60"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-admin-text focus:outline-none focus:ring-2 focus:ring-admin-primary/60 sm:w-auto"
                     >
                         <option value="">Все</option>
                         <option v-for="c in categories" :key="c.id" :value="c.id">
                             {{ c.translation?.name || `Категория #${c.id}` }}
                         </option>
                     </select>
-                </div>
+                </label>
 
                 <!-- Кнопки массовой активации -->
-                <div class="flex gap-2">
+                <div class="grid grid-cols-2 gap-2">
                     <button
                         @click.prevent="activateAll"
-                        class="px-3 py-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                        class="rounded bg-green-600 px-3 py-2 text-sm leading-tight text-white transition hover:bg-green-700"
                     >
                         Активировать все
                     </button>
                     <button
                         @click.prevent="deactivateAll"
-                        class="px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                        class="rounded bg-red-600 px-3 py-2 text-sm leading-tight text-white transition hover:bg-red-700"
                     >
                         Деактивировать все
                     </button>
@@ -87,7 +87,7 @@
 
                 <Link
                     :href="route('admin.products.create')"
-                    class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition text-sm"
+                    class="rounded-lg bg-admin-primary px-4 py-2 text-center text-sm text-white transition hover:bg-admin-muted"
                 >
                     Добавить
                 </Link>
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Пагинация -->
-        <div class="mt-4 flex justify-between items-center">
+        <div class="mt-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 text-sm">
             <button
                 :disabled="!products.prev_page_url"
                 @click="goToPage(products.prev_page_url)"
@@ -145,7 +145,7 @@
             >
                 Назад
             </button>
-            <span>Страница {{ products.current_page }} из {{ products.last_page }}</span>
+            <span class="text-center">Страница {{ products.current_page }} из {{ products.last_page }}</span>
             <button
                 :disabled="!products.next_page_url"
                 @click="goToPage(products.next_page_url)"

@@ -35,13 +35,13 @@
 
 <template>
     <div class="max-w-7xl mx-auto space-y-8 text-admin-text" :key="value.id">
-        <div class="flex items-center justify-between">
-            <h1 class="text-xl font-semibold">
+        <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <h1 class="min-w-0 text-xl font-semibold">
                 Редактировать значение — {{ attribute.translation?.name || `#${attribute.id}` }}
             </h1>
             <Link
                 :href="route('admin.attribute-values.index', attribute.id)"
-                class="px-4 py-2 border rounded hover:bg-gray-50 transition"
+                class="shrink-0 rounded border px-4 py-2 text-center transition hover:bg-gray-50"
             >
                 ← К значениям
             </Link>

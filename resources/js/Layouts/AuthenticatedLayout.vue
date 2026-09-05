@@ -27,7 +27,7 @@
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
-                            <Link :href="route('dashboard')">
+                            <Link :href="user?.role === 'admin' ? route('admin.dashboard') : route('dashboard')">
                                 <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                             </Link>
                         </div>
@@ -110,7 +110,10 @@
             <!-- Responsive menu -->
             <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
                 <div class="space-y-1 pb-3 pt-2">
-                    <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                    <ResponsiveNavLink
+                        :href="user?.role === 'admin' ? route('admin.dashboard') : route('dashboard')"
+                        :active="user?.role === 'admin' ? route().current('admin.dashboard') : route().current('dashboard')"
+                    >
                         Dashboard
                     </ResponsiveNavLink>
                 </div>
@@ -131,14 +134,14 @@
 
         <!-- Header: если страница не дала #header, показываем заголовок по роли -->
         <header class="bg-white shadow">
-            <div class="mx-auto max-w-7xl px-4 py-6 flex justify-between">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+                <h2 class="min-w-0 text-lg font-semibold leading-tight text-gray-800 sm:text-xl">
                     <slot name="header">
                         {{ title }}
                     </slot>
                 </h2>
 
-                <div>
+                <div class="shrink-0">
                     <template v-if="user?.role === 'admin'">
                         <AdminNav />
                     </template>
@@ -149,7 +152,7 @@
             </div>
         </header>
 
-        <main>
+        <main :class="{ 'admin-content': user?.role === 'admin' }">
             <slot />
         </main>
     </div>

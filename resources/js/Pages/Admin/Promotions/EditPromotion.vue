@@ -108,7 +108,7 @@
 <template>
     <div class="p-6 max-w-4xl mx-auto space-y-6">
         <!-- Header -->
-        <div class="flex justify-between items-center">
+        <div class="flex items-start justify-between gap-3">
             <h1 class="text-xl font-semibold text-admin-text">Редактирование акции</h1>
 
             <Link :href="route('admin.promotions.index')" class="text-sm text-admin-muted hover:underline">← Назад</Link>
@@ -117,7 +117,7 @@
         <!-- Form -->
         <form
             @submit.prevent="form.put(route('admin.promotions.update', promotion.id))"
-            class="bg-white border border-gray-300 rounded-lg p-6 space-y-6"
+            class="space-y-6 rounded-lg border border-gray-300 bg-white p-4 sm:p-6"
         >
             <!-- Product -->
             <div>
@@ -221,15 +221,15 @@
             </div>
 
             <!-- Actions -->
-            <div class="flex justify-end space-x-3">
-                <Link :href="route('admin.promotions.index')" class="px-4 py-2 border rounded-lg hover:bg-gray-100 transition">
+            <div class="grid grid-cols-2 gap-3 sm:flex sm:justify-end">
+                <Link :href="route('admin.promotions.index')" class="rounded-lg border px-4 py-2 text-center transition hover:bg-gray-100">
                     Отмена
                 </Link>
 
                 <button
                     type="submit"
                     :disabled="form.processing"
-                    class="bg-admin-primary text-white px-6 py-2 rounded-lg hover:bg-admin-muted transition"
+                    class="rounded-lg bg-admin-primary px-6 py-2 text-white transition hover:bg-admin-muted"
                 >
                     Сохранить
                 </button>

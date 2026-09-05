@@ -20,20 +20,20 @@
 
 <template>
     <div class="p-6 max-w-7xl mx-auto space-y-6">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h1 class="text-xl font-semibold text-admin-text">
                 Значения: {{ attribute.translation?.name || `#${attribute.id}` }}
             </h1>
-            <div class="flex gap-2">
+            <div class="grid grid-cols-2 gap-2 sm:flex">
                 <Link
                     :href="route('admin.attributes.index')"
-                    class="px-4 py-2 border rounded-lg text-admin-text hover:bg-admin-background transition"
+                    class="rounded-lg border px-3 py-2 text-center text-sm text-admin-text transition hover:bg-admin-background sm:px-4"
                 >
                     ← К атрибутам
                 </Link>
                 <Link
                     :href="route('admin.attribute-values.create', attribute.id)"
-                    class="bg-admin-primary text-white px-4 py-2 rounded-lg hover:bg-admin-muted transition"
+                    class="rounded-lg bg-admin-primary px-3 py-2 text-center text-sm text-white transition hover:bg-admin-muted sm:px-4"
                 >
                     Добавить
                 </Link>

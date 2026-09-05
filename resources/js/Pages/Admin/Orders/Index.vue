@@ -85,55 +85,58 @@
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h1 class="text-xl font-semibold text-admin-text">Заказы</h1>
 
-            <div class="flex flex-wrap items-center gap-4 text-sm">
+            <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
                 <!-- 🔹 Отдельное поле для ID -->
-                <div class="flex flex-col">
+                <label class="flex min-w-0 flex-col gap-1">
+                    <span class="text-xs text-admin-text/80">ID заказа</span>
                     <input
                         v-model="orderId"
                         type="text"
                         inputmode="numeric"
                         placeholder="Например, 125"
-                        class="border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-admin-text text-sm w-32"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-admin-text lg:w-32"
                         @keyup.enter="applyFilters"
                         @change="applyFilters"
                     />
-                    <label class="text-xs text-admin-text/80 mb-1">Ищет по ID заказа</label>
-                </div>
+                </label>
 
                 <!-- Фильтр даты -->
-                <div class="flex items-center gap-2">
-                    <span class="text-admin-text/80">От:</span>
+                <label class="flex min-w-0 flex-col gap-1">
+                    <span class="text-xs text-admin-text/80">Дата от</span>
                     <input
                         v-model="dateFrom"
                         type="date"
-                        class="border border-gray-300 rounded-lg px-2 py-1 bg-white text-admin-text text-sm"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-admin-text"
                         @change="applyFilters"
                     />
-                </div>
+                </label>
 
-                <div class="flex items-center gap-2">
-                    <span class="text-admin-text/80">До:</span>
+                <label class="flex min-w-0 flex-col gap-1">
+                    <span class="text-xs text-admin-text/80">Дата до</span>
                     <input
                         v-model="dateTo"
                         type="date"
-                        class="border border-gray-300 rounded-lg px-2 py-1 bg-white text-admin-text text-sm"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-admin-text"
                         @change="applyFilters"
                     />
-                </div>
+                </label>
 
                 <!-- 🔹 Общий поиск -->
-                <div class="flex flex-col">
+                <label class="flex min-w-0 flex-col gap-1 sm:col-span-2 lg:col-span-1">
+                    <span class="text-xs text-admin-text/80">Имя, телефон или сумма</span>
                     <input
                         v-model="search"
                         type="text"
                         placeholder="Поиск..."
-                        class="border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-admin-text text-sm w-56"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-admin-text lg:w-56"
                         @keyup.enter="applyFilters"
                     />
-                    <span class="text-xs text-gray-400 mt-1">Ищет по имени клиента, телефону и сумме</span>
-                </div>
+                </label>
                 <!-- 🔹 Сброс -->
-                <button @click="resetAll" class="px-3 py-1.5 text-sm bg-gray-200 hover:bg-gray-300 rounded-lg transition">
+                <button
+                    @click="resetAll"
+                    class="rounded-lg bg-gray-200 px-3 py-2 text-sm transition hover:bg-gray-300 sm:col-span-2 lg:col-span-1"
+                >
                     Сбросить всё
                 </button>
             </div>
@@ -146,8 +149,71 @@
             Пока нет заказов.
         </div>
 
-        <div v-else class="overflow-x-auto">
-            <table class="w-full bg-white border border-gray-300 text-sm text-admin-text rounded-lg overflow-hidden">
+        <div v-else class="space-y-4">
+            <div class="space-y-3 sm:hidden">
+                <article v-for="o in orders.data" :key="o.id" class="overflow-hidden rounded-lg border border-gray-300 bg-white">
+                    <button type="button" class="w-full p-4 text-left" @click="toggleOrder(o.id)">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <div class="font-semibold text-admin-text">Заказ #{{ o.id }}</div>
+                                <div class="mt-1 text-xs text-gray-500">{{ o.created_at }}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-semibold text-admin-text">{{ o.total_with_delivery }} {{ o.currency }}</div>
+                                <span class="mt-1 inline-flex rounded-full border border-gray-300 px-2 py-0.5 text-xs">
+                                    {{ o.status || 'new' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <dl class="mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
+                            <div class="min-w-0">
+                                <dt class="text-xs text-gray-500">Клиент</dt>
+                                <dd class="break-words">{{ o.customer_name || '—' }}</dd>
+                            </div>
+                            <div class="min-w-0">
+                                <dt class="text-xs text-gray-500">Телефон</dt>
+                                <dd class="break-words">{{ o.customer_phone || '—' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-xs text-gray-500">Сумма</dt>
+                                <dd>{{ o.total }} {{ o.currency }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-xs text-gray-500">Доставка</dt>
+                                <dd>{{ o.delivery_cost ?? 0 }} {{ o.currency }}</dd>
+                            </div>
+                        </dl>
+
+                        <div class="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500">
+                            <span>Позиций: {{ o.items_count ?? (o.items?.length || 0) }}</span>
+                            <span>{{ openedOrderId === o.id ? 'Скрыть ▲' : 'Показать товары ▼' }}</span>
+                        </div>
+                    </button>
+
+                    <div v-if="openedOrderId === o.id" class="border-t border-gray-200 bg-gray-50 p-4">
+                        <div v-if="o.items && o.items.length" class="space-y-2">
+                            <div
+                                v-for="(item, idx) in o.items"
+                                :key="item.id"
+                                class="flex items-start justify-between gap-3 rounded-md border border-gray-200 bg-white p-3 text-sm"
+                            >
+                                <div class="min-w-0">
+                                    <div class="break-words font-medium">{{ idx + 1 }}. {{ item.name }}</div>
+                                    <div class="mt-1 text-xs text-gray-500">
+                                        {{ item.quantity }} × {{ item.price }} {{ o.currency }}
+                                    </div>
+                                </div>
+                                <div class="shrink-0 font-semibold">{{ item.total }} {{ o.currency }}</div>
+                            </div>
+                        </div>
+                        <div v-else class="text-xs text-gray-500">В этом заказе нет позиций.</div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="hidden overflow-x-auto sm:block">
+            <table class="min-w-[1080px] w-full bg-white border border-gray-300 text-sm text-admin-text rounded-lg overflow-hidden">
                 <thead class="bg-admin-background text-left">
                     <tr>
                         <th class="px-4 py-2 border cursor-pointer select-none" @click="changeSort('id')">
@@ -252,8 +318,9 @@
                     </template>
                 </tbody>
             </table>
+            </div>
             <!-- Пагинация -->
-            <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+            <div class="flex flex-col gap-3 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     Показано {{ orders.data.length }} из {{ orders.total }} заказов (страница {{ orders.current_page }} из
                     {{ orders.last_page }})

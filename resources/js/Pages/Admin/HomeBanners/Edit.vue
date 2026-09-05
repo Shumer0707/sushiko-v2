@@ -49,7 +49,7 @@
                         <input type="number" v-model.number="form.overlay_opacity" class="form-input w-24" min="0" max="100" />
                         <div v-if="form.errors.overlay_opacity" class="text-red-500 text-sm">{{ form.errors.overlay_opacity }}</div>
                     </div>
-                    <div class="flex-1 min-w-[280px]">
+                    <div class="min-w-0 flex-1 basis-full sm:basis-auto">
                         <label class="font-semibold block mb-1">Ссылка</label>
                         <input type="text" v-model="form.link" class="form-input w-full" placeholder="/contact или https://..." />
                         <div v-if="form.errors.link" class="text-red-500 text-sm">{{ form.errors.link }}</div>
