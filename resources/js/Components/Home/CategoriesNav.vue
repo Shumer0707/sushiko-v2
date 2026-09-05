@@ -35,11 +35,21 @@
                             <div
                                 class="relative w-full aspect-square rounded-lg overflow-hidden mb-2 border-2 border-sushi-gold border-opacity-20 group-hover:border-opacity-60 transition-all duration-300"
                             >
-                                <img
+                                <FadeImage
                                     :src="category.image_url"
                                     :alt="category.name"
-                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
+                                    image-class="w-full h-full object-cover duration-500 group-hover:scale-110"
+                                >
+                                    <template #fallback>
+                                        <div
+                                            class="flex h-full w-full items-center justify-center bg-gradient-to-br from-sushi-first to-sushi-dark"
+                                        >
+                                            <span class="text-xl font-bold text-sushi-gold/50">
+                                                {{ category.name?.charAt(0) }}
+                                            </span>
+                                        </div>
+                                    </template>
+                                </FadeImage>
 
                                 <!-- Overlay при наведении - золотой -->
                                 <div
@@ -70,6 +80,7 @@
     import { router, usePage } from '@inertiajs/vue3'
     import { Swiper, SwiperSlide } from 'swiper/vue'
     import { Navigation } from 'swiper/modules'
+    import FadeImage from '@/Components/UI/FadeImage.vue'
 
     // Импортируем стили Swiper
     import 'swiper/css'

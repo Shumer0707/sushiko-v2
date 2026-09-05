@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, onUnmounted } from 'vue'
     import { useParallaxBackground } from '@/composables/useParallaxBackground'
 
     const props = defineProps({
@@ -17,30 +17,56 @@
         },
     })
 
-    const isMobile = ref(false)
+    const mobileMediaQuery = typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)') : null
+    const isMobile = ref(mobileMediaQuery?.matches ?? false)
     const mobileImage = ref(null)
 
     // на мобилках показываем случайную картинку
     const pickRandomMobileImage = () => {
         const arr = props.images
+        if (arr.length === 0) return
+
         const rand = arr[Math.floor(Math.random() * arr.length)]
         mobileImage.value = rand
     }
 
+    const handleViewportChange = (event) => {
+        isMobile.value = event.matches
+
+        if (isMobile.value && !mobileImage.value) {
+            pickRandomMobileImage()
+        }
+    }
+
+    if (isMobile.value) {
+        pickRandomMobileImage()
+    }
+
     onMounted(() => {
-        if (typeof window !== 'undefined') {
-            isMobile.value = window.innerWidth < 768
-            if (isMobile.value) {
-                pickRandomMobileImage()
-            }
+        if (mobileMediaQuery?.addEventListener) {
+            mobileMediaQuery.addEventListener('change', handleViewportChange)
+        } else {
+            mobileMediaQuery?.addListener(handleViewportChange)
+        }
+
+        if (isMobile.value && !mobileImage.value) {
+            pickRandomMobileImage()
+        }
+    })
+
+    onUnmounted(() => {
+        if (mobileMediaQuery?.removeEventListener) {
+            mobileMediaQuery.removeEventListener('change', handleViewportChange)
+        } else {
+            mobileMediaQuery?.removeListener(handleViewportChange)
         }
     })
 
     // параллакс только для десктопа
     const backgroundRef = useParallaxBackground(props.speed)
 
-    // повторяем ленту как у тебя было
-    const repeatedImages = [...props.images, ...props.images, ...props.images]
+    // Две дополнительные панели страхуют короткие экраны на длинной странице без тройного повторения всей ленты.
+    const backgroundImages = [...props.images, ...props.images.slice(0, 2)]
 </script>
 
 <template>
@@ -57,7 +83,7 @@
 
         <!-- 💻 Десктопная версия: параллакс -->
         <div v-else :ref="backgroundRef" class="image-strip" :style="{ opacity: opacity }">
-            <div v-for="(image, index) in repeatedImages" :key="index" class="image-card">
+            <div v-for="(image, index) in backgroundImages" :key="`${image}-${index}`" class="image-card">
                 <div class="image-content" :style="{ backgroundImage: `url(${image})` }"></div>
             </div>
         </div>
@@ -74,6 +100,10 @@
         will-change: transform;
     }
 
+    .image-card {
+        contain: layout paint;
+    }
+
     .image-content {
         width: 100%;
         height: 100vh;
@@ -85,8 +115,8 @@
 
     /* ======= Mobile Static BG (random) ======= */
     .mobile-bg {
-        width: 432px;
-        height: 768px;
+        width: 100%;
+        height: 100%;
         position: absolute;
         inset: 0;
         background-size: cover;

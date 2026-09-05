@@ -38,8 +38,8 @@ export function useParallaxBackground(speed = 0.2, breakpoint = 768) {
     onMounted(() => {
         if (typeof window === 'undefined') return
 
-        // 👉 На мобилках вообще не включаем параллакс
-        if (window.innerWidth < breakpoint) {
+        // На мобильных устройствах и при системном ограничении движения фон остаётся статичным.
+        if (window.innerWidth < breakpoint || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             isActive = false
             return
         }

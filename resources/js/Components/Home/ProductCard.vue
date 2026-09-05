@@ -1,29 +1,31 @@
 <template>
     <div
-        class="product-card bg-sushi-dark bg-opacity-80 rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 shadow-sm cursor-pointer group md:backdrop-blur-sm md:shadow-lg md:hover:shadow-2xl md:hover:border-opacity-50 md:transition-all md:duration-300"
+        class="product-card bg-sushi-dark bg-opacity-90 rounded-xl overflow-hidden border border-sushi-gold border-opacity-20 shadow-sm cursor-pointer group md:shadow-lg md:hover:shadow-2xl md:hover:border-opacity-50 md:transition-all md:duration-300"
     >
         <!-- Картинка товара -->
         <div @click="goToProduct" class="relative aspect-square overflow-hidden bg-sushi-first">
-            <img
-                v-if="product.image_url"
+            <FadeImage
                 :src="product.image_url"
                 :alt="product.name"
-                class="w-full h-full object-cover md:transition-transform md:duration-500 md:group-hover:scale-110"
-                loading="lazy"
-            />
-
-            <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sushi-first to-sushi-dark">
-                <div class="text-center">
-                    <div class="text-3xl md:text-6xl mb-1 md:mb-2 opacity-30">🍱</div>
-                    <span class="text-sushi-gold text-[10px] md:text-sm opacity-50 font-medium">Фото скоро</span>
-                </div>
-            </div>
+                image-class="w-full h-full object-cover md:group-hover:scale-110 md:duration-500"
+            >
+                <template #fallback>
+                    <div
+                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sushi-first to-sushi-dark"
+                    >
+                        <div class="text-center">
+                            <div class="text-3xl md:text-6xl mb-1 md:mb-2 opacity-30">🍱</div>
+                            <span class="text-sushi-gold text-[10px] md:text-sm opacity-50 font-medium">{{ t.product_photo_soon }}</span>
+                        </div>
+                    </div>
+                </template>
+            </FadeImage>
 
             <!-- Категория -->
             <div class="absolute top-1 md:top-2 left-1 md:left-2 flex items-center gap-1 max-w-[90%]">
                 <!-- Категория -->
                 <span
-                    class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
+                    class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-95 text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
                 >
                     {{ product.category.name }}
                 </span>
@@ -31,7 +33,7 @@
                 <!-- 🔥 ВЕС / КОЛ-ВО -->
                 <span
                     v-if="product.weight"
-                    class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
+                    class="inline-flex w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-95 text-[9px] md:text-xs font-medium text-sushi-gold rounded-full border border-sushi-gold border-opacity-30"
                 >
                     {{ product.weight }}
                 </span>
@@ -39,7 +41,7 @@
                 <!-- PROMO -->
                 <span
                     v-if="hasPromotion"
-                    class="inline-flex items-center gap-1 w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-red_promo/90 backdrop-blur-sm text-[9px] md:text-xs font-bold text-white rounded-full border border-white/20 shadow max-w-full"
+                    class="inline-flex items-center gap-1 w-fit px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-red_promo/95 text-[9px] md:text-xs font-bold text-white rounded-full border border-white/20 shadow max-w-full"
                 >
                     <template v-if="isDiscount">
                         -
@@ -52,7 +54,7 @@
 
             <span
                 v-if="product.measure"
-                class="inline-flex px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-90 backdrop-blur-sm text-[9px] md:text-xs font-medium text-white rounded-full border border-white/20"
+                class="inline-flex px-1.5 md:px-2 py-0.5 md:py-1 bg-sushi-dark bg-opacity-95 text-[9px] md:text-xs font-medium text-white rounded-full border border-white/20"
             >
                 {{ product.measure }}
             </span>
@@ -170,6 +172,7 @@
     import { router, usePage } from '@inertiajs/vue3'
     import { computed } from 'vue'
     import { useCartStore } from '@/Stores/cart'
+    import FadeImage from '@/Components/UI/FadeImage.vue'
 
     const props = defineProps({
         product: {

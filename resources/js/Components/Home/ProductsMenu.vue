@@ -20,7 +20,21 @@
                                 v-if="category.image_url"
                                 class="w-12 h-12 rounded-full overflow-hidden border-2 border-sushi-gold"
                             >
-                                <img :src="category.image_url" :alt="category.name" class="w-full h-full object-cover" />
+                                <FadeImage
+                                    :src="category.image_url"
+                                    :alt="category.name"
+                                    image-class="h-full w-full object-cover"
+                                >
+                                    <template #fallback>
+                                        <div
+                                            class="flex h-full w-full items-center justify-center bg-gradient-to-br from-sushi-first to-sushi-dark"
+                                        >
+                                            <span class="text-sm font-bold text-sushi-gold/50">
+                                                {{ category.name?.charAt(0) }}
+                                            </span>
+                                        </div>
+                                    </template>
+                                </FadeImage>
                             </div>
 
                             <h2 class="font-display text-xl md:text-2xl font-bold text-sushi-gold">
@@ -48,6 +62,7 @@
     import { computed, onMounted } from 'vue'
     import { useProductsStore } from '@/Stores/products'
     import ProductCard from '@/Components/Home/ProductCard.vue'
+    import FadeImage from '@/Components/UI/FadeImage.vue'
     import { usePage } from '@inertiajs/vue3'
 
     const page = usePage()
@@ -84,6 +99,13 @@
 <style scoped>
     .products-menu {
         background: transparent;
+    }
+
+    @supports (content-visibility: auto) {
+        .category-section {
+            content-visibility: auto;
+            contain-intrinsic-size: auto 1000px;
+        }
     }
 
     @media (min-width: 768px) {
