@@ -26,6 +26,12 @@ class Order extends Model
         'currency',
         'comment',
         'status',
+        'privacy_accepted_at',
+        'privacy_policy_version',
+    ];
+
+    protected $casts = [
+        'privacy_accepted_at' => 'datetime',
     ];
 
     public function items(): HasMany

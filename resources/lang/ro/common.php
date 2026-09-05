@@ -10,6 +10,7 @@ return [
     'navigation' => 'Navigare',
     'menu' => 'Meniu',
     'language' => 'Limba',
+    'categories' => 'Categorii',
     'cart' => 'Coș',
     'go_cart' => 'Mergi la coș',
     'go_back' => 'Continuă cumpărăturile',

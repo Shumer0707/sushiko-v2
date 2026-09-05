@@ -38,6 +38,12 @@
                                 >
                                     {{ t.contact }}
                                 </Link>
+                                <Link
+                                    :href="localizedRoute('/privacy')"
+                                    class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 text-sm"
+                                >
+                                    {{ legal.footer_privacy }}
+                                </Link>
                             </nav>
                         </div>
 
@@ -151,6 +157,7 @@
 
     const page = usePage()
     const t = page.props.translations.common
+    const legal = page.props.translations.legal
 
     const { localizedRoute } = useLocale()
 </script>

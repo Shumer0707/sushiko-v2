@@ -10,6 +10,7 @@ return [
     'navigation' => 'Navigation',
     'menu' => 'Menu',
     'language' => 'Language',
+    'categories' => 'Categories',
     'cart' => 'Cart',
     'go_cart' => 'Go to cart',
     'go_back' => 'Continue shopping',

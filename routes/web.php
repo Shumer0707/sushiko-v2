@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,6 +25,7 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en'], 'midd
     Route::post('/api/cart/products', [ProductController::class, 'cartProducts'])->name('cart.products');
     Route::get('/about', [PageController::class, 'about'])->name('about');
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+    Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
     Route::post('/order/checkout', [OrderController::class, 'store'])->name('order.checkout');
     Route::get('/api/category/{slug}/products', [ProductController::class, 'byCategory'])->name('category.products');

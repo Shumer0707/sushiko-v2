@@ -29,6 +29,7 @@ class CheckoutRequest extends FormRequest
             'deliveryCost' => 'required|numeric|min:0',
             'totalWithDelivery' => 'required|numeric|min:0',
             'currency' => 'required|string|max:10',
+            'privacy_accepted' => 'required|accepted',
             'items.*.base_price' => 'nullable|numeric|min:0',
             'items.*.has_promotion' => 'nullable|boolean',
             'items.*.promotion_type' => 'nullable|in:discount,gift',
@@ -54,5 +55,12 @@ class CheckoutRequest extends FormRequest
         return $rules;
     }
 
-    // метод messages() больше не нужен!
+    public function messages(): array
+    {
+        return [
+            'privacy_accepted.required' => __('legal.checkout_required_error'),
+            'privacy_accepted.accepted' => __('legal.checkout_required_error'),
+        ];
+    }
+
 }

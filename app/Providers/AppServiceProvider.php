@@ -22,8 +22,13 @@ class AppServiceProvider extends ServiceProvider
             'csrf_token' => fn() => csrf_token(),
             'translations' => fn() => [
                 'common' => trans('common'),
+                'legal' => trans('legal'),
                 'seo' => trans('seo'),
                 'maintenance' => ShopSetting::getPublicStatusContent(app()->getLocale()),
+            ],
+            'privacy_policy' => fn() => [
+                'version' => (string) config('legal.privacy.version'),
+                'published_at' => (string) config('legal.privacy.published_at'),
             ],
         ]);
     }

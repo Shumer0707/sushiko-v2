@@ -108,6 +108,8 @@ class OrderController extends Controller
                 'total_with_delivery'  => $totalWithDelivery,
                 'currency'             => $data['currency'],
                 'status'               => 'new',
+                'privacy_accepted_at'  => now(),
+                'privacy_policy_version' => (string) config('legal.privacy.version'),
             ]);
 
             foreach ($resolvedItems as $item) {

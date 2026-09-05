@@ -7,6 +7,7 @@
     import StickyHeader from '@/Components/Navigation/StickyHeader.vue'
     import ScrollToTop from '@/Components/UI/ScrollToTop.vue'
     import HashCleanup from '@/Components/UI/HashCleanup.vue'
+    import PrivacyNotice from '@/Components/Legal/PrivacyNotice.vue'
     import { useInitialLoad } from '@/composables/useInitialLoad'
     import { useCartStore } from '@/Stores/cart'
     import { useInternalBack } from '@/composables/useInternalBack'
@@ -78,5 +79,6 @@
 
         <ScrollToTop />
         <HashCleanup />
+        <PrivacyNotice />
     </div>
 </template>

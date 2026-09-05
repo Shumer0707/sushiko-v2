@@ -1,11 +1,14 @@
 <script setup>
     import { reactive } from 'vue'
     import { router, usePage } from '@inertiajs/vue3'
+    import { useLocale } from '@/composables/useLocale'
 
     const page = usePage()
     const t = page.props.translations.common
+    const legal = page.props.translations.legal
     const errors = page.props.errors || {}
     const flash = page.props.flash || {}
+    const { localizedRoute } = useLocale()
 
     const form = reactive({
         name: '',
@@ -115,6 +118,18 @@
                     {{ errors.message }}
                 </div>
             </div>
+
+            <p class="rounded-lg border border-sushi-gold/25 bg-sushi-first/40 px-4 py-3 text-xs leading-relaxed text-sushi-silver/65">
+                {{ legal.contact_notice_prefix }}
+                <a
+                    :href="localizedRoute('/privacy')"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-medium text-sushi-gold underline decoration-sushi-gold/60 underline-offset-4 transition hover:text-white"
+                >
+                    {{ legal.contact_notice_link }}
+                </a>{{ legal.contact_notice_suffix }}
+            </p>
 
             <!-- Кнопка отправки -->
             <button

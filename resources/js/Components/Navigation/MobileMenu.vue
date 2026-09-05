@@ -81,7 +81,7 @@
 
                     <!-- Правая колонка - Категории (теперь с прокруткой) -->
                     <div>
-                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">{{ t.language }}</h3>
+                        <h3 class="text-lg font-bold text-sushi-gold mb-3 border-b border-sushi-gold pb-1">{{ t.categories }}</h3>
                         <div class="space-y-1 max-h-96 overflow-y-auto custom-scrollbar">
                             <!-- 🎯 Заменили Link на a с событием -->
                             <a

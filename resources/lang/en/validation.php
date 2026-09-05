@@ -15,6 +15,7 @@ return [
     'integer' => 'The :attribute must be an integer.',
     'numeric' => 'The :attribute must be a number.',
     'array' => 'The :attribute must be an array.',
+    'accepted' => 'The :attribute must be accepted.',
 
     // Custom attribute names
     'attributes' => [
@@ -30,5 +31,6 @@ return [
         'payment' => 'Payment method',
         'items' => 'Cart',
         'comment' => 'Comment',
+        'privacy_accepted' => 'personal data processing terms',
     ],
 ];

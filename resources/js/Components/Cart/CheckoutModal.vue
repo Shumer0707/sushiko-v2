@@ -436,11 +436,41 @@
                             </p>
                         </div>
 
+                        <!-- Подтверждение ознакомления с политикой -->
+                        <div
+                            class="rounded-lg border bg-sushi-first/40 p-4"
+                            :class="getError('privacy_accepted') ? 'border-red-400' : 'border-sushi-gold/30'"
+                        >
+                            <label class="flex cursor-pointer items-start gap-3">
+                                <input
+                                    v-model="form.privacyAccepted"
+                                    type="checkbox"
+                                    required
+                                    class="mt-1 h-4 w-4 flex-shrink-0 rounded border-sushi-gold/60 bg-sushi-dark text-sushi-gold focus:ring-sushi-gold focus:ring-offset-sushi-dark"
+                                />
+                                <span class="text-xs leading-relaxed text-sushi-silver/80 sm:text-sm">
+                                    {{ legal.checkout_acknowledgement_prefix }}
+                                    <a
+                                        :href="localizedRoute('/privacy')"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="font-medium text-sushi-gold underline decoration-sushi-gold/60 underline-offset-4 transition hover:text-sushi-silver"
+                                    >
+                                        {{ legal.checkout_privacy_link }}
+                                    </a>
+                                    {{ legal.checkout_acknowledgement_suffix }}
+                                </span>
+                            </label>
+                            <p v-if="getError('privacy_accepted')" class="mt-2 text-xs text-red-400">
+                                {{ getError('privacy_accepted') }}
+                            </p>
+                        </div>
+
                         <!-- Кнопки -->
                         <div class="flex flex-col sm:flex-row gap-3 pt-4">
                             <button
                                 type="submit"
-                                :disabled="isSubmitting"
+                                :disabled="isSubmitting || !form.privacyAccepted"
                                 class="w-full sm:flex-1 bg-sushi-gold hover:bg-sushi-gold_op text-sushi-dark py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                             >
                                 {{ isSubmitting ? t.checkout_submitting : t.checkout_submit }}
@@ -473,6 +503,7 @@
     import { useCartStore } from '@/Stores/cart'
     import OverlayBackdrop from '@/Components/UI/OverlayBackdrop.vue'
     import SuccessModal from '@/Components/Cart/SuccessModal.vue'
+    import { useLocale } from '@/composables/useLocale'
 
     const props = defineProps({
         isOpen: {
@@ -485,7 +516,9 @@
 
     const page = usePage()
     const t = page.props.translations.common
+    const legal = page.props.translations.legal
     const cartStore = useCartStore()
+    const { localizedRoute } = useLocale()
 
     // Ошибки валидации от Laravel
     const validationErrors = ref({})
@@ -505,6 +538,7 @@
         intercom: '',
         comment: '',
         payment: 'cash',
+        privacyAccepted: false,
     })
 
     const phoneCodes = [
@@ -591,6 +625,7 @@
             intercom: '',
             comment: '',
             payment: 'cash',
+            privacyAccepted: false,
         }
 
         // 4. Закрываем форму заказа
@@ -673,6 +708,7 @@
             deliveryCost: toNumber(deliveryCostView.value),
             totalWithDelivery: toNumber(totalWithDeliveryView.value),
             currency: cartStore.currency,
+            privacy_accepted: form.value.privacyAccepted,
         }
 
         // Отправляем через Inertia на бэкенд

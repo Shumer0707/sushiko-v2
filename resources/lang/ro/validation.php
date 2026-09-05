@@ -15,6 +15,7 @@ return [
     'integer' => 'Câmpul :attribute trebuie să fie un număr întreg.',
     'numeric' => 'Câmpul :attribute trebuie să fie un număr.',
     'array' => 'Câmpul :attribute trebuie să fie un array.',
+    'accepted' => 'Trebuie să acceptați :attribute.',
 
     // Nume personalizate pentru atribute
     'attributes' => [
@@ -30,5 +31,6 @@ return [
         'payment' => 'Metoda de plată',
         'items' => 'Coșul',
         'comment' => 'Comentariu',
+        'privacy_accepted' => 'condițiile de prelucrare a datelor cu caracter personal',
     ],
 ];

@@ -30,7 +30,7 @@ class GenerateSitemap extends Command
         }
 
         // 2. Статические страницы
-        $staticPages = ['about', 'contact'];
+        $staticPages = ['about', 'contact', 'privacy'];
         foreach ($staticPages as $page) {
             foreach ($locales as $locale) {
                 $sitemap->add(
