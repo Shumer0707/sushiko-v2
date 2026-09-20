@@ -19,7 +19,7 @@ return [
 
     'order_email_delivery_info' => 'Delivery information',
     'order_email_delivery_pickup' => 'Pickup from our restaurant',
-    'order_email_delivery_pickup_address' => 'Balti, Example street 1 (you\'ll replace this with your real address 🙂)',
+    'order_email_delivery_pickup_address' => '86 Ismail Street, Chișinău, Moldova',
     'order_email_delivery_pickup_hours' => 'Our working hours: ' . config('shop.work_time') . '',
 
     'order_email_delivery_address_label' => 'Delivery address',

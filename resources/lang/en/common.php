@@ -28,7 +28,7 @@ return [
     'home_ban_button_1' => 'View menu',
 
     'home_ban_title_2' => 'Free delivery',
-    'home_ban_description_2' => 'Free delivery throughout Chisinau for orders over ' . config('shop.free_delivery_amount') . ' lei',
+    'home_ban_description_2' => 'Free delivery throughout Chisinau for orders from ' . config('shop.free_delivery_amount') . ' lei',
     'home_ban_button_2' => 'Order now',
 
     'home_ban_title_3' => 'Fresh rolls every day',
@@ -49,7 +49,7 @@ return [
     'home_seo_1_title' => 'Fresh products',
     'home_seo_1_des' => 'Only premium ingredients. Fish delivery every day.',
     'home_seo_2_title' => 'Fast delivery',
-    'home_seo_2_des' => 'Delivery from 60 minutes. Free in Chișinău for orders over ' . config('shop.free_delivery_amount') . ' lei.',
+    'home_seo_2_des' => 'Delivery from 60 minutes. Free in Chișinău for orders from ' . config('shop.free_delivery_amount') . ' lei.',
     'home_seo_3_title' => 'Masters of Their Craft',
     'home_seo_3_des' => 'Our chefs are experienced professionals. We cook with care and heart.',
 
@@ -137,7 +137,10 @@ return [
     'cart_summary_delivery' => 'Delivery',
     'cart_summary_free_delivery' => 'Free',
     'cart_summary_until_free' => 'Add',
-    'cart_summary_until_free_text' => 'more for free delivery (free delivery for orders over ' . config('shop.free_delivery_amount') . ' lei)',
+    'cart_summary_until_free_text' => 'more for free delivery (for orders from ' . config('shop.free_delivery_amount') . ' lei)',
+    'cart_summary_until_standard' => 'Add',
+    'cart_summary_standard_delivery_cost' => 'delivery will cost',
+    'cart_summary_within_city' => 'within city limits',
     'cart_summary_total' => 'Total:',
     'cart_summary_checkout' => 'Checkout',
     'cart_summary_continue' => 'Continue shopping',
@@ -166,8 +169,9 @@ return [
     'checkout_delivery_method_label' => 'Delivery method',
     'checkout_pickup' => 'Pickup',
     'checkout_delivery' => 'Delivery',
+    'checkout_delivery_city_note' => 'The listed rates apply within city limits.',
     'checkout_pickup_address_label' => 'Pickup address:',
-    'checkout_pickup_address' => 'Ismail str. 10, Chisinau, Moldova',
+    'checkout_pickup_address' => '86 Ismail Street, Chișinău, Moldova',
     'checkout_pickup_hours' => 'Working hours: ' . config('shop.work_time') . '',
 
     // Delivery address

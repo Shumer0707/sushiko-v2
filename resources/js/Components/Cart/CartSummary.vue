@@ -57,18 +57,57 @@
                 </div>
 
                 <!-- Доставка -->
-                <div class="flex justify-between text-sushi-silver/80 text-sm sm:text-base">
-                    <span>{{ t.cart_summary_delivery }}</span>
-                    <span v-if="isFreeDelivery" class="text-sushi-gold font-medium">{{ t.cart_summary_free_delivery }}</span>
-                    <span v-else class="text-sushi-silver">{{ deliveryCost }} {{ currency }}</span>
+                <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 text-sm text-sushi-silver/80 sm:text-base">
+                    <label class="col-start-1 row-start-1 flex min-w-0 cursor-pointer items-center gap-2">
+                        <input
+                            type="checkbox"
+                            :checked="deliveryEnabled"
+                            class="h-4 w-4 shrink-0 rounded border-sushi-gold/60 bg-sushi-dark text-sushi-gold focus:ring-sushi-gold focus:ring-offset-sushi-dark"
+                            @change="$emit('update:deliveryEnabled', $event.target.checked)"
+                        />
+                        <span>{{ t.checkout_delivery }}</span>
+                    </label>
+                    <span v-if="!deliveryEnabled" class="col-start-2 row-start-1 shrink-0 text-sushi-silver">
+                        {{ t.checkout_pickup }}
+                    </span>
+                    <template v-else-if="isFreeDelivery">
+                        <span class="col-start-2 row-start-1 shrink-0 text-right font-medium text-sushi-gold">
+                            {{ t.cart_summary_free_delivery }}
+                        </span>
+                        <span class="col-start-2 row-start-2 mt-0.5 text-right text-[10px] text-sushi-silver/55">
+                            ({{ t.cart_summary_within_city }})
+                        </span>
+                    </template>
+                    <span v-else class="col-start-2 row-start-1 shrink-0 text-sushi-silver">
+                        {{ deliveryCost }} {{ currency }}
+                    </span>
                 </div>
+
+                <a
+                    :href="localizedRoute('/delivery')"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 text-xs text-sushi-gold underline decoration-sushi-gold/60 underline-offset-4 transition hover:text-sushi-silver"
+                >
+                    {{ legal.delivery_terms_link }}
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
 
                 <!-- Подсказка до бесплатной доставки -->
                 <div
-                    v-if="!isFreeDelivery && Number(amountUntilFree) > 0"
+                    v-if="deliveryEnabled && isHighDeliveryCost && Number(amountUntilStandardDelivery) > 0"
+                    class="text-xs text-sushi-gold/80 bg-sushi-first/20 rounded p-2"
+                >
+                    💡 {{ t.cart_summary_until_standard }} {{ amountUntilStandardDelivery }} {{ currency }} —
+                    {{ t.cart_summary_standard_delivery_cost }} {{ standardDeliveryCost }} {{ currency }}
+                    <span class="text-[11px] text-sushi-silver/55">({{ t.cart_summary_within_city }})</span>
+                </div>
+                <div
+                    v-else-if="deliveryEnabled && !isFreeDelivery && Number(amountUntilFree) > 0"
                     class="text-xs text-sushi-gold/80 bg-sushi-first/20 rounded p-2"
                 >
                     💡 {{ t.cart_summary_until_free }} {{ amountUntilFree }} {{ currency }} {{ t.cart_summary_until_free_text }}
+                    <span class="text-[11px] text-sushi-silver/55">({{ t.cart_summary_within_city }})</span>
                 </div>
 
                 <!-- Итого -->
@@ -109,9 +148,12 @@
 <script setup>
     import { Link, usePage } from '@inertiajs/vue3'
     import { useCartStore } from '@/Stores/cart'
+    import { useLocale } from '@/composables/useLocale'
 
     const page = usePage()
     const t = page.props.translations.common
+    const legal = page.props.translations.legal
+    const { localizedRoute } = useLocale()
 
     const props = defineProps({
         items: {
@@ -138,8 +180,24 @@
             type: Number,
             required: true,
         },
+        deliveryEnabled: {
+            type: Boolean,
+            required: true,
+        },
         isFreeDelivery: {
             type: Boolean,
+            required: true,
+        },
+        isHighDeliveryCost: {
+            type: Boolean,
+            required: true,
+        },
+        amountUntilStandardDelivery: {
+            type: [Number, String],
+            required: true,
+        },
+        standardDeliveryCost: {
+            type: Number,
             required: true,
         },
         amountUntilFree: {
@@ -161,7 +219,7 @@
         return product?.gift_product?.name || ''
     }
 
-    defineEmits(['checkout', 'clear'])
+    defineEmits(['checkout', 'clear', 'update:deliveryEnabled'])
 </script>
 
 <style scoped>

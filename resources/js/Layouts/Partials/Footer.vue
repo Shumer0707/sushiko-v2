@@ -44,6 +44,12 @@
                                 >
                                     {{ legal.footer_privacy }}
                                 </Link>
+                                <Link
+                                    :href="localizedRoute('/delivery')"
+                                    class="text-sushi-silver hover:text-sushi-gold transition-colors duration-300 text-sm"
+                                >
+                                    {{ legal.footer_delivery }}
+                                </Link>
                             </nav>
                         </div>
 

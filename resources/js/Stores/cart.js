@@ -7,8 +7,10 @@ export const useCartStore = defineStore('cart', {
         items: [],
 
         deliverySettings: {
-            freeDeliveryThreshold: 0,
-            deliveryCost: 0,
+            freeDeliveryThreshold: 600,
+            deliveryCost: 50,
+            standardDeliveryThreshold: 200,
+            highDeliveryCost: 100,
         },
         isSyncing: false,
     }),
@@ -39,18 +41,43 @@ export const useCartStore = defineStore('cart', {
         currency: (state) => state.items[0]?.product?.currency || 'MDL',
 
         deliveryCost() {
-            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
-            return total >= this.deliverySettings.freeDeliveryThreshold ? 0 : this.deliverySettings.deliveryCost
+            if (this.items.length === 0) return 0
+
+            const total = Number(this.totalPrice)
+
+            if (total < this.deliverySettings.standardDeliveryThreshold) {
+                return this.deliverySettings.highDeliveryCost
+            }
+
+            return total < this.deliverySettings.freeDeliveryThreshold ? this.deliverySettings.deliveryCost : 0
         },
 
         isFreeDelivery() {
-            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            if (this.items.length === 0) return false
+
+            const total = Number(this.totalPrice)
             return total >= this.deliverySettings.freeDeliveryThreshold
         },
 
+        hasHighDeliveryCost() {
+            if (this.items.length === 0) return false
+
+            const total = Number(this.totalPrice)
+            return total < this.deliverySettings.standardDeliveryThreshold
+        },
+
+        amountUntilStandardDelivery() {
+            const total = Number(this.totalPrice)
+            const remaining = this.deliverySettings.standardDeliveryThreshold - total
+            return remaining > 0 ? remaining.toFixed(2) : 0
+        },
+
         amountUntilFreeDelivery() {
-            const total = this.items.reduce((sum, item) => sum + this.unitPrice(item.product) * item.quantity, 0)
+            const total = Number(this.totalPrice)
             const remaining = this.deliverySettings.freeDeliveryThreshold - total
+
+            if (this.isFreeDelivery) return 0
+
             return remaining > 0 ? remaining.toFixed(2) : 0
         },
 
@@ -71,6 +98,8 @@ export const useCartStore = defineStore('cart', {
             this.deliverySettings = {
                 freeDeliveryThreshold: settings.freeDeliveryThreshold ?? 0,
                 deliveryCost: settings.deliveryCost ?? 0,
+                standardDeliveryThreshold: settings.standardDeliveryThreshold ?? 200,
+                highDeliveryCost: settings.highDeliveryCost ?? 100,
             }
         },
 
@@ -154,9 +183,11 @@ export const useCartStore = defineStore('cart', {
             this.saveToStorage()
         },
 
-        updateDeliverySettings(freeThreshold, cost) {
+        updateDeliverySettings(freeThreshold, cost, standardThreshold = 200, highCost = 100) {
             this.deliverySettings.freeDeliveryThreshold = freeThreshold
             this.deliverySettings.deliveryCost = cost
+            this.deliverySettings.standardDeliveryThreshold = standardThreshold
+            this.deliverySettings.highDeliveryCost = highCost
         },
 
         saveToStorage() {

@@ -49,7 +49,7 @@ return [
     'home_seo_1_title' => 'Produse proaspete',
     'home_seo_1_des' => 'Doar ingrediente premium. Livrare de pește în fiecare zi.',
     'home_seo_2_title' => 'Livrare rapidă',
-    'home_seo_2_des' => 'Livrare de la 60 de minute. Gratuit în Chișinău pentru comenzile de peste ' . config('shop.free_delivery_amount') . ' lei.',
+    'home_seo_2_des' => 'Livrare de la 60 de minute. Gratuit în Chișinău pentru comenzile de la ' . config('shop.free_delivery_amount') . ' lei.',
     'home_seo_3_title' => 'Maeștri în domeniul lor',
     'home_seo_3_des' => 'Bucătarii noștri sunt profesioniști cu experiență. Gătim cu atenție și suflet.',
 
@@ -138,7 +138,10 @@ return [
     'cart_summary_delivery' => 'Livrare',
     'cart_summary_free_delivery' => 'Gratuit',
     'cart_summary_until_free' => 'Adăugați încă',
-    'cart_summary_until_free_text' => 'pentru livrare gratuită (gratuit de la ' . config('shop.free_delivery_amount') . ' lei)',
+    'cart_summary_until_free_text' => 'pentru livrare gratuită (la comenzi de la ' . config('shop.free_delivery_amount') . ' de lei)',
+    'cart_summary_until_standard' => 'Adăugați încă',
+    'cart_summary_standard_delivery_cost' => 'livrarea va costa',
+    'cart_summary_within_city' => 'în raza orașului',
     'cart_summary_total' => 'De plată:',
     'cart_summary_checkout' => 'Plasați comanda',
     'cart_summary_continue' => 'Continuă cumpărăturile',
@@ -167,8 +170,9 @@ return [
     'checkout_delivery_method_label' => 'Metoda de primire',
     'checkout_pickup' => 'Ridicare personală',
     'checkout_delivery' => 'Livrare',
+    'checkout_delivery_city_note' => 'Tarifele indicate sunt valabile în raza orașului.',
     'checkout_pickup_address_label' => 'Adresa de ridicare:',
-    'checkout_pickup_address' => 'str. Ismail 10, Chișinău, Moldova',
+    'checkout_pickup_address' => 'str. Ismail 86, Chișinău, Moldova',
     'checkout_pickup_hours' => 'Program: ' . config('shop.work_time') . '',
 
     // Adresa de livrare

@@ -26,6 +26,7 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'ru|ro|en'], 'midd
     Route::get('/about', [PageController::class, 'about'])->name('about');
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
     Route::get('/privacy', [LegalController::class, 'privacy'])->name('privacy');
+    Route::get('/delivery', [LegalController::class, 'delivery'])->name('delivery');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
     Route::post('/order/checkout', [OrderController::class, 'store'])->name('order.checkout');
     Route::get('/api/category/{slug}/products', [ProductController::class, 'byCategory'])->name('category.products');

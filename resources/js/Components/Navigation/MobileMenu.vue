@@ -45,6 +45,13 @@
                                 >
                                     📞 {{ t.contact }}
                                 </Link>
+                                <Link
+                                    :href="localizedRoute('/delivery')"
+                                    class="block rounded-lg px-3 py-2 font-medium text-white transition-colors hover:bg-gray-700 hover:text-sushi-gold"
+                                    @click="$emit('close')"
+                                >
+                                    🚚 {{ legal.delivery_terms_link }}
+                                </Link>
                             </nav>
                         </div>
 
@@ -147,6 +154,7 @@
     const { localizedRoute } = useLocale()
     const page = usePage()
     const t = page.props.translations.common
+    const legal = page.props.translations.legal
 
     // Вычисляем стиль для позиционирования под хедером
     const menuStyle = computed(() => {

@@ -25,6 +25,8 @@ class OrderController extends Controller
             $method = $data['delivery']['method'] ?? 'delivery';
             $freeFrom = (float) config('shop.free_delivery_amount', 0);
             $deliveryFee = (float) config('shop.delivery_cost', 0);
+            $standardDeliveryFrom = (float) config('shop.standard_delivery_min_amount', 200);
+            $highDeliveryFee = (float) config('shop.high_delivery_cost', 100);
 
             $products = Product::with([
                 'translation',
@@ -83,8 +85,12 @@ class OrderController extends Controller
 
             if ($method === 'pickup') {
                 $deliveryCost = 0;
+            } elseif ($total < $standardDeliveryFrom) {
+                $deliveryCost = $highDeliveryFee;
+            } elseif ($freeFrom <= 0 || $total < $freeFrom) {
+                $deliveryCost = $deliveryFee;
             } else {
-                $deliveryCost = ($freeFrom > 0 && $total >= $freeFrom) ? 0 : $deliveryFee;
+                $deliveryCost = 0;
             }
 
             $totalWithDelivery = round($total + $deliveryCost, 2);

@@ -19,7 +19,7 @@ return [
 
     'order_email_delivery_info' => 'Informații despre livrare',
     'order_email_delivery_pickup' => 'Ridicare personală de la restaurant',
-    'order_email_delivery_pickup_address' => 'mun. Bălți, str. Exemplu 1 (vei pune adresa ta reală mai târziu 🙂)',
+    'order_email_delivery_pickup_address' => 'str. Ismail 86, Chișinău, Moldova',
     'order_email_delivery_pickup_hours' => 'Programul de lucru: ' . config('shop.work_time') . '',
 
     'order_email_delivery_address_label' => 'Adresa de livrare',

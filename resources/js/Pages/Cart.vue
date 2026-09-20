@@ -37,10 +37,14 @@
                     :total-price="cartStore.totalPrice"
                     :currency="cartStore.currency"
                     :locale="$page.props.locale"
-                    :delivery-cost="cartStore.deliveryCost"
-                    :is-free-delivery="cartStore.isFreeDelivery"
+                    v-model:delivery-enabled="courierDeliveryEnabled"
+                    :delivery-cost="selectedDeliveryCost"
+                    :is-free-delivery="courierDeliveryEnabled && cartStore.isFreeDelivery"
+                    :is-high-delivery-cost="courierDeliveryEnabled && cartStore.hasHighDeliveryCost"
+                    :amount-until-standard-delivery="cartStore.amountUntilStandardDelivery"
+                    :standard-delivery-cost="cartStore.deliverySettings.deliveryCost"
                     :amount-until-free="cartStore.amountUntilFreeDelivery"
-                    :total-with-delivery="cartStore.totalWithDelivery"
+                    :total-with-delivery="selectedTotal"
                     @checkout="showCheckoutModal = true"
                     @clear="clearCart"
                 />
@@ -66,12 +70,17 @@
     </div>
 
     <!-- Модалка оформления заказа -->
-    <CheckoutModal :is-open="showCheckoutModal" @close="showCheckoutModal = false"/>
+    <CheckoutModal
+        :is-open="showCheckoutModal"
+        :initial-delivery-method="courierDeliveryEnabled ? 'delivery' : 'pickup'"
+        @close="showCheckoutModal = false"
+        @order-success="resetDeliveryPreference"
+    />
 </template>
 
 <script setup>
     import { Head, usePage, router } from '@inertiajs/vue3'
-    import { ref, computed } from 'vue'
+    import { ref, computed, watch } from 'vue'
     import { useCartStore } from '@/Stores/cart'
 
     // Компоненты
@@ -92,7 +101,43 @@
         console.warn('⚠ deliverySettings не передан в props. Используются значения по умолчанию из стора.')
     }
 
+    const deliveryPreferenceKey = 'sushiko_delivery_enabled'
+
+    const loadDeliveryPreference = () => {
+        try {
+            const storedPreference = localStorage.getItem(deliveryPreferenceKey)
+            return storedPreference === null ? true : storedPreference === 'true'
+        } catch (error) {
+            console.error('Delivery preference load error:', error)
+            return true
+        }
+    }
+
     const showCheckoutModal = ref(false)
+    const courierDeliveryEnabled = ref(loadDeliveryPreference())
+
+    watch(courierDeliveryEnabled, (isEnabled) => {
+        try {
+            localStorage.setItem(deliveryPreferenceKey, String(isEnabled))
+        } catch (error) {
+            console.error('Delivery preference save error:', error)
+        }
+    })
+
+    const resetDeliveryPreference = () => {
+        courierDeliveryEnabled.value = true
+
+        try {
+            localStorage.setItem(deliveryPreferenceKey, 'true')
+        } catch (error) {
+            console.error('Delivery preference reset error:', error)
+        }
+    }
+
+    const selectedDeliveryCost = computed(() => (courierDeliveryEnabled.value ? cartStore.deliveryCost : 0))
+    const selectedTotal = computed(() => {
+        return (Number(cartStore.totalPrice) + selectedDeliveryCost.value).toFixed(2)
+    })
 
     // Для Undo
     const showUndoBar = ref(false)
@@ -175,6 +220,7 @@
     const clearCart = () => {
         if (confirm(t.cart_confirm_clear)) {
             cartStore.clearCart()
+            resetDeliveryPreference()
         }
     }
 
@@ -185,6 +231,7 @@
 
         showCheckoutModal.value = false
         cartStore.clearCart()
+        resetDeliveryPreference()
 
         setTimeout(() => {
             router.visit(route('home', { locale: page.props.locale }))

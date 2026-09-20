@@ -34,4 +34,15 @@ class LegalController extends Controller
             ],
         ]);
     }
+
+    public function delivery(): Response
+    {
+        return Inertia::render('Legal/Delivery', [
+            'meta' => [
+                'title' => __('legal.delivery_meta_title'),
+                'description' => __('legal.delivery_meta_description'),
+                'image' => asset('images/og-default.jpg'),
+            ],
+        ]);
+    }
 }

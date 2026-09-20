@@ -187,6 +187,21 @@
                             <p v-if="getError('delivery.method')" class="text-red-400 text-xs mt-1">
                                 {{ getError('delivery.method') }}
                             </p>
+                            <a
+                                :href="localizedRoute('/delivery')"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="mt-2 inline-flex items-center gap-1.5 text-xs text-sushi-gold underline decoration-sushi-gold/60 underline-offset-4 transition hover:text-sushi-silver sm:text-sm"
+                            >
+                                {{ legal.delivery_terms_link }}
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                            <p
+                                v-if="form.deliveryMethod === 'delivery'"
+                                class="mt-1 text-[11px] text-sushi-silver/55 sm:text-xs"
+                            >
+                                {{ t.checkout_delivery_city_note }}
+                            </p>
                         </div>
 
                         <!-- Адрес самовывоза (если выбран самовывоз) -->
@@ -510,9 +525,14 @@
             type: Boolean,
             required: true,
         },
+        initialDeliveryMethod: {
+            type: String,
+            default: 'delivery',
+            validator: (value) => ['pickup', 'delivery'].includes(value),
+        },
     })
 
-    const emit = defineEmits(['close'])
+    const emit = defineEmits(['close', 'order-success'])
 
     const page = usePage()
     const t = page.props.translations.common
@@ -528,7 +548,7 @@
         phone: '',
         phoneCode: '+373', // MD по умолчанию
         email: '',
-        deliveryMethod: 'pickup',
+        deliveryMethod: props.initialDeliveryMethod,
         addressType: 'apartment',
         address: '',
         houseNumber: '',
@@ -557,6 +577,7 @@
             if (isOpen) {
                 document.body.style.overflow = 'hidden'
                 isClosing.value = false
+                form.value.deliveryMethod = props.initialDeliveryMethod
             } else {
                 document.body.style.overflow = ''
             }
@@ -608,6 +629,7 @@
 
         // 2. Очищаем корзину
         cartStore.clearCart()
+        emit('order-success')
 
         // 3. Сбрасываем форму
         form.value = {
@@ -615,7 +637,7 @@
             phoneCode: '+373',
             phone: '',
             email: '',
-            deliveryMethod: 'pickup',
+            deliveryMethod: props.initialDeliveryMethod,
             addressType: 'apartment',
             address: '',
             houseNumber: '',

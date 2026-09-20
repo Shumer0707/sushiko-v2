@@ -34,6 +34,8 @@ class PageController extends Controller
             'deliverySettings' => [
                 'freeDeliveryThreshold' => config('shop.free_delivery_amount'),
                 'deliveryCost'          => config('shop.delivery_cost', 50),
+                'standardDeliveryThreshold' => config('shop.standard_delivery_min_amount', 200),
+                'highDeliveryCost' => config('shop.high_delivery_cost', 100),
             ],
         ]);
     }
